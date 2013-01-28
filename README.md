@@ -8,7 +8,7 @@ Description
 Augmented Reality Mirror (ARM) is for individuals with unilateral limb loss and intended to manage phantom limb pain (PLP).  
 ARM is made with [Open Frameworks](http://openframeworks.cc/) and [ofxKinect](https://github.com/ofTheo/ofxKinect).  
 
-The augmented reality mirror therapy app uses the Kinect to capture a real time image of the intact limb and the (ARM) app then create a digital mirror limb (phantom limb) image.  Then, the user can observe their intact limb and phantom limb on a monitor with the ability to control their point of view in 360 degrees of freedom.
+The Augmented reality mirror therapy app uses the Kinect to capture a real time image of the intact limb and the (ARM) app then create a digital mirror limb (phantom limb) image.  Then, the user can observe their intact limb and phantom limb on a monitor with the ability to control their point of view in 360 degrees of freedom.
 
 Installation
 ------------
