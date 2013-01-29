@@ -20,4 +20,4 @@ Example
 
 Recognition
 -----------
-Thanks to Michael Lichter, Dr. Jeffrey Heckman
+Thanks to Joe Labrie, Michael Lichter, Dr. Jeffrey Heckman
