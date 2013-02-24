@@ -20,4 +20,4 @@ Example
 
 Recognition
 -----------
-Thanks to : Kareemah Batts, Joe Labrie, Michael Lichter, Jennifer Eftychiou PT DPT, Jeffrey Heckman DO
+Thanks to : Kareemah Batts, Desmond Heeley, Joe Labrie, Michael Lichter, Jennifer Eftychiou PT DPT, Jeffrey Heckman DO
