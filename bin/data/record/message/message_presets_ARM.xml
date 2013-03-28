@@ -1,0 +1,55 @@
+<about>
+    <message_0>Date</message_0>
+	<message_1>Client</message_1>
+	<message_2>Authors</message_2>
+	<message_3>url</message_3>
+	<message_4>github</message_4>
+</about>
+<AUDIO>
+    <title>Audio</title>
+    <message_0>Audio</message_0>
+    <message_1>Play</message_1>
+    <message_2>Paused</message_2>
+	<message_3>Volume</message_3>
+    <message_4>Speed</message_4>
+	<message_5>Position</message_5>
+</AUDIO>
+<RECORD>
+    <title>RECORD</title>
+    <message_0>File</message_0>
+	<message_1>Date</message_1>
+    <message_2>Session</message_2>
+	<message_3>Participant</message_3>
+    <message_4>Age</message_4>
+	<message_5>Amputation</message_5>
+	<message_6>Audio</message_6>
+</RECORD>
+<AL>
+    <title>Amputation Level</title>
+    <message_0>AE- Above the elbow</message_0>
+	<message_1>AK- Above the knee</message_1>
+    <message_2>Bilateral- both sides</message_2>
+	<message_3>BE- Below elbow</message_3>
+    <message_4>BK- Below the knee</message_4>
+</AL>
+<REALTAGRECORD>
+    <title>real XML Tags</title>
+    <message_0>file</message_0>
+	<message_1>DATE</message_1>
+    <message_2>SESSION</message_2>
+	<message_3>PARTICIPANT</message_3>
+    <message_4>AGE</message_4>
+	<message_5>AMPUTATION</message_5>
+	<message_6>AUDIO</message_6>
+</REALTAGRECORD>
+<GETRECORD>
+    <title>Camera</title>
+    <message_0>Camera</message_0>
+	<message_1>Pain Score</message_1>
+	<message_2>Time</message_2>
+    <message_3>Position</message_3>
+    <message_4>X Axis</message_4>
+    <message_5>Y Axis</message_5>
+    <message_6>Z Axis</message_6>
+    <message_7>Rec End</message_7>
+</GETRECORD>
