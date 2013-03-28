@@ -33,7 +33,7 @@ void guiMessXML::setup(float newRectX, float newRectY, string newSetDocDir){
     
 	rectX = newRectX;
 	rectY = newRectY;
-	myFont.loadFont("mono.ttf", 12, false);
+	myFont.loadFont("verdana.ttf", 12, false);
 	guiText_0.setup();
 	guiText_0.setFont(myFont);
 	guiText_0.setText(getMessRecordXML[3]);
@@ -87,14 +87,14 @@ void guiMessXML::draw(){
 	ofFill();
     ofEnableAlphaBlending();
     ofSetColor(playRecordRectColor);
-	ofRect(rectX-15, rectY-128, rectW+13, rectH*maxNumInList-3);
+	ofRect(rectX-15, rectY-128, rectW+15, rectH*maxNumInList+7);
     if (recIndex_Y >= maxNumInList) {
         ofSetColor(playRecordRectColor);
     }else {
         ofSetColor(recRecordRectColor);
     }
     ofNoFill();
-    ofRect(rectX-15, rectY-128, rectW+13, rectH*maxNumInList-3);
+    ofRect(rectX-15, rectY-128, rectW+15, rectH*maxNumInList+7);
     int rectXW = rectX+rectW+5;
     
     ofFill();

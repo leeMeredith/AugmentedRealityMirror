@@ -13,7 +13,7 @@ void recordTextInt::setup(float newRectX, float newRectY){
     string setSome = "000";
     rectX = newRectX;
 	rectY = newRectY;
-	scoreFont.loadFont("mono.ttf", 12, false);
+	scoreFont.loadFont("verdana.ttf", 12, false);
 	guiText_0.setup();
 	guiText_0.setFont(scoreFont);
 	guiText_0.setText(newScoreString);

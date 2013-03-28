@@ -25,7 +25,7 @@ void audioPlayer::setup(int newRectX, int newRectY, string newLargeAudioDir){
     getMessAudioXML[5] = getXML.getValue("AUDIO:message_5" , "XML?");
     //-------------xml---------------_
     
-	knobFont.loadFont("mono.ttf", 12, false);
+	knobFont.loadFont("verdana.ttf", 12, false);
 	guiText_0.setup();
 	guiText_0.setFont(knobFont);
 	guiText_0.setText(getMessAudioXML[5]);
@@ -110,11 +110,11 @@ void audioPlayer::draw(){
     ofEnableAlphaBlending();
 	ofSetColor(0, 0, 255, 40);
     int newRectH = rectH*3;
-	ofRect(rectX-12, rectY-100, rectW+43, newRectH);
+	ofRect(rectX-12, rectY-100, rectW+53, newRectH+5);
     
     ofNoFill();
 	ofSetColor(0, 0, 255, 255);
-	ofRect(rectX-12, rectY-100, rectW+43, newRectH);
+	ofRect(rectX-12, rectY-100, rectW+53, newRectH+5);
 
     ofFill();
     ofSetColor(100, 100, 255, 255);
@@ -122,7 +122,7 @@ void audioPlayer::draw(){
     ofSetColor(playColor);
 	guiText_0.renderString(getMessAudioXML[1], rectX-10, rectY-65);
     ofSetColor(pausedColor);
-	guiText_0.renderString(getMessAudioXML[2], rectX+50, rectY-65);
+	guiText_0.renderString(getMessAudioXML[2], rectX+40, rectY-65);
     //ofSetColor(controlColor);
 	//guiText_0.renderString(getMessAudioXML[3], rectX-10, rectY-45);
 	//guiText_0.renderString(getMessAudioXML[4], rectX-10, rectY-25);
