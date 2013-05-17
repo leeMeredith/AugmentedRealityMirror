@@ -672,7 +672,19 @@ void dataLoggerARM::keyPressed  (int key){
     //----Directory-Image---_
     //-------------ofDirectory-----------_
     
-    //letterForm----------------------_    
+    //letterForm----------------------_
+    if ( guiMessXML_0.recIndex_Y != 0
+        && guiMessXML_0.recIndex_Y != 6
+        && guiMessXML_0.recIndex_Y != guiMessXML_0.maxNumInList
+        && isKeyFill == false) {
+        if (key == OF_KEY_RIGHT || key == 258) {
+            guiMessXML_0.isRight = true;
+        } 
+        if (key == OF_KEY_LEFT || key == 256) {
+            guiMessXML_0.isLeft = true;
+        }
+    }
+
     if(key == '<') {
 		guiMessXML_0.isDownList = true;
         if (guiMessXML_0.recIndex_Y == guiMessXML_0.maxNumInList) {
@@ -690,6 +702,11 @@ void dataLoggerARM::keyPressed  (int key){
         isSetAllDefault = true;
         recRecordARM_0.isGetAll = true;
 	} else if(key == OF_KEY_RETURN || key == 13) {
+        addKeyIndexZero = 0;
+        toAddZero = "";
+        isDelAtIndexZero = false;
+        guiMessXML_0.isSetCursorAtSizeZero_X = false;
+        
         if (guiMessXML_0.recIndex_Y == 0) {
             if (setRecordFile != "" && isKeyFileRL == true) {  
                 if (isJustAtRunFile == true) {
@@ -729,28 +746,45 @@ void dataLoggerARM::keyPressed  (int key){
             }
             recRecordARM_0.isSaveAll = true;
             recRecordARM_0.isGetAll = true;
+            guiMessXML_0.isFileEnter = false;
         }
         //---ofDirectory-----_
         
         if (guiMessXML_0.recIndex_Y == 2) {
+            if (setRecordSession.at(0) == ' ') {
+                setRecordSession.erase(setRecordSession.begin());
+            }
             recRecordWhichTagCon = recordSession = setRecordSession;
             recRecordARM_0.isRemoveTag = true;
             isKeySession = false;
+            guiMessXML_0.isSessionEnter = false;
         }
         if (guiMessXML_0.recIndex_Y == 3) {
+            if (setRecordParticipant.at(0) == ' ') {
+                setRecordParticipant.erase(setRecordParticipant.begin());
+            }
             recRecordWhichTagCon = recordParticipant = setRecordParticipant;
             recRecordARM_0.isRemoveTag = true;
             isKeyParticipant = false;
+            guiMessXML_0.isParticipantEnter = false;
         }
         if (guiMessXML_0.recIndex_Y == 4) {
+            if (setRecordAge.at(0) == ' ') {
+                setRecordAge.erase(setRecordAge.begin());
+            }
             recRecordWhichTagCon = recordAge = setRecordAge;
             recRecordARM_0.isRemoveTag = true;
             isKeyRecAge = false;
+            guiMessXML_0.isAgeEnter = false;
         }
         if (guiMessXML_0.recIndex_Y == 5) {
+            if (setRecordAmputation.at(0) == ' ') {
+                setRecordAmputation.erase(setRecordAmputation.begin());
+            }
             recRecordWhichTagCon = recordAmputation = setRecordAmputation;
             recRecordARM_0.isRemoveTag = true;
             isKeyRecAmputation = false;
+            guiMessXML_0.isAmputationEnter = false;
         }
         if (guiMessXML_0.recIndex_Y == 6) {
             if (setRecordAudio != ""){
@@ -761,6 +795,7 @@ void dataLoggerARM::keyPressed  (int key){
                 //---ofDirectory-----_
                 recRecordARM_0.isRemoveTag = true;
                 isKeyAudio = false;
+                guiMessXML_0.isAudioEnter = false;
             }
         }
         /*
@@ -792,6 +827,9 @@ void dataLoggerARM::keyPressed  (int key){
         }
          */
 	}else if(key == OF_KEY_DEL || key == 127) {
+        addKeyIndexZero = 0;
+        toAddZero = "";
+        
         if (guiMessXML_0.recIndex_Y == 0) {
             setRecordFile = "";
             //ofDirectory--------_
@@ -800,28 +838,106 @@ void dataLoggerARM::keyPressed  (int key){
             //----ofDirectory----_
             isKeyFileRL = true;
             isKeyFile = true;
+            guiMessXML_0.isFileEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 2) {
-            setRecordSession = "";
+            if (setRecordSession.size() > 0) {
+                if (guiMessXML_0.stringIndexRightLeft == 0) {
+                    isDelAtIndexZero = true;
+                }
+                if (guiMessXML_0.stringIndexRightLeft >= setRecordSession.size()) {
+                    setRecordSession.erase(setRecordSession.end()-1,setRecordSession.end());
+                    guiMessXML_0.stringIndexRightLeft--;
+                }else {
+                    setRecordSession.erase(setRecordSession.begin()+guiMessXML_0.stringIndexRightLeft);
+                    guiMessXML_0.stringIndexRightLeft--;
+                }
+            }
+            if (setRecordSession.size() <= 0) {
+                isDelAtIndexZero = false;
+                setRecordSession = "";
+            }
+            guiMessXML_0.stringSize = setRecordSession.size();
+            stringSizeWas = setRecordSession.size();
             isKeySession = true;
+            guiMessXML_0.isSessionEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 3) {
-            setRecordParticipant = "";
+            if (setRecordParticipant.size() > 0) {
+                if (guiMessXML_0.stringIndexRightLeft == 0) {
+                    isDelAtIndexZero = true;
+                }
+                if (guiMessXML_0.stringIndexRightLeft >= setRecordParticipant.size()) {
+                    setRecordParticipant.erase(setRecordParticipant.end()-1,setRecordParticipant.end());
+                    guiMessXML_0.stringIndexRightLeft--;
+                }else {
+                    setRecordParticipant.erase(setRecordParticipant.begin()+guiMessXML_0.stringIndexRightLeft);
+                    guiMessXML_0.stringIndexRightLeft--;
+                }
+            }
+            if (setRecordParticipant.size() <= 0) {
+                isDelAtIndexZero = false;
+                setRecordParticipant = "";
+            }
+            guiMessXML_0.stringSize = setRecordParticipant.size();
+            stringSizeWas = setRecordParticipant.size();
+
             isKeyParticipant = true;
+            guiMessXML_0.isParticipantEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 4) {
-            setRecordAge = "";
+            if (setRecordAge.size() > 0) {
+                if (guiMessXML_0.stringIndexRightLeft == 0) {
+                    isDelAtIndexZero = true;
+                }
+                if (guiMessXML_0.stringIndexRightLeft >= setRecordAge.size()) {
+                    setRecordAge.erase(setRecordAge.end()-1,setRecordAge.end());
+                    guiMessXML_0.stringIndexRightLeft--;
+                }else {
+                    setRecordAge.erase(setRecordAge.begin()+guiMessXML_0.stringIndexRightLeft);
+                    guiMessXML_0.stringIndexRightLeft--;
+                }
+            }
+            if (setRecordAge.size() <= 0) {
+                isDelAtIndexZero = false;
+                setRecordAge = "";
+            }
+            guiMessXML_0.stringSize = setRecordAge.size();
+            stringSizeWas = setRecordAge.size();
             isKeyRecAge = true;
+            guiMessXML_0.isAgeEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 5) {
-            setRecordAmputation = "";
+            if (setRecordAmputation.size() > 0) {
+                setRecordAmputation.erase(setRecordAmputation.end()-1,setRecordAmputation.end());
+            }
+            if (setRecordAmputation.size() > 0) {
+                if (guiMessXML_0.stringIndexRightLeft == 0) {
+                    isDelAtIndexZero = true;
+                }
+                if (guiMessXML_0.stringIndexRightLeft >= setRecordAmputation.size()) {
+                    setRecordAmputation.erase(setRecordAmputation.end()-1,setRecordAmputation.end());
+                    guiMessXML_0.stringIndexRightLeft--;
+                }else {
+                    setRecordAmputation.erase(setRecordAmputation.begin()+guiMessXML_0.stringIndexRightLeft);
+                    guiMessXML_0.stringIndexRightLeft--;
+                }
+            }
+            if (setRecordAmputation.size() <= 0) {
+                isDelAtIndexZero = false;
+                setRecordAmputation = "";
+            }
+            guiMessXML_0.stringSize = setRecordAmputation.size();
+            stringSizeWas = setRecordAmputation.size();
             isKeyRecAmputation = true;
+            guiMessXML_0.isAmputationEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 6) {
             //ofDirectory--------_
             recAudioCurrentDirTest = true;
             isSetAudioDefault = false;
             //----ofDirectory----_
+            guiMessXML_0.isAudioEnter = true;
         }
         /*
         if (guiMessXML_0.recIndex_Y == 7) {
@@ -835,7 +951,13 @@ void dataLoggerARM::keyPressed  (int key){
             //isKeyDiaImage = true;
         }
          */
-	} else if(key != '@' || key != OF_KEY_DEL || key != 127 || key == OF_KEY_RETURN || key != 13) {
+	} else if(key != '@' 
+              && key != OF_KEY_DEL && key != 127 
+              && key != OF_KEY_RETURN && key != 13 
+              && key != OF_KEY_RIGHT && key != 258 
+              && key != OF_KEY_LEFT && key != 256
+              && key != OF_KEY_UP && key != 357
+              && key != OF_KEY_DOWN && key != 359) {
 		letterForm = key;
         if (guiMessXML_0.recIndex_Y == 0 && 
             key != ':'&& 
@@ -870,18 +992,119 @@ void dataLoggerARM::keyPressed  (int key){
             key != ' '&& 
             key != 9) {
             if (isKeyFile == true)setRecordFile += letterForm;
+            guiMessXML_0.isFileEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 2) {
-            if (isKeySession == true)setRecordSession += letterForm;
+            if (setRecordSession.size() > 0) {
+                addKeyIndexZero++;
+                cout << addKeyIndexZero << endl;
+                if (isDelAtIndexZero == true) {
+                    guiMessXML_0.stringIndexRightLeft++;
+                    toAddZero += letterForm;
+                    if (toAddZero.size() > 1) {
+                        toAddZero.erase(toAddZero.begin()+addKeyIndexZero, toAddZero.end());
+                    }
+                    setRecordSession.insert(0, toAddZero);
+                    setRecordSession.erase(setRecordSession.begin(), setRecordSession.end()-stringSizeWas);
+                    setRecordSession.insert(0, toAddZero);
+                    
+                }
+                if (isDelAtIndexZero == false) {
+                    guiMessXML_0.stringIndexRightLeft++;
+                    setRecordSession.insert(guiMessXML_0.stringIndexRightLeft, letterForm);
+                }
+            }
+            
+            if (setRecordSession.size() <= 0) {
+                guiMessXML_0.stringIndexRightLeft = 0;
+                setRecordSession += letterForm;
+            }
+            guiMessXML_0.stringSize = setRecordSession.size();
+            guiMessXML_0.isSessionEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 3) {
-            if (isKeyParticipant == true)setRecordParticipant += letterForm;
+            if (setRecordParticipant.size() > 0) {
+                addKeyIndexZero++;
+                cout << addKeyIndexZero << endl;
+                if (isDelAtIndexZero == true) {
+                    guiMessXML_0.stringIndexRightLeft++;
+                    toAddZero += letterForm;
+                    if (toAddZero.size() > 1) {
+                        toAddZero.erase(toAddZero.begin()+addKeyIndexZero, toAddZero.end());
+                    }
+                    setRecordParticipant.insert(0, toAddZero);
+                    setRecordParticipant.erase(setRecordParticipant.begin(), setRecordParticipant.end()-stringSizeWas);
+                    setRecordParticipant.insert(0, toAddZero);
+                    
+                }
+                if (isDelAtIndexZero == false) {
+                    guiMessXML_0.stringIndexRightLeft++;
+                    setRecordParticipant.insert(guiMessXML_0.stringIndexRightLeft, letterForm);
+                }
+            }
+            
+            if (setRecordParticipant.size() <= 0) {
+                guiMessXML_0.stringIndexRightLeft = 0;
+                setRecordParticipant += letterForm;
+            }
+            guiMessXML_0.stringSize = setRecordParticipant.size();
+            guiMessXML_0.isParticipantEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 4) {
-            if (isKeyRecAge == true)setRecordAge += letterForm;
+            if (setRecordAge.size() > 0) {
+                addKeyIndexZero++;
+                cout << addKeyIndexZero << endl;
+                if (isDelAtIndexZero == true) {
+                    guiMessXML_0.stringIndexRightLeft++;
+                    toAddZero += letterForm;
+                    if (toAddZero.size() > 1) {
+                        toAddZero.erase(toAddZero.begin()+addKeyIndexZero, toAddZero.end());
+                    }
+                    setRecordAge.insert(0, toAddZero);
+                    setRecordAge.erase(setRecordAge.begin(), setRecordAge.end()-stringSizeWas);
+                    setRecordAge.insert(0, toAddZero);
+                    
+                }
+                if (isDelAtIndexZero == false) {
+                    guiMessXML_0.stringIndexRightLeft++;
+                    setRecordAge.insert(guiMessXML_0.stringIndexRightLeft, letterForm);
+                }
+            }
+            
+            if (setRecordAge.size() <= 0) {
+                guiMessXML_0.stringIndexRightLeft = 0;
+                setRecordAge += letterForm;
+            }
+            guiMessXML_0.stringSize = setRecordAge.size();
+            guiMessXML_0.isAgeEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 5) {
-           if (isKeyRecAmputation == true)setRecordAmputation += letterForm;
+            if (setRecordAmputation.size() > 0) {
+                addKeyIndexZero++;
+                cout << addKeyIndexZero << endl;
+                if (isDelAtIndexZero == true) {
+                    guiMessXML_0.stringIndexRightLeft++;
+                    toAddZero += letterForm;
+                    if (toAddZero.size() > 1) {
+                        toAddZero.erase(toAddZero.begin()+addKeyIndexZero, toAddZero.end());
+                    }
+                    setRecordAmputation.insert(0, toAddZero);
+                    setRecordAmputation.erase(setRecordAmputation.begin(), setRecordAmputation.end()-stringSizeWas);
+                    setRecordAmputation.insert(0, toAddZero);
+                    
+                }
+                if (isDelAtIndexZero == false) {
+                    guiMessXML_0.stringIndexRightLeft++;
+                    setRecordAmputation.insert(guiMessXML_0.stringIndexRightLeft, letterForm);
+                }
+            }
+            
+            if (setRecordAmputation.size() <= 0) {
+                guiMessXML_0.stringIndexRightLeft = 0;
+                setRecordAmputation += letterForm;
+            }
+            guiMessXML_0.stringSize = setRecordAmputation.size();
+            guiMessXML_0.isAmputationEnter = true;
         }
 	}   
     //---------letterForm-------------_

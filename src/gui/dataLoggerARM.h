@@ -51,6 +51,10 @@ public:
     float recPosition_X, recPosition_Y, recPosition_Z, recXAxis_X, recXAxis_Y, recXAxis_Z, recYAxis_X, recYAxis_Y, recYAxis_Z, recZAxis_X, recZAxis_Y, recZAxis_Z;
     
     //guiMessXML------------------------_
+    bool isDelAtIndexZero;
+    int addKeyIndexZero;
+    int stringSizeWas;
+    string toAddZero;
     guiMessXML guiMessXML_0;
     guiGetRecMessXML guiGetRecMessXML_0;
     //-----------guiMessXML-------------_

@@ -513,9 +513,8 @@ void testApp::keyPressed (int key) {
                 flipH = !flipH;
             }
         }
-    }
     
-    if (bDrawPointCloud == false) {
+        if (bDrawPointCloud == false) {
         switch (key) {
         case ' ':
             bThreshWithOpenCV = !bThreshWithOpenCV;
@@ -572,59 +571,60 @@ void testApp::keyPressed (int key) {
         isGuiAll = true;
         isDataLoggerARM = false;
     }
+        
+        //ofCamera----------------------------------------_
+        if (isGuiDataLoggerARM == false && isDataLoggerARM == false && bDrawPointCloud == true && isGuiAll == true) {
+            ofNode *n = &cam[camToConfigure];
+            
+            switch(key) {
+                case 'c':
+                    camToConfigure = 1 - camToConfigure;
+                    printf("\n\n** MOVING CAMERA %i **\n", camToConfigure);
+                    break;
+                    
+                case 'v':
+                    camToView = 1 - camToView;
+                    printf("\n\n** SHOWING CAMERA %i **\n", camToView);
+                    break;
+                    
+                case 'z':
+                    reset();
+                    break;
+                    
+                case 't':
+                    lookatIndex[camToConfigure]++ ; 
+                    if(lookatIndex[camToConfigure]>=kNumTestNodes) {
+                        lookatIndex[camToConfigure] = -1;
+                        // cam[camToConfigure].disableTarget();
+                        // } else {
+                        // cam[camToConfigure].setTarget(testNodes[parentIndex[camToConfigure]]);
+                    }
+                    break;
+                    
+                case 'p':
+                    parentIndex[camToConfigure]++ ; 
+                    ofVec3f oldP = cam[camToConfigure].getGlobalPosition();
+                    ofQuaternion oldQ = cam[camToConfigure].getGlobalOrientation();
+                    if(parentIndex[camToConfigure]>=kNumTestNodes) {
+                        parentIndex[camToConfigure] = -1;
+                        cam[camToConfigure].clearParent();
+                    } else {
+                        cam[camToConfigure].setParent(testNodes[parentIndex[camToConfigure]]);
+                    }
+                    cam[camToConfigure].setGlobalPosition(oldP);
+                    cam[camToConfigure].setGlobalOrientation(oldQ);
+                    
+                    break;
+            }
+        }
+    }
+    //---------------------ofCamera-------------------_
     
     //dataLoggerARM-----------------------------------_
     if (isDataLoggerARM == true && bDrawPointCloud == true) {
         dataLoggerARM_0.keyPressed(key);
     }
     //-----------------dataLoggerARM------------------_
-    
-    //ofCamera----------------------------------------_
-    if (isGuiDataLoggerARM == false && isDataLoggerARM == false && bDrawPointCloud == true && isGuiAll == true) {
-        ofNode *n = &cam[camToConfigure];
-        
-        switch(key) {
-            case 'c':
-                camToConfigure = 1 - camToConfigure;
-                printf("\n\n** MOVING CAMERA %i **\n", camToConfigure);
-                break;
-                
-            case 'v':
-                camToView = 1 - camToView;
-                printf("\n\n** SHOWING CAMERA %i **\n", camToView);
-                break;
-                
-            case 'z':
-                reset();
-                break;
-                
-            case 't':
-                lookatIndex[camToConfigure]++ ; 
-                if(lookatIndex[camToConfigure]>=kNumTestNodes) {
-                    lookatIndex[camToConfigure] = -1;
-                    // cam[camToConfigure].disableTarget();
-                    // } else {
-                    // cam[camToConfigure].setTarget(testNodes[parentIndex[camToConfigure]]);
-                }
-                break;
-                
-            case 'p':
-                parentIndex[camToConfigure]++ ; 
-                ofVec3f oldP = cam[camToConfigure].getGlobalPosition();
-                ofQuaternion oldQ = cam[camToConfigure].getGlobalOrientation();
-                if(parentIndex[camToConfigure]>=kNumTestNodes) {
-                    parentIndex[camToConfigure] = -1;
-                    cam[camToConfigure].clearParent();
-                } else {
-                    cam[camToConfigure].setParent(testNodes[parentIndex[camToConfigure]]);
-                }
-                cam[camToConfigure].setGlobalPosition(oldP);
-                cam[camToConfigure].setGlobalOrientation(oldQ);
-                
-                break;
-        }
-    }
-    //---------------------ofCamera-------------------_
 }
 
 //--------------------------------------------------------------
