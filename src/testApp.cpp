@@ -37,6 +37,9 @@ void testApp::reset() {
 void testApp::setup() {
 	ofSetLogLevel(OF_LOG_VERBOSE);
     ofSetWindowTitle("ARM");//"Aaugmented Reality Mirror"
+    ofSetWindowPosition(10, 10);
+    bFullscreen	= 0;
+    
 	//ofCamera----------------------------------------_
     glEnable(GL_DEPTH_TEST);
 	ofSetVerticalSync(true);
@@ -256,6 +259,7 @@ void testApp::draw() {
         ofSetColor(255, 255, 255);
         stringstream reportStream;
         reportStream << "Rotate the point cloud with the mouse" << endl
+        << "Press 'f' to switch to full screen" << endl
         << "Press 'h' to switch mirror horizontal for participant" << endl
         << "accel is: " << ofToString(kinect.getMksAccel().x, 2) << " / "
         << ofToString(kinect.getMksAccel().y, 2) << " / "
@@ -274,11 +278,12 @@ void testApp::draw() {
     if(bDrawPointCloud == true) {
         if (isGuiDataLoggerARM == true && isGuiAll == true) {
             //ofBackground(0);
-            
+            //bFullscreen
             string s = string("") + 
             "\n" + 
             "KEYS:\n" + 
             "\n" +
+            "Press 'f' to switch to full screen\n"+
             "Press 'h' to switch mirror horizontal for participant\n"+
             "\n" +
             "Out Form Field\n" +
@@ -316,6 +321,7 @@ void testApp::draw() {
             
             string s = string("") + 
             "\n" +
+            "Press 'f' to switch to full screen\n"+
             "Press 'h' to switch mirror horizontal for participant\n"+
             "\n" +
             "Purple boxes (4 of them) are generic nodes with simple circular motion, linked in a hierarchy (with ofNode::setParent).\n" + 
@@ -521,6 +527,20 @@ void testApp::exit() {
 void testApp::keyPressed (int key) {
     
     if (dataLoggerARM_0.isKeyFill == false) {
+        
+        if(key == 'f'){
+            
+            bFullscreen = !bFullscreen;
+            
+            if(!bFullscreen){
+                ofSetWindowShape(1224,800);
+                ofSetFullscreen(false);
+                // figure out how to put the window in the center:
+                ofSetWindowPosition(10, 10);
+            } else if(bFullscreen == 1){
+                ofSetFullscreen(true);
+            }
+        }
         
         if (bDrawPointCloud == true) {
             if (key == 'h' || key == 'H'){

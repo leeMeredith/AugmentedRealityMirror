@@ -35,6 +35,8 @@ public:
 	
 	ofxKinect kinect;
 	
+    bool  	bFullscreen;
+    
 	ofxCvColorImage colorImg;
 	
 	ofxCvGrayscaleImage grayImage; // grayscale depth image
