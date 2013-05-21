@@ -113,7 +113,9 @@ void testApp::update() {
 	ofBackground(100, 100, 100);
 	
 	kinect.update();
-	
+    if(!bFullscreen){
+        ofSetWindowTitle("ARM");//"Aaugmented Reality Mirror"
+    }
 	// there is a new frame and we are connected
 	if(kinect.isFrameNew()) {
 		
