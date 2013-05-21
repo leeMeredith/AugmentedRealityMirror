@@ -10,6 +10,7 @@
 
 #include "dataLoggerARM.h"
 #include "velSmoothStateXY.h"
+#include "drHitAreaImage.h"
 
 #define kNumTestNodes 4
 #define kNumCameras 2
@@ -84,5 +85,9 @@ public:
     //velSmoothStateXY--------------------------------_
     velSmoothStateXY velSmoothStateMouseMoved;
     //-----------------velSmoothStateXY---------------_
+    
+    //drHitAreaImage----------------------------------_
+    drHitAreaImage drHitAreaImage_0;
+    //-----------------drHitAreaImage-----------------_
     
 };

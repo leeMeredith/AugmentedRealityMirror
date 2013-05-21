@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "guiText.h"
 
 #define SG_STATE_SELECTED 1
 
@@ -22,15 +21,14 @@ public:
 	
 	ofRectangle boundingBox;
 	ofRectangle myHitAreaImage;
-	 
-	guiText displayText;
+    
 	float offsetX, offsetY;
 	float titleSpacing;
 	float fontSize;
 	bool readOnly;
 	bool bShowText;
 	int  state;
-    bool isIn;
+    bool isIn, isSel;
     
     ofImage myImage;
 };

@@ -40,6 +40,16 @@ void hitAreaImage::setImage(ofImage newImage){
 
 //--------------------------------------------------------------
 void hitAreaImage::draw(float x, float y){
+    
+    if (isSel == true) {
+        ofNoFill();
+        ofSetColor(255, 0, 255, 255);
+        ofRect(x-1, y-1, myImage.width+2, myImage.height+2);
+    }else {
+        ofNoFill();
+        ofSetColor(0, 0, 0, 75);
+        ofRect(x-1, y-1, myImage.width+2, myImage.height+2);
+    }
     ofFill();
     if (isIn == true) {
         ofSetColor(255, 0, 0);

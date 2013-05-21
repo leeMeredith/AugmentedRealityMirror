@@ -139,7 +139,7 @@ void guiGetRecMessXML::update(float newRectX, float newRectY, string newSetDocDi
     //------------recordInt-----------_    
     
     //recordFloat-----------------------_
-    int rectXW = rectX+rectW+40;
+    int rectXW = rectX+rectW+60;
     camera.update(rectXW, rectY-80, cameraVal);
     painScore.update(rectXW, rectY-65, painScoreVal);
     
@@ -186,14 +186,14 @@ void guiGetRecMessXML::draw(){
 	ofFill();
     ofEnableAlphaBlending();
 	ofSetColor(playRecordRectColor);
-	ofRect(rectX-15, rectY-98, rectW+41, rectH*11);
+	ofRect(rectX-15, rectY-98, rectW+61, rectH*11);
     
     ofNoFill();
 	ofSetColor(playRecordColor);
-	ofRect(rectX-15, rectY-98, rectW+41, rectH*11);
+	ofRect(rectX-15, rectY-98, rectW+61, rectH*11);
 	
     ofFill();
-    int rectXW = rectX+rectW+28;
+    int rectXW = rectX+rectW+50;
     ofSetColor(playRecordColor);//ofSetColor(playRecordRectColor);
 	guiText_0.renderString(getMessGetRecordXML[0], rectX-10, rectY-80);
 	guiText_0.renderString(getMessGetRecordXML[1], rectX-10, rectY-65);

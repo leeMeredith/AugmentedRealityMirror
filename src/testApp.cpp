@@ -36,6 +36,7 @@ void testApp::reset() {
 //--------------------------------------------------------------
 void testApp::setup() {
 	ofSetLogLevel(OF_LOG_VERBOSE);
+    ofSetWindowTitle("ARM");//"Aaugmented Reality Mirror"
 	//ofCamera----------------------------------------_
     glEnable(GL_DEPTH_TEST);
 	ofSetVerticalSync(true);
@@ -96,6 +97,10 @@ void testApp::setup() {
     //velSmoothStateXY--------------------------------_
     velSmoothStateMouseMoved.setup(5, 5);
     //-----------------velSmoothStateXY---------------_
+    
+    //drHitAreaImage----------------------------------_
+    drHitAreaImage_0.setup();
+    //-----------------drHitAreaImage-----------------_
 
 }
 
@@ -197,7 +202,30 @@ void testApp::update() {
     //velSmoothStateXY--------------------------------_
     velSmoothStateMouseMoved.update(mouseX, mouseY);
     //-----------------velSmoothStateXY---------------_
-
+    
+    //drHitAreaImage----------------------------------_
+    drHitAreaImage_0.update();
+    if (drHitAreaImage_0.hitAreaImageIndex == 1) {
+        bDrawPointCloud = false;
+        isGuiAll = true;
+    }
+    if (drHitAreaImage_0.hitAreaImageIndex == 2) {
+        bDrawPointCloud = true;
+        isGuiDataLoggerARM = true;
+        if (isGuiDataLoggerARM == false) {
+            isDataLoggerARM = false;
+        }
+        isGuiAll = true;
+    }
+    if (drHitAreaImage_0.hitAreaImageIndex == 3) {
+        bDrawPointCloud = true;
+        isGuiDataLoggerARM = false;
+        if (isGuiDataLoggerARM == false) {
+            isDataLoggerARM = false;
+        }
+        isGuiAll = true;
+    }
+        //-----------------drHitAreaImage-----------------_
 }
 
 //--------------------------------------------------------------
@@ -227,8 +255,8 @@ void testApp::draw() {
         
         ofSetColor(255, 255, 255);
         stringstream reportStream;
-        reportStream << "press 'P' to switch between images and point cloud, rotate the point cloud with the mouse" << endl
-        << "press 'h' to switch mirror horizontal for patient" << endl
+        reportStream << "Rotate the point cloud with the mouse" << endl
+        << "Press 'h' to switch mirror horizontal for participant" << endl
         << "accel is: " << ofToString(kinect.getMksAccel().x, 2) << " / "
         << ofToString(kinect.getMksAccel().y, 2) << " / "
         << ofToString(kinect.getMksAccel().z, 2) << endl
@@ -238,7 +266,7 @@ void testApp::draw() {
         << ", fps: " << ofGetFrameRate() << endl
         << "press 'c' to close the connection and o to open it again, connection is: " << kinect.isConnected() << endl
         << "press 'UP' and 'DOWN' to change the tilt angle: " << angle << " degrees" << endl;
-        ofDrawBitmapString(reportStream.str(),20,652);
+        ofDrawBitmapString(reportStream.str(), 425, 420);
         glEnable(GL_CULL_FACE);
     }
 	// draw instructions
@@ -251,8 +279,7 @@ void testApp::draw() {
             "\n" + 
             "KEYS:\n" + 
             "\n" +
-            " 'g' or 'G' Get GUI AKA Camera / Data Logger\n" + 
-            " 'l' or 'L' to Session\n" +
+            "Press 'h' to switch mirror horizontal for participant\n"+
             "\n" +
             "Out Form Field\n" +
             "\n" +
@@ -288,9 +315,8 @@ void testApp::draw() {
             //ofBackground(0);
             
             string s = string("") + 
-            "\n" + 
-            " 'g' or 'G' Get GUI AKA Camera / Data Logger\n" + 
-            " 'l' or 'L' to Session\n" +
+            "\n" +
+            "Press 'h' to switch mirror horizontal for participant\n"+
             "\n" +
             "Purple boxes (4 of them) are generic nodes with simple circular motion, linked in a hierarchy (with ofNode::setParent).\n" + 
             "Yellow boxes (2 of them) are cameras. You are looking through one of them so can only see one box on screen.\n" + 
@@ -398,6 +424,13 @@ void testApp::draw() {
         //---------------------ofCamera-------------------_
     }
     
+    //drHitAreaImage----------------------------------_
+    glDisable(GL_CULL_FACE);
+    ofEnableAlphaBlending();
+    drHitAreaImage_0.draw();
+    ofDisableAlphaBlending();
+    glEnable(GL_CULL_FACE);
+    //-----------------drHitAreaImage-----------------_
 }
 
 void testApp::drawPointCloud() {
@@ -488,27 +521,8 @@ void testApp::exit() {
 void testApp::keyPressed (int key) {
     
     if (dataLoggerARM_0.isKeyFill == false) {
-        if (key == 'P') {
-            bDrawPointCloud = !bDrawPointCloud;
-        }
-        
-        if (key == 'g' || key ==  'G') {
-            isGuiDataLoggerARM = !isGuiDataLoggerARM;
-            if (isGuiDataLoggerARM == false) {
-                isDataLoggerARM = false;
-            }
-        }
         
         if (bDrawPointCloud == true) {
-            if (key == 'l' || key ==  'L') {
-                isGuiAll = !isGuiAll;
-                if (isGuiAll == false) {
-                    isDataLoggerARM = true;
-                }
-                if (isGuiDataLoggerARM == false && isGuiAll == true) {
-                    isDataLoggerARM = false;
-                }
-            }
             if (key == 'h' || key == 'H'){
                 flipH = !flipH;
             }
@@ -628,22 +642,50 @@ void testApp::keyPressed (int key) {
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y){}
+void testApp::mouseMoved(int x, int y){
+    //drHitAreaImage----------------------------------_
+    drHitAreaImage_0.mouseMoved(x, y);
+    //-----------------drHitAreaImage-----------------_
+}
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button)
-{}
+void testApp::mouseDragged(int x, int y, int button){
+    //drHitAreaImage----------------------------------_
+    drHitAreaImage_0.mouseDragged(x, y, button);
+    //-----------------drHitAreaImage-----------------_
+}
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
     if (isDataLoggerARM == true && bDrawPointCloud == true) {
-        dataLoggerARM_0.recRecordARM_0.isLogging = true;
+        if (drHitAreaImage_0.isHitOk == false) {
+            dataLoggerARM_0.recRecordARM_0.isLogging = true;
+        }
     }
+    //drHitAreaImage----------------------------------_
+    drHitAreaImage_0.mousePressed(x, y, button);
+    if (drHitAreaImage_0.isHitOk == true) {
+        if (drHitAreaImage_0.hitAreaImageIndex == 4) {
+            bDrawPointCloud = true;
+            isGuiAll = !isGuiAll;
+            if (isGuiAll == false) {
+                isDataLoggerARM = true;
+            }
+            if (isGuiDataLoggerARM == false && isGuiAll == true) {
+                isDataLoggerARM = false;
+                drHitAreaImage_0.hitAreaImageIndex = 2;
+            }
+        }
+    }
+    //-----------------drHitAreaImage-----------------_
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button)
-{}
+void testApp::mouseReleased(int x, int y, int button){
+    //drHitAreaImage----------------------------------_
+    drHitAreaImage_0.mouseReleased(x, y, button);
+    //-----------------drHitAreaImage-----------------_
+}
 
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h)

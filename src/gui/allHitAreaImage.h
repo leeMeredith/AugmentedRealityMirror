@@ -6,21 +6,28 @@
 
 #include "ofMain.h"
 #include "hitAreaImage.h"
+#include "guiText.h"
 
-#define MAX_NUM_IMAGE 6
+#define MAX_NUM_IMAGE 4
 
 class allHitAreaImage{
 	
 public:
 	
+    void setup();
 	bool checkHit(float new_x, float new_y);
 	void setPosition(float new_x, float new_y);
 	void setDimensions();
     void setImage(ofImage newImage[MAX_NUM_IMAGE]);
     
 	void draw(float new_x, float new_y);
-	
+	void mousePressed(int x, int y, int button);
+    
+    float boundingBoxWidth, boundingBoxHeight;
+    float pressedSel_x, pressedSel_y;
     float addPosX, testAddPosX;
+    bool isSel;
+    float allSize;
     float test_x, test_y;
     int hitAreaImageIndex;
     
@@ -31,5 +38,10 @@ public:
     string hitDialogIndex;
     string dialogIndex[MAX_NUM_IMAGE];
     hitAreaImage hitAreaImage_0[MAX_NUM_IMAGE];
+    
+    //guiText-----_
+    guiText guiText_0;
+    ofTrueTypeFont myFont;
+    //---guiText--_
     
 };
