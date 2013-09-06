@@ -12,7 +12,7 @@ The Augmented reality mirror therapy app uses the Kinect to capture a real time 
 
 Installation
 ------------
-To use Augmented Reality Mirror, first you need to download and install [Open Frameworks 008](https://github.com/openframeworks/openFrameworks). Second you will need to download [ofxKinect](https://github.com/ofTheo/ofxKinect) and place it into your addons folder. 
+To use Augmented Reality Mirror, You need to download and install [Open Frameworks 008](https://github.com/openframeworks/openFrameworks).
 
 Example
 -------
