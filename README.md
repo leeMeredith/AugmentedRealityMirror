@@ -18,6 +18,10 @@ Example
 -------
 [Movie Example](https://vimeo.com/49252026)
 
+To do
+-------
+Cut out ofxXmlSettings and add ofXml.
+
 Recognition
 -----------
 Thanks to : Kareemah Batts, Desmond Heeley, Joe Labrie, Michael Lichter, Jennifer Eftychiou PT DPT, Jeffrey Heckman DO
