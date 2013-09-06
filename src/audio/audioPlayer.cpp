@@ -25,7 +25,7 @@ void audioPlayer::setup(int newRectX, int newRectY, string newLargeAudioDir){
     getMessAudioXML[5] = getXML.getValue("AUDIO:message_5" , "XML?");
     //-------------xml---------------_
     
-	knobFont.loadFont("verdana.ttf", 12, false);
+	knobFont.loadFont("mono.ttf", 12, false);
 	guiText_0.setup();
 	guiText_0.setFont(knobFont);
 	guiText_0.setText(getMessAudioXML[5]);

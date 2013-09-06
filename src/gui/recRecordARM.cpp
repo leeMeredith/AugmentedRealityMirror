@@ -556,6 +556,7 @@ void recRecordARM::update(string xmlFile){
             isTimesAddressEnd = false;
         }
         
+        getAllPositionsXSize = allPositions_X.size();
         if (setGetRecordAddressAll >= allPositions_X.size()-1) {
             setGetPositionsAddress_X = allPositions_X.size()-1;
             isPositionsAddressEnd = true;

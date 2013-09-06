@@ -12,7 +12,7 @@ void dataLoggerARM::setup(){
     recordAddressDir.listDir("record/address/");
 	recordAddressDir.sort(); // in linux the file system doesn't return file lists ordered in alphabetical order
     if ((int)recordAddressDir.size() == 0) {
-        setRecordFileDefault = setRecordFile = recordFile = "forYou";// if no file in record/address/????.xml
+        setRecordFileDefault = setRecordFile = recordFile = "Demo";// if no file in record/address/????.xml
         recRecordARM_0.isSaveAll = true;
         recRecordARM_0.isGetAll = true;
     }
@@ -26,6 +26,7 @@ void dataLoggerARM::setup(){
     //Directory-Audio-------_
     recordAudioDir.listDir("record/media/audio/");
 	recordAudioDir.sort();
+    isKeyAudioRL = false;
     //----Directory-Audio---_
     
     //Directory-ImageFolder-------_
@@ -65,7 +66,7 @@ void dataLoggerARM::setup(){
     
     //audioPlayer--------------_
     nameOfDirPathAudio = "record/media/audio/loveHate.wav";
-    audioPlayer_0.setup(20, 400, "record/media/audio/loveHate.wav");
+    audioPlayer_0.setup(20, 440, "record/media/audio/loveHate.wav");
     //-------audioPlayer-------_
     
 	ofBackground(75,75,75);
@@ -116,6 +117,7 @@ void dataLoggerARM::setup(){
     
     float setWithRan = ofRandom(0.9, 10.9);
     recCamera = recPainScore = 1;
+    getAllPositionsXSize = 0;
     recPosition_X = recPosition_Y = recPosition_Z = setWithRan;
     recXAxis_X = recXAxis_Y = recXAxis_Z = setWithRan;
     recYAxis_X = recYAxis_Y = recYAxis_Z = setWithRan;
@@ -143,10 +145,14 @@ void dataLoggerARM::setup(){
         
     //guiMessXML------------------------_
     guiMessXML_0.setup(20, 150, "record/message/message_presets_ARM.xml");
-    guiGetRecMessXML_0.setup(20, 250, "record/message/message_presets_ARM.xml");
+    guiGetRecMessXML_0.setup(20, 290, "record/message/message_presets_ARM.xml");
     guiMessXML_0.recIndex_Y = guiMessXML_0.maxNumInList;
     //-----------guiMessXML-------------_
     
+    //xenoRectOne--------------_
+    getPositions_X = getPositions_Y = getPositions_Z = 0;
+    setPosAddres = 0;
+    //xenoRectOne--------------_
 }
 
 //--------------------------------------------------------------
@@ -179,6 +185,7 @@ void dataLoggerARM::update(){
     if (recordAudioDir.size() > 0 && isRecordAudioR == true){
 		recAudioCurrentDir++;
 		recAudioCurrentDir %= recordAudioDir.size();
+        isKeyAudioRL = true;
         isRecordAudioR = false;
 	}
     if (recordAudioDir.size() > 0 && isRecordAudioL == true){
@@ -186,6 +193,7 @@ void dataLoggerARM::update(){
         if (recAudioCurrentDir < 0) {
             recAudioCurrentDir = recordAudioDir.size()-1;
         }
+        isKeyAudioRL = true;
         isRecordAudioL = false;
 	}
     for(int i = 0; i < (int)recordAudioDir.size(); i++){
@@ -461,16 +469,17 @@ void dataLoggerARM::update(){
         guiGetRecMessXML_0.endRecFloatColor;
     }
     guiMessXML_0.update(20, 150, "record/message/message_presets_ARM.xml");
-    guiGetRecMessXML_0.update(20, 250, "record/message/message_presets_ARM.xml");
+    guiGetRecMessXML_0.update(20, 290, "record/message/message_presets_ARM.xml");
     //-----------guiMessXML-------------_
     
     //audioPlayer--------------_
-    audioPlayer_0.update(20, 350, nameOfDirPathAudio);
+    audioPlayer_0.update(20, 440, nameOfDirPathAudio);
     //-------audioPlayer-------_
     
     recRecordARM_0.recordCamera = recCamera;
     recRecordARM_0.recordPainScore = recPainScore;
     recRecordARM_0.recordTime = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
+    getAllPositionsXSize = recRecordARM_0.getAllPositionsXSize;
     recRecordARM_0.recordPosition_X = recPosition_X;
     recRecordARM_0.recordPosition_Y = recPosition_Y;
     recRecordARM_0.recordPosition_Z = recPosition_Z;
@@ -483,6 +492,12 @@ void dataLoggerARM::update(){
     recRecordARM_0.recordZAxis_X = recZAxis_X;
     recRecordARM_0.recordZAxis_Y = recZAxis_Y;
     recRecordARM_0.recordZAxis_Z = recZAxis_Z;
+    
+    //xenoRectOne--------------_
+    getPositions_X = recRecordARM_0.allPositions_X[setPosAddres];//or xenoPosX.prevOne
+    getPositions_Y = recRecordARM_0.allPositions_Y[setPosAddres];
+    getPositions_Z = recRecordARM_0.allPositions_Z[setPosAddres];
+    //xenoRectOne--------------_
 }
 
 //--------------------------------------------------------------
@@ -692,6 +707,7 @@ void dataLoggerARM::keyPressed  (int key){
             recordAddressDir.sort();
         }
         isSetAllDefault = true;
+        isKeyFileRL = isKeyAudioRL = false;
         recRecordARM_0.isGetAll = true;
 	} else if (key == '>' || key == 9) {
         guiMessXML_0.isUpList = true;
@@ -699,6 +715,7 @@ void dataLoggerARM::keyPressed  (int key){
             recordAddressDir.listDir("record/address/");
             recordAddressDir.sort();
         }
+        isKeyFileRL = isKeyAudioRL = false;
         isSetAllDefault = true;
         recRecordARM_0.isGetAll = true;
 	} else if(key == OF_KEY_RETURN || key == 13) {
@@ -787,12 +804,13 @@ void dataLoggerARM::keyPressed  (int key){
             guiMessXML_0.isAmputationEnter = false;
         }
         if (guiMessXML_0.recIndex_Y == 6) {
-            if (setRecordAudio != ""){
+            if (setRecordAudio != "" && isKeyAudioRL == true){
                 recRecordWhichTagCon = recordAudio = setRecordAudio;
                 //ofDirectory--------_
                 recordAudioDir.listDir("record/media/audio/");
                 recordAudioDir.sort();
                 //---ofDirectory-----_
+                isKeyAudioRL = false;
                 recRecordARM_0.isRemoveTag = true;
                 isKeyAudio = false;
                 guiMessXML_0.isAudioEnter = false;
@@ -831,6 +849,9 @@ void dataLoggerARM::keyPressed  (int key){
         toAddZero = "";
         
         if (guiMessXML_0.recIndex_Y == 0) {
+            if (isJustAtRunFile == true) {
+                isJustAtRunFile = false;
+            }
             setRecordFile = "";
             //ofDirectory--------_
             recAddressCurrentDirTest = true;
@@ -908,9 +929,6 @@ void dataLoggerARM::keyPressed  (int key){
             guiMessXML_0.isAgeEnter = true;
         }
         if (guiMessXML_0.recIndex_Y == 5) {
-            if (setRecordAmputation.size() > 0) {
-                setRecordAmputation.erase(setRecordAmputation.end()-1,setRecordAmputation.end());
-            }
             if (setRecordAmputation.size() > 0) {
                 if (guiMessXML_0.stringIndexRightLeft == 0) {
                     isDelAtIndexZero = true;

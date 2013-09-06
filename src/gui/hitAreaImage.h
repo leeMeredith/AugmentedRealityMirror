@@ -29,6 +29,7 @@ public:
 	bool bShowText;
 	int  state;
     bool isIn, isSel;
-    
+    ofColor setColorSel_0, setColorSel_1;
+    ofColor setColorIn_0, setColorIn_1;
     ofImage myImage;
 };

@@ -27,7 +27,7 @@ void guiGetRecMessXML::setup(float newRectX, float newRectY, string newSetDocDir
     	
 	rectX = newRectX;
 	rectY = newRectY;
-	myFont.loadFont("verdana.ttf", 12, false);
+	myFont.loadFont("mono.ttf", 12, false);
 	guiText_0.setup();
 	guiText_0.setFont(myFont);
 	guiText_0.setText(getMessGetRecordXML[1]);
@@ -186,11 +186,11 @@ void guiGetRecMessXML::draw(){
 	ofFill();
     ofEnableAlphaBlending();
 	ofSetColor(playRecordRectColor);
-	ofRect(rectX-15, rectY-98, rectW+61, rectH*11);
+	ofRect(rectX-15, rectY-98, rectW+61, rectH*10);
     
     ofNoFill();
 	ofSetColor(playRecordColor);
-	ofRect(rectX-15, rectY-98, rectW+61, rectH*11);
+	ofRect(rectX-15, rectY-98, rectW+61, rectH*10);
 	
     ofFill();
     int rectXW = rectX+rectW+50;

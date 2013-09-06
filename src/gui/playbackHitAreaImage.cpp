@@ -1,15 +1,15 @@
 /*
- *  allHitAreaImage.cpp
+ *  playbackHitAreaImage.cpp
  */
 
-#include "allHitAreaImage.h"
+#include "playbackHitAreaImage.h"
 
 static bool isInsideRect(float x, float y, ofRectangle rect){
     return ( x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height );
 }
 
 //-------------------------------------------
-bool allHitAreaImage::checkHit(float new_x, float new_y){
+bool playbackHitAreaImage::checkHit(float new_x, float new_y){
     float x = new_x;
     float y = new_y;
     
@@ -31,19 +31,21 @@ bool allHitAreaImage::checkHit(float new_x, float new_y){
 }
 
 //--------------------------------------------------------------
-void allHitAreaImage::setup(){
+void playbackHitAreaImage::setup(){
     pressedSel_x = hitAreaImage_0[0].boundingBox.getX();
     pressedSel_y = hitAreaImage_0[0].boundingBox.getY();
     isSel = false;
     
+    
     testSelPPMode_0.set(255, 0, 0, 255);
-    testSelPPMode_1.set(0, 0, 0, 75);
-    testInPPMode_0.set(255, 0, 0, 255);
-    testInPPMode_1.set(255, 255, 255, 255);
+    testSelPPMode_1.set(255, 255, 255, 100);
+    testInPPMode_0.set(255, 100, 100, 255);
+    testInPPMode_1.set(0, 0, 255, 255);
+    
     testSelRecMode_0.set(255, 0, 0, 255);
-    testSelRecMode_1.set(255, 0, 0, 255);
+    testSelRecMode_1.set(255, 255, 255, 255);
     testInRecMode_0.set(255, 0, 0, 255);
-    testInRecMode_1.set(255, 0, 0, 255);
+    testInRecMode_1.set(50, 50, 50, 255);
     
     hitAreaImage_0[0].setColorSel_0 = testSelPPMode_0;
     hitAreaImage_0[0].setColorSel_1 = testSelPPMode_1;
@@ -60,10 +62,30 @@ void allHitAreaImage::setup(){
     hitAreaImage_0[2].setColorIn_0 = testInPPMode_0;
     hitAreaImage_0[2].setColorIn_1 = testInPPMode_1;
     
-    hitAreaImage_0[3].setColorSel_0 = testSelPPMode_0;
-    hitAreaImage_0[3].setColorSel_1 = testSelPPMode_1;
-    hitAreaImage_0[3].setColorIn_0 = testInPPMode_0;
-    hitAreaImage_0[3].setColorIn_1 = testInPPMode_1;
+    hitAreaImage_0[3].setColorSel_0 = testSelRecMode_0;
+    hitAreaImage_0[3].setColorSel_1 = testSelRecMode_1;
+    hitAreaImage_0[3].setColorIn_0 = testInRecMode_0;
+    hitAreaImage_0[3].setColorIn_1 = testInRecMode_1;
+    
+//    setColorSel_0[0] = testSelPPMode;
+//    setColorSel_1[0] = testSelPPMode;
+//    setColorIn_0[0] = testInPPMode;
+//    setColorIn_1[0] = testInPPMode;
+//    
+//    setColorSel_0[1] = testSelPPMode;
+//    setColorSel_1[1] = testSelPPMode;
+//    setColorIn_0[1] = testInPPMode;
+//    setColorIn_1[1] = testInPPMode;
+//    
+//    setColorSel_0[2] = testSelPPMode;
+//    setColorSel_1[2] = testSelPPMode;
+//    setColorIn_0[2] = testInPPMode;
+//    setColorIn_1[2] = testInPPMode;
+//    
+//    setColorSel_0[3] = testSelPPMode;
+//    setColorSel_1[3] = testSelPPMode;
+//    setColorIn_0[3] = testInPPMode;
+//    setColorIn_1[3] = testInPPMode;
     
     //guiText-----_
     myFont.loadFont("mono.ttf", 16, false);
@@ -73,18 +95,19 @@ void allHitAreaImage::setup(){
 	//rectW = guiText_0.getTextWidth();
 	//rectH = guiText_0.getTextHeight();
     //--guiText---_
+    
 
 }
 //-----------------------------------------------
-void allHitAreaImage::setPosition(float new_x, float new_y){
+void playbackHitAreaImage::setPosition(float new_x, float new_y){
     float x = new_x;
     float y = new_y;
     isImageWidthNew = true;
     testAddPosX = 0;
-    dialogIndex[0] =  "SENSOR";
-    dialogIndex[1] =  "FORM";
-    dialogIndex[2] =  "CAMERA";
-    dialogIndex[3] =  "SESSION";
+    dialogIndex[0] =  "PP";//>
+    dialogIndex[1] =  "RR";//<<
+    dialogIndex[2] =  "FF";//>>
+    dialogIndex[3] =  "REC";//O
     
     for (int i = 0; i < MAX_NUM_IMAGE; i++) {
         hitAreaImage_0[i].setPosition(x, y);
@@ -92,24 +115,44 @@ void allHitAreaImage::setPosition(float new_x, float new_y){
 }
 
 //------------------------------------------------
-void allHitAreaImage::setDimensions(){
+void playbackHitAreaImage::setDimensions(){
     for (int i = 0; i < MAX_NUM_IMAGE; i++) {
         hitAreaImage_0[i].setDimensions();
     }
 }
 
 //--------------------------------------------------------------
-void allHitAreaImage::setImage(ofImage newImage[MAX_NUM_IMAGE]){
+void playbackHitAreaImage::setImage(ofImage newImage[MAX_NUM_IMAGE]){
     for (int i = 0; i < MAX_NUM_IMAGE; i++) {
         hitAreaImage_0[i].setImage(newImage[i]);
     }
 }
 
 //--------------------------------------------------------------
-void allHitAreaImage::draw(float new_x, float new_y){
+void playbackHitAreaImage::draw(float new_x, float new_y){
     float x = new_x;
     float y = new_y;
     
+    hitAreaImage_0[0].setColorSel_0 = testSelPPMode_0;
+    hitAreaImage_0[0].setColorSel_1 = testSelPPMode_1;
+    hitAreaImage_0[0].setColorIn_0 = testInPPMode_0;
+    hitAreaImage_0[0].setColorIn_1 = testInPPMode_1;
+    
+    hitAreaImage_0[1].setColorSel_0 = testSelPPMode_0;
+    hitAreaImage_0[1].setColorSel_1 = testSelPPMode_1;
+    hitAreaImage_0[1].setColorIn_0 = testInPPMode_0;
+    hitAreaImage_0[1].setColorIn_1 = testInPPMode_1;
+    
+    hitAreaImage_0[2].setColorSel_0 = testSelPPMode_0;
+    hitAreaImage_0[2].setColorSel_1 = testSelPPMode_1;
+    hitAreaImage_0[2].setColorIn_0 = testInPPMode_0;
+    hitAreaImage_0[2].setColorIn_1 = testInPPMode_1;
+    
+    hitAreaImage_0[3].setColorSel_0 = testSelRecMode_0;
+    hitAreaImage_0[3].setColorSel_1 = testSelRecMode_1;
+    hitAreaImage_0[3].setColorIn_0 = testInRecMode_0;
+    hitAreaImage_0[3].setColorIn_1 = testInRecMode_1;
+
     if (isImageWidthNew == true){
         testAddPosX = 0;
         for (int i = 0; i < MAX_NUM_IMAGE; i++) {
@@ -132,24 +175,24 @@ void allHitAreaImage::draw(float new_x, float new_y){
             //--guiText---_
             float setX_1, setY_1;
             setX_1 = x + (hitAreaImage_0[i].boundingBox.getWidth()/2)-(guiText_0.stringWidth(dialogIndex[i])/2);
-            //setY_1 = height - allHitAreaImage_0.boundingBoxHeight+5;
+            setY_1 = hitAreaImage_0[i].boundingBox.getHeight()+ guiText_0.stringHeight(dialogIndex[i])+4;
             
-            guiText_0.renderString(dialogIndex[i], setX_1, y-3);
+            guiText_0.renderString(dialogIndex[i], setX_1, y+setY_1);
             //--guiText---_
         }
     }
 }
 
 //--------------------------------------------------------------
-void allHitAreaImage::mousePressed(int x, int y, int button){
+void playbackHitAreaImage::mousePressed(int x, int y, int button){
     for (int i = 0; i < MAX_NUM_IMAGE; i++) {
         if (hitAreaImage_0[i].isIn == true){
             hitAreaImage_0[i].isSel = true;
-            if (hitAreaImageIndex == 4) {
-                isSel = true;
-            }else {
-                isSel = false;
-            }
+//            if (hitAreaImageIndex == 4) {
+//                isSel = true;
+//            }else {
+//                isSel = false;
+//            }
 
         }else {
             hitAreaImage_0[i].isSel = false;

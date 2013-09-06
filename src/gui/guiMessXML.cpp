@@ -48,7 +48,7 @@ void guiMessXML::setup(float newRectX, float newRectY, string newSetDocDir){
     
 	rectX = newRectX;
 	rectY = newRectY;
-	myFont.loadFont("mono.ttf", 12, false);
+	myFont.loadFont("mono.ttf", 15, false);
 	guiText_0.setup();
 	guiText_0.setFont(myFont);
 	guiText_0.setText(getMessRecordXML[3]);
@@ -120,37 +120,37 @@ void guiMessXML::update(float newRectX, float newRectY, string newSetDocDir){
     
     if (recIndex_Y == 1) {
         newCursor_X = rectXW;
-        cursor_Y = rectY-95;
+        cursor_Y = rectY-92;
         stringSize = dateTime.size();
     }
     
     if (recIndex_Y == 2) {
         newCursor_X = rectXW;
-        cursor_Y = rectY-80;
+        cursor_Y = rectY-74;
         stringSize = session.size();
     }
     
     if (recIndex_Y == 3) {
         newCursor_X = rectXW;
-        cursor_Y = rectY-65;
+        cursor_Y = rectY-56;
         stringSize = participant.size();
     }
     
     if (recIndex_Y == 4) {
         newCursor_X = rectXW;
-        cursor_Y = rectY-50;
+        cursor_Y = rectY-38;
         stringSize = age.size();
     }
     
     if (recIndex_Y == 5) {
         newCursor_X = rectXW;
-        cursor_Y = rectY-35;
+        cursor_Y = rectY-20;
         stringSize = amputation.size();
     }
     
     if (recIndex_Y == 6) {
         newCursor_X = rectXW;
-        cursor_Y = rectY-20;
+        cursor_Y = rectY-2;
         stringSize = audio.size();
     }
    
@@ -175,37 +175,37 @@ void guiMessXML::update(float newRectX, float newRectY, string newSetDocDir){
         
         if (recIndex_Y == 1) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-95;
+            cursor_Y = rectY-92;
             stringSize = dateTime.size();
         }
         
         if (recIndex_Y == 2) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-80;
+            cursor_Y = rectY-74;
             stringSize = session.size();
         }
         
         if (recIndex_Y == 3) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-65;
+            cursor_Y = rectY-56;
             stringSize = participant.size();
         }
         
         if (recIndex_Y == 4) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-50;
+            cursor_Y = rectY-38;
             stringSize = age.size();
         }
         
         if (recIndex_Y == 5) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-35;
+            cursor_Y = rectY-20;
             stringSize = amputation.size();
         }
         
         if (recIndex_Y == 6) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-20;
+            cursor_Y = rectY-2;
             stringSize = audio.size();
         }
 
@@ -243,37 +243,37 @@ void guiMessXML::update(float newRectX, float newRectY, string newSetDocDir){
         
         if (recIndex_Y == 1) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-95;
+            cursor_Y = rectY-92;
             stringSize = dateTime.size();
         }
         
         if (recIndex_Y == 2) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-80;
+            cursor_Y = rectY-74;
             stringSize = session.size();
         }
         
         if (recIndex_Y == 3) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-65;
+            cursor_Y = rectY-56;
             stringSize = participant.size();
         }
         
         if (recIndex_Y == 4) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-50;
+            cursor_Y = rectY-38;
             stringSize = age.size();
         }
         
         if (recIndex_Y == 5) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-35;
+            cursor_Y = rectY-20;
             stringSize = amputation.size();
         }
         
         if (recIndex_Y == 6) {
             newCursor_X = rectXW;
-            cursor_Y = rectY-20;
+            cursor_Y = rectY-2;
             stringSize = audio.size();
         }
         
@@ -357,7 +357,7 @@ void guiMessXML::draw(){
     ofEnableAlphaBlending();
     ofSetColor(playRecordRectColor);
     boundingBox.set(rectX-15, rectY-128, rectW+13, rectH*10-3);
-	ofRect(rectX-15, rectY-128, rectW+15, rectH*maxNumInList+7);
+	ofRect(rectX-15, rectY-128, rectW+15, rectH*maxNumInList-5);
     if (recIndex_Y >= maxNumInList) {
         ofSetColor(playRecordRectColor);
     }else {
@@ -370,7 +370,7 @@ void guiMessXML::draw(){
         ofSetColor(selRecordRectColor);
     }
     ofNoFill();
-    ofRect(rectX-15, rectY-128, rectW+15, rectH*maxNumInList+7);
+    ofRect(rectX-15, rectY-128, rectW+15, rectH*maxNumInList-5);
     int rectXW = rectX+rectW+5;
     
     ofFill();
@@ -403,8 +403,8 @@ void guiMessXML::draw(){
             ofSetColor(playRecordColor);
         }
     }
-    guiText_0.renderString(dateTime, rectXW, rectY-95);
-    guiText_0.renderString(getMessRecordXML[1], rectX-10, rectY-95);
+    guiText_0.renderString(dateTime, rectXW, rectY-92);
+    guiText_0.renderString(getMessRecordXML[1], rectX-10, rectY-92);
     
     if (recIndex_Y == 2) {
         if (isSessionEnter == true) {
@@ -419,8 +419,8 @@ void guiMessXML::draw(){
             ofSetColor(playRecordColor);
         }
     }
-    guiText_0.renderString(session, rectXW, rectY-80);
-	guiText_0.renderString(getMessRecordXML[2], rectX-10, rectY-80);
+    guiText_0.renderString(session, rectXW, rectY-74);
+	guiText_0.renderString(getMessRecordXML[2], rectX-10, rectY-74);
     
     if (recIndex_Y == 3) {
         if (isParticipantEnter == true) {
@@ -435,8 +435,8 @@ void guiMessXML::draw(){
             ofSetColor(playRecordColor);
         }
     }
-    guiText_0.renderString(participant, rectXW, rectY-65);
-	guiText_0.renderString(getMessRecordXML[3], rectX-10, rectY-65);
+    guiText_0.renderString(participant, rectXW, rectY-56);
+	guiText_0.renderString(getMessRecordXML[3], rectX-10, rectY-56);
     
     if (recIndex_Y == 4) {
         if (isAgeEnter == true) {
@@ -451,8 +451,8 @@ void guiMessXML::draw(){
             ofSetColor(playRecordColor);
         }
     }
-    guiText_0.renderString(age, rectXW, rectY-50);
-	guiText_0.renderString(getMessRecordXML[4], rectX-10, rectY-50);
+    guiText_0.renderString(age, rectXW, rectY-38);
+	guiText_0.renderString(getMessRecordXML[4], rectX-10, rectY-38);
     
     if (recIndex_Y == 5) {
         if (isAmputationEnter == true) {
@@ -467,8 +467,8 @@ void guiMessXML::draw(){
             ofSetColor(playRecordColor);
         }
     }
-    guiText_0.renderString(amputation, rectXW, rectY-35);
-	guiText_0.renderString(getMessRecordXML[5], rectX-10, rectY-35);
+    guiText_0.renderString(amputation, rectXW, rectY-20);
+	guiText_0.renderString(getMessRecordXML[5], rectX-10, rectY-20);
     
     if (recIndex_Y == 6) {
         if (isAudioEnter == true) {
@@ -483,8 +483,8 @@ void guiMessXML::draw(){
             ofSetColor(playRecordColor);
         }
     }
-    guiText_0.renderString(audio, rectXW, rectY-20);
-	guiText_0.renderString(getMessRecordXML[6], rectX-10, rectY-20);
+    guiText_0.renderString(audio, rectXW, rectY-2);
+	guiText_0.renderString(getMessRecordXML[6], rectX-10, rectY-2);
     
     if (recIndex_Y != maxNumInList) {
         if (testCursorCounter) {

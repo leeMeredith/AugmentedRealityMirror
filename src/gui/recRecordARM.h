@@ -80,6 +80,7 @@ class recRecordARM{
         vector <int> allCamera;
         vector <int> allPainScores;
         vector <string> allTimes;
+        int getAllPositionsXSize;
         vector <float> allPositions_X;
         vector <float> allPositions_Y;
         vector <float> allPositions_Z;

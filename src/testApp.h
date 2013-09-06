@@ -11,6 +11,9 @@
 #include "dataLoggerARM.h"
 #include "velSmoothStateXY.h"
 #include "drHitAreaImage.h"
+#include "playbackCam.h"
+#include "drPLayHitAreaImage.h"
+#include "timer.h"
 
 #define kNumTestNodes 4
 #define kNumCameras 2
@@ -35,7 +38,7 @@ public:
 	
 	ofxKinect kinect;
 	
-    bool  	bFullscreen;
+    bool  	bFullscreen, isDrawOpenCV, isSession;
     
 	ofxCvColorImage colorImg;
 	
@@ -62,6 +65,11 @@ public:
     bool dBug;
     int flipH;
     
+    bool isMouseMovTop, isMouseMovBott;
+    int mouseMovTop, mouseMovBott;
+    int mouseMovTop_y, mouseMovBott_Y;
+    
+    
     //ofCamera----------------------------------------_
     void reset(); 
     
@@ -71,16 +79,22 @@ public:
     int lookatIndex[kNumCameras]; // which test node to lookat (one for each camera)
     int parentIndex[kNumCameras]; // which test node to link (parent) to (one for each camera)
     bool doMouseOrbit[kNumCameras]; // whether camera is in mouseOrbit mode or not
-    float orbitRadius;
+    float orbitRadius, setOrbitRadius;
     
     int camToView; // which camera index are we looking through
     int camToConfigure; // which camera index we are configuring
     bool isWhoKey;
     bool isGuiCamera;
+    float setLon, setLat;
     //--------------------ofCamera--------------------_
     
     //dataLoggerARM-----------------------------------_
     bool isGuiDataLoggerARM, isDataLoggerARM;
+    bool isCamMove, isCamMoveTest;
+    int setPosAddres, camMove, setPosAddresTest;
+    float newRecPos_X, newRecPosTest_X;
+    float newRecPos_Y, newRecPosTest_Y;
+    float newRecPos_Z, newRecPosTest_Z;
     dataLoggerARM dataLoggerARM_0;
     //-----------------dataLoggerARM------------------_
     
@@ -89,7 +103,30 @@ public:
     //-----------------velSmoothStateXY---------------_
     
     //drHitAreaImage----------------------------------_
+    bool isDrHitAreaImage;
     drHitAreaImage drHitAreaImage_0;
     //-----------------drHitAreaImage-----------------_
+    
+    //drPLayHitAreaImage------------------------------_
+    bool isDrPLayHitAreaImage, isPlay, isPlayReset, isPlayResetTest;
+    bool isRR, isRRTest, isFF, isFFTest;
+    bool isRec, isRecTest, isRecReset, isRecResetTest;
+    int playMode, rrMode, ffMode, recMode;
+    drPLayHitAreaImage drPLayHitAreaImage_0;
+    //-----------------drPLayHitAreaImage-------------_
+    
+    //playbackCam-------------------------------------_
+    float newPos_X, newPos_Y, newPos_Z;
+    float newPosTest, newPosTest_X, newPosTest_Y, newPosTest_Z;
+    int cameraMode;
+    float rampAmount;
+    playbackCam playbackCam_0;
+    //-----------------playbackCam--------------------_
+    
+    //timer-------------------------------------------_
+    bool isTimerStart, isTimerStartTest;
+    int howLongPlaybackCam, howManyPlaybackCam;
+    timer playbackCamTimer_0;
+    //---------------------timer----------------------_
     
 };

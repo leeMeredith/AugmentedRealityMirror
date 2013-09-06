@@ -136,14 +136,15 @@ void drHitAreaImage::draw(){
     if (dirDialogImage.size() > 0){
 		ofSetColor(ofColor::white);
 		//images[currentDialogImage].draw(300,220);
-        //allHitAreaImage-------------_
-        for (int i = 0; i < MAX_NUM_IMAGE; i++) {
-            if (i < MAX_NUM_IMAGE) {
-                myImage[i] = images[i];
-            }
-            allHitAreaImage_0.setImage(myImage);
-        }
-        //------allHitAreaImage-------_
+        ////allHitAreaImage-------------_
+        //this is bad on fps
+        //for (int i = 0; i < MAX_NUM_IMAGE; i++) {
+        //    if (i < MAX_NUM_IMAGE) {
+        //        myImage[i] = images[i];
+        //    }
+        //    allHitAreaImage_0.setImage(myImage);
+        //}
+        ////------allHitAreaImage-------_
 	}
     //-------------ofDirectory-----------_
     

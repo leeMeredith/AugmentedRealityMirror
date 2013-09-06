@@ -23,6 +23,10 @@ void hitAreaImage::setPosition(float x, float y){
 	boundingBox.y = y;
 	myHitAreaImage.x     = x;
 	myHitAreaImage.y     = y;
+//    setColorIn_0.set(255, 0, 0, 255);
+//    setColorIn_1.set(255, 255, 255, 255);
+//    setColorSel_0.set(255, 0, 255, 255);
+//    setColorSel_1.set(0, 0, 0, 75);
 }
 
 //------------------------------------------------
@@ -43,18 +47,18 @@ void hitAreaImage::draw(float x, float y){
     
     if (isSel == true) {
         ofNoFill();
-        ofSetColor(255, 0, 255, 255);
+        ofSetColor(setColorSel_0);
         ofRect(x-1, y-1, myImage.width+2, myImage.height+2);
     }else {
         ofNoFill();
-        ofSetColor(0, 0, 0, 75);
+        ofSetColor(setColorSel_1);
         ofRect(x-1, y-1, myImage.width+2, myImage.height+2);
     }
     ofFill();
     if (isIn == true) {
-        ofSetColor(255, 0, 0);
+        ofSetColor(setColorIn_0);
     }else {
-        ofSetColor(255, 255, 255);
+        ofSetColor(setColorIn_1);
     }
     
 	boundingBox.set(x, y, myImage.width, myImage.height);

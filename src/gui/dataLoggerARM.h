@@ -47,7 +47,7 @@ public:
     string recRecordWhoClearTagCon, recRecordWhichTagCon;
     
     recRecordARM recRecordARM_0;
-    int recCamera, recPainScore;
+    int recCamera, recPainScore, getAllPositionsXSize;
     float recPosition_X, recPosition_Y, recPosition_Z, recXAxis_X, recXAxis_Y, recXAxis_Z, recYAxis_X, recYAxis_Y, recYAxis_Z, recZAxis_X, recZAxis_Y, recZAxis_Z;
     
     //guiMessXML------------------------_
@@ -68,7 +68,7 @@ public:
     bool isJustAtRunFile;
     int recAddressCurrentDir, recAddressCurrentDirTest;
     bool isRecordAddressR, isRecordAddressL;
-    bool isKeyFileRL;
+    bool isKeyAudioRL, isKeyFileRL;
     bool isClearAndSaveDoc;
     
     ofDirectory recordAudioDir;
@@ -99,5 +99,10 @@ public:
     //audioPlayer--------------_
     audioPlayer audioPlayer_0;
     //-------audioPlayer-------_
+    
+    //xenoRectOne--------------_
+    int setPosAddres;
+    float getPositions_X, getPositions_Y, getPositions_Z;    
+    //xenoRectOne--------------_
 };
 
