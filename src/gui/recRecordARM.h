@@ -20,7 +20,7 @@ class recRecordARM{
 		void draw(int setX, int setY, int setW, int setH);
 		void keyPressed(int key);
         
-        bool dBug, isLogging;
+        bool dBug, isLogging, isLoggingKey;
         string xmlName, xmlFileTest, settingsDirectory, currentXmlFile;
         string whoClearTagCon, whichTagCon;
         bool isRemoveTag;

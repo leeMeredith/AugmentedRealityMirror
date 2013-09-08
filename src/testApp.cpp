@@ -1093,10 +1093,12 @@ void testApp::mousePressed(int x, int y, int button){
                     dataLoggerARM_0.isSetAllDefault = true;
                     dataLoggerARM_0.recRecordARM_0.isGetAll = true;
                     drPLayHitAreaImage_0.menuMode = 0;
+                    dataLoggerARM_0.recRecordARM_0.isLoggingKey = false;
                     isDataLoggerARM = false;
                 }
                 if (recMode == 1) {
                     drPLayHitAreaImage_0.menuMode = 2;
+                    dataLoggerARM_0.recRecordARM_0.isLoggingKey = true;
                     isDataLoggerARM = true;
                 }
             }

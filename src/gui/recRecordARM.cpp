@@ -340,6 +340,7 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
     
     //edit----------------------------_
     isSaveAll = isSaveEvents = isStartEvents = isSetRecord = false;
+    isLogging = isLoggingKey = false;
     //------------edit----------------_
 }
 
@@ -1162,230 +1163,233 @@ void recRecordARM::draw(int setX, int setY, int setW, int setH){
 
 //--------------------------------------------------------------
 void recRecordARM::keyPressed  (int key){
-    
-    //get-----------------_
-    if(key == OF_KEY_UP || key == 357){
-        --setRecordAddress;
-        if (setRecordAddress <= 0) {
-            setRecordAddress = 0;
+    if (isLoggingKey == false) {
+        //get-----------------_
+        if(key == OF_KEY_UP || key == 357){
+            --setRecordAddress;
+            if (setRecordAddress <= 0) {
+                setRecordAddress = 0;
+            }
+            isGetAll = true;
+            if (dBug == true)cout << "setRecordAddress " << setRecordAddress << endl;
         }
-        isGetAll = true;
-        if (dBug == true)cout << "setRecordAddress " << setRecordAddress << endl;
-    }
-    if(key == OF_KEY_DOWN || key == 359){
-        ++setRecordAddress;
-        if (setRecordAddress >= settingsRecordARMFile.getNumTags("RECORD")) {
-            setRecordAddress = settingsRecordARMFile.getNumTags("RECORD")-1;
+        if(key == OF_KEY_DOWN || key == 359){
+            ++setRecordAddress;
+            if (setRecordAddress >= settingsRecordARMFile.getNumTags("RECORD")) {
+                setRecordAddress = settingsRecordARMFile.getNumTags("RECORD")-1;
+            }
+            isGetAll = true;
+            if (dBug == true)cout << "setRecordAddress " << setRecordAddress << endl;
         }
-        isGetAll = true;
-        if (dBug == true)cout << "setRecordAddress " << setRecordAddress << endl;
-    }
-    if(key == OF_KEY_RIGHT || key == 258){
-		++setGetRecordAddressAll;
-        if (setGetRecordAddressAll >= allCamera.size()) {
-            setGetRecordAddressAll = allCamera.size()-1;
+        if(key == OF_KEY_RIGHT || key == 258){
+            ++setGetRecordAddressAll;
+            if (setGetRecordAddressAll >= allCamera.size()) {
+                setGetRecordAddressAll = allCamera.size()-1;
+            }
+            if (dBug == true)cout << " setGetRecordAddressAll                        " << setGetRecordAddressAll << endl;
         }
-        if (dBug == true)cout << " setGetRecordAddressAll                        " << setGetRecordAddressAll << endl;
-	}
-    if(key == OF_KEY_LEFT || key == 256){
-		--setGetRecordAddressAll;
-        if (setGetRecordAddressAll <= 0) {
-            setGetRecordAddressAll = 0;
+        if(key == OF_KEY_LEFT || key == 256){
+            --setGetRecordAddressAll;
+            if (setGetRecordAddressAll <= 0) {
+                setGetRecordAddressAll = 0;
+            }
+            if (dBug == true)cout << " setGetRecordAddressAll " << setGetRecordAddressAll << endl;
         }
-        if (dBug == true)cout << " setGetRecordAddressAll " << setGetRecordAddressAll << endl;
-	}
-    //---------get--------_
-    
-    
-    //edit----------------------------_
-    if (dBug == true) {
-        if(key == '0')clearDoc = true;
-    
-        if(key == 'S'){
-            isSaveAll = true;
+        //---------get--------_
+        
+        
+        //edit----------------------------_
+        if (dBug == true) {
+            if(key == '0')clearDoc = true;
+        
+            if(key == 'S'){
+                isSaveAll = true;
+                settingsRecordARMFile.saveFile(currentXmlFile);
+                message = currentXmlFile;
+                message += " saved to xml!";
+            }
+            if(key == 's'){
+                isSaveEvents = true;
+            }
+        }
+        
+        if(key == 'E'){
+            if( settingsRecordARMFile.pushTag("RECORD", setRecordAddress) ){
+                settingsRecordARMFile.removeTag("ENDRECORD", 0);
+                settingsRecordARMFile.addValue("ENDRECORD", recordAddress);
+                settingsRecordARMFile.popTag();
+            }
             settingsRecordARMFile.saveFile(currentXmlFile);
             message = currentXmlFile;
             message += " saved to xml!";
         }
-        if(key == 's'){
-            isSaveEvents = true;
-        }
-    }
-    
-    if(key == '1'|| 
-       key == '2'|| 
-       key == '3'||
-       key == '4'|| 
-       key == '5'|| 
-       key == '6'|| 
-       key == '7'|| 
-       key == '8'|| 
-       key == '9'){
-        int myCamera;
-        myCamera = recordCamera;
-        camera.push_back(myCamera);
-        
-        int myPainScore;
-        recordPainScore = (key + 2)-50;//this to make the key to 1-9 and not 49-50-51...
-        myPainScore = recordPainScore;
-        painScore.push_back(myPainScore);
-        
-        string myTime;
-        myTime = recordTime = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds())+"-"+ ofToString(ofGetElapsedTimeMillis());
-        time.push_back(myTime);
-        
-        float myPosition_X;
-        myPosition_X = recordPosition_X;
-        position_X.push_back(myPosition_X);
-        float myPosition_Y;
-        myPosition_Y = recordPosition_Y;
-        position_Y.push_back(myPosition_Y);
-        float myPosition_Z;
-        myPosition_Z = recordPosition_Z;
-        position_Z.push_back(myPosition_Z);
-        
-        float myXAxis_X;
-        myXAxis_X = recordXAxis_X;
-        xAxis_X.push_back(myXAxis_X);
-        float myXAxis_Y;
-        myXAxis_Y = recordXAxis_Y;
-        xAxis_Y.push_back(myXAxis_Y);
-        float myXAxis_Z;
-        myXAxis_Z = recordXAxis_Z;
-        xAxis_Z.push_back(myXAxis_Z);
-        
-        float myYAxis_X;
-        myYAxis_X = recordYAxis_X;
-        yAxis_X.push_back(myYAxis_X);
-        float myYAxis_Y;
-        myYAxis_Y = recordYAxis_Y;
-        yAxis_Y.push_back(myYAxis_Y);
-        float myYAxis_Z;
-        myYAxis_Z = recordYAxis_Z;
-        yAxis_Z.push_back(myYAxis_Z);
-        
-        float myZAxis_X;
-        myZAxis_X = recordZAxis_X;
-        zAxis_X.push_back(myZAxis_X);
-        float myZAxis_Y;
-        myZAxis_Y = recordZAxis_Y;
-        zAxis_Y.push_back(myZAxis_Y);
-        float myZAxis_Z;
-        myZAxis_Z = recordZAxis_Z;
-        zAxis_Z.push_back(myZAxis_Z);
-        
-        isStartEvents = true;
-        isEventsTest = false;
-        isSaveAll = true;
-    }
-    
-    if(key == 'E'){
-        if( settingsRecordARMFile.pushTag("RECORD", setRecordAddress) ){
-            settingsRecordARMFile.removeTag("ENDRECORD", 0);
-            settingsRecordARMFile.addValue("ENDRECORD", recordAddress);
-            settingsRecordARMFile.popTag();
-        }
-        settingsRecordARMFile.saveFile(currentXmlFile);
-        message = currentXmlFile;
-        message += " saved to xml!";
-    }
-    if(key == 'R'){
-        lastRecTagNumber = settingsRecordARMFile.getNumTags("RECORD");
-        if( settingsRecordARMFile.pushTag("RECORD", lastRecTagNumber-1) ){
-            settingsRecordARMFile.removeTag("ENDRECORD", 0);
-            settingsRecordARMFile.addValue("ENDRECORD", recordAddress);
-            settingsRecordARMFile.popTag();
-        }
-        
-        lastRecTagNumber	= settingsRecordARMFile.addTag("RECORD");
-        xmlStructure	= "<RECORD>\n";
-        
-        if( settingsRecordARMFile.pushTag("RECORD", lastRecTagNumber) ){
-            date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
-            settingsRecordARMFile.addValue("DATE", date);
-            settingsRecordARMFile.addValue("SESSION", recordSession);
-            settingsRecordARMFile.addValue("PARTICIPANT", recordParticipant);
-            settingsRecordARMFile.addValue("AGE", recordAge);
-            settingsRecordARMFile.addValue("AMPUTATION", recordAmputation);
-            settingsRecordARMFile.addValue("AUDIO", recordAudio);
-            settingsRecordARMFile.popTag();
-            settingsRecordARMFile.popTag();
-        }
-        int myCamera;
-        myCamera = recordCamera;
-        camera.push_back(myCamera);
-        int myPainScore;
-        myPainScore = recordPainScore;
-        painScore.push_back(myPainScore);
-        string myTime;
-        myTime = recordTime;
-        time.push_back(recordTime);
-        
-        float myPosition_X;
-        myPosition_X = recordPosition_X;
-        position_X.push_back(myPosition_X);
-        float myPosition_Y;
-        myPosition_Y = recordPosition_Y;
-        position_Y.push_back(myPosition_Y);
-        float myPosition_Z;
-        myPosition_Z = recordPosition_Z;
-        position_Z.push_back(myPosition_Z);
-        
-        float myXAxis_X;
-        myXAxis_X = recordXAxis_X;
-        xAxis_X.push_back(myXAxis_X);
-        float myXAxis_Y;
-        myXAxis_Y = recordXAxis_Y;
-        xAxis_Y.push_back(myXAxis_Y);
-        float myXAxis_Z;
-        myXAxis_Z = recordXAxis_Z;
-        xAxis_Z.push_back(myXAxis_Z);
-        
-        float myYAxis_X;
-        myYAxis_X = recordYAxis_X;
-        yAxis_X.push_back(myYAxis_X);
-        float myYAxis_Y;
-        myYAxis_Y = recordYAxis_Y;
-        yAxis_Y.push_back(myYAxis_Y);
-        float myYAxis_Z;
-        myYAxis_Z = recordYAxis_Z;
-        yAxis_Z.push_back(myYAxis_Z);
-        
-        float myZAxis_X;
-        myZAxis_X = recordZAxis_X;
-        zAxis_X.push_back(myZAxis_X);
-        float myZAxis_Y;
-        myZAxis_Y = recordZAxis_Y;
-        zAxis_Y.push_back(myZAxis_Y);
-        float myZAxis_Z;
-        myZAxis_Z = recordZAxis_Z;
-        zAxis_Z.push_back(myZAxis_Z);
-        
-        isStartEvents = true;
-        isEventsTest = false;
-        lastRecTagNumber = settingsRecordARMFile.getNumTags("RECORD");
-        if( settingsRecordARMFile.pushTag("RECORD", lastRecTagNumber-1) ){
-            settingsRecordARMFile.addValue("CAMERA", -1);
-            settingsRecordARMFile.addValue("PAIN_SCORE", -1);
-            settingsRecordARMFile.addValue("TIME", "-1");
-            settingsRecordARMFile.addValue("POS_X", -1);
-            settingsRecordARMFile.addValue("POS_Y", -1);
-            settingsRecordARMFile.addValue("POS_Z", -1);
+        if(key == 'R'){
+            lastRecTagNumber = settingsRecordARMFile.getNumTags("RECORD");
+            if( settingsRecordARMFile.pushTag("RECORD", lastRecTagNumber-1) ){
+                settingsRecordARMFile.removeTag("ENDRECORD", 0);
+                settingsRecordARMFile.addValue("ENDRECORD", recordAddress);
+                settingsRecordARMFile.popTag();
+            }
             
-            settingsRecordARMFile.addValue("XAXIS_X", -1);
-            settingsRecordARMFile.addValue("XAXIS_Y", -1);
-            settingsRecordARMFile.addValue("XAXIS_Z", -1);
+            lastRecTagNumber	= settingsRecordARMFile.addTag("RECORD");
+            xmlStructure	= "<RECORD>\n";
             
-            settingsRecordARMFile.addValue("YAXIS_X", -1);
-            settingsRecordARMFile.addValue("YAXIS_Y", -1);
-            settingsRecordARMFile.addValue("YAXIS_Z", -1);
+            if( settingsRecordARMFile.pushTag("RECORD", lastRecTagNumber) ){
+                date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
+                settingsRecordARMFile.addValue("DATE", date);
+                settingsRecordARMFile.addValue("SESSION", recordSession);
+                settingsRecordARMFile.addValue("PARTICIPANT", recordParticipant);
+                settingsRecordARMFile.addValue("AGE", recordAge);
+                settingsRecordARMFile.addValue("AMPUTATION", recordAmputation);
+                settingsRecordARMFile.addValue("AUDIO", recordAudio);
+                settingsRecordARMFile.popTag();
+                settingsRecordARMFile.popTag();
+            }
+            int myCamera;
+            myCamera = recordCamera;
+            camera.push_back(myCamera);
+            int myPainScore;
+            myPainScore = recordPainScore;
+            painScore.push_back(myPainScore);
+            string myTime;
+            myTime = recordTime;
+            time.push_back(recordTime);
+            
+            float myPosition_X;
+            myPosition_X = recordPosition_X;
+            position_X.push_back(myPosition_X);
+            float myPosition_Y;
+            myPosition_Y = recordPosition_Y;
+            position_Y.push_back(myPosition_Y);
+            float myPosition_Z;
+            myPosition_Z = recordPosition_Z;
+            position_Z.push_back(myPosition_Z);
+            
+            float myXAxis_X;
+            myXAxis_X = recordXAxis_X;
+            xAxis_X.push_back(myXAxis_X);
+            float myXAxis_Y;
+            myXAxis_Y = recordXAxis_Y;
+            xAxis_Y.push_back(myXAxis_Y);
+            float myXAxis_Z;
+            myXAxis_Z = recordXAxis_Z;
+            xAxis_Z.push_back(myXAxis_Z);
+            
+            float myYAxis_X;
+            myYAxis_X = recordYAxis_X;
+            yAxis_X.push_back(myYAxis_X);
+            float myYAxis_Y;
+            myYAxis_Y = recordYAxis_Y;
+            yAxis_Y.push_back(myYAxis_Y);
+            float myYAxis_Z;
+            myYAxis_Z = recordYAxis_Z;
+            yAxis_Z.push_back(myYAxis_Z);
+            
+            float myZAxis_X;
+            myZAxis_X = recordZAxis_X;
+            zAxis_X.push_back(myZAxis_X);
+            float myZAxis_Y;
+            myZAxis_Y = recordZAxis_Y;
+            zAxis_Y.push_back(myZAxis_Y);
+            float myZAxis_Z;
+            myZAxis_Z = recordZAxis_Z;
+            zAxis_Z.push_back(myZAxis_Z);
+            
+            isStartEvents = true;
+            isEventsTest = false;
+            lastRecTagNumber = settingsRecordARMFile.getNumTags("RECORD");
+            if( settingsRecordARMFile.pushTag("RECORD", lastRecTagNumber-1) ){
+                settingsRecordARMFile.addValue("CAMERA", -1);
+                settingsRecordARMFile.addValue("PAIN_SCORE", -1);
+                settingsRecordARMFile.addValue("TIME", "-1");
+                settingsRecordARMFile.addValue("POS_X", -1);
+                settingsRecordARMFile.addValue("POS_Y", -1);
+                settingsRecordARMFile.addValue("POS_Z", -1);
+                
+                settingsRecordARMFile.addValue("XAXIS_X", -1);
+                settingsRecordARMFile.addValue("XAXIS_Y", -1);
+                settingsRecordARMFile.addValue("XAXIS_Z", -1);
+                
+                settingsRecordARMFile.addValue("YAXIS_X", -1);
+                settingsRecordARMFile.addValue("YAXIS_Y", -1);
+                settingsRecordARMFile.addValue("YAXIS_Z", -1);
 
-            settingsRecordARMFile.addValue("ZAXIS_X", -1);
-            settingsRecordARMFile.addValue("ZAXIS_Y", -1);
-            settingsRecordARMFile.addValue("ZAXIS_Z", -1);
+                settingsRecordARMFile.addValue("ZAXIS_X", -1);
+                settingsRecordARMFile.addValue("ZAXIS_Y", -1);
+                settingsRecordARMFile.addValue("ZAXIS_Z", -1);
 
-            settingsRecordARMFile.addValue("ENDRECORD", -1);
-            settingsRecordARMFile.popTag();
+                settingsRecordARMFile.addValue("ENDRECORD", -1);
+                settingsRecordARMFile.popTag();
+            }
+        }
+    }
+
+    if (isLoggingKey == true) {
+        if(key == '1'||
+           key == '2'||
+           key == '3'||
+           key == '4'||
+           key == '5'||
+           key == '6'||
+           key == '7'||
+           key == '8'||
+           key == '9'){
+            int myCamera;
+            myCamera = recordCamera;
+            camera.push_back(myCamera);
+            
+            int myPainScore;
+            recordPainScore = (key + 2)-50;//this to make the key to 1-9 and not 49-50-51...
+            myPainScore = recordPainScore;
+            painScore.push_back(myPainScore);
+            
+            string myTime;
+            myTime = recordTime = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds())+"-"+ ofToString(ofGetElapsedTimeMillis());
+            time.push_back(myTime);
+            
+            float myPosition_X;
+            myPosition_X = recordPosition_X;
+            position_X.push_back(myPosition_X);
+            float myPosition_Y;
+            myPosition_Y = recordPosition_Y;
+            position_Y.push_back(myPosition_Y);
+            float myPosition_Z;
+            myPosition_Z = recordPosition_Z;
+            position_Z.push_back(myPosition_Z);
+            
+            float myXAxis_X;
+            myXAxis_X = recordXAxis_X;
+            xAxis_X.push_back(myXAxis_X);
+            float myXAxis_Y;
+            myXAxis_Y = recordXAxis_Y;
+            xAxis_Y.push_back(myXAxis_Y);
+            float myXAxis_Z;
+            myXAxis_Z = recordXAxis_Z;
+            xAxis_Z.push_back(myXAxis_Z);
+            
+            float myYAxis_X;
+            myYAxis_X = recordYAxis_X;
+            yAxis_X.push_back(myYAxis_X);
+            float myYAxis_Y;
+            myYAxis_Y = recordYAxis_Y;
+            yAxis_Y.push_back(myYAxis_Y);
+            float myYAxis_Z;
+            myYAxis_Z = recordYAxis_Z;
+            yAxis_Z.push_back(myYAxis_Z);
+            
+            float myZAxis_X;
+            myZAxis_X = recordZAxis_X;
+            zAxis_X.push_back(myZAxis_X);
+            float myZAxis_Y;
+            myZAxis_Y = recordZAxis_Y;
+            zAxis_Y.push_back(myZAxis_Y);
+            float myZAxis_Z;
+            myZAxis_Z = recordZAxis_Z;
+            zAxis_Z.push_back(myZAxis_Z);
+            
+            isStartEvents = true;
+            isEventsTest = false;
+            isSaveAll = true;
         }
     }
     //------------edit----------------_
