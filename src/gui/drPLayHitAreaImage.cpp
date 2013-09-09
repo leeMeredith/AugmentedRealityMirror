@@ -67,6 +67,7 @@ void drPLayHitAreaImage::update(){
          playbackHitAreaImage_0.dialogIndex[0] = "Play";
          playbackHitAreaImage_0.dialogIndex[1] = "REW";
          playbackHitAreaImage_0.dialogIndex[2] = "FDW";
+         playbackHitAreaImage_0.dialogIndex[3] = "REC";
 
          testSelPPMode_0.set(0, 255, 0, 255);
          testSelPPMode_1.set(255, 255, 255, 255);
@@ -90,7 +91,7 @@ void drPLayHitAreaImage::update(){
          playbackHitAreaImage_0.dialogIndex[0] = "Pause";
          playbackHitAreaImage_0.dialogIndex[1] = "Slower";
          playbackHitAreaImage_0.dialogIndex[2] = "Faster";
-         
+         playbackHitAreaImage_0.dialogIndex[3] = "REC";
          testSelPPMode_0.set(255, 0, 0, 255);
          testSelPPMode_1.set(255, 255, 255, 255);
          testInPPMode_0.set(0, 255, 0, 255);
@@ -114,6 +115,7 @@ void drPLayHitAreaImage::update(){
         playbackHitAreaImage_0.dialogIndex[0] = "Play";
         playbackHitAreaImage_0.dialogIndex[1] = "REW";
         playbackHitAreaImage_0.dialogIndex[2] = "FDW";
+        playbackHitAreaImage_0.dialogIndex[3] = "Stop REC";
         testSelPPMode_0.set(255, 0, 0, 255);
         testSelPPMode_1.set(255, 255, 255, 255);
         testInPPMode_0.set(0, 255, 0, 255);
@@ -161,7 +163,6 @@ void drPLayHitAreaImage::update(){
                     myImage[i] = images[i];
                 }
             }
-            cout << " I DID " << endl;
         }
         if (menuMode == 1 && menuMode != testMenuMode) {
             //Directory-Image-------_

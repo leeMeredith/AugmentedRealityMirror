@@ -104,9 +104,9 @@ void playbackHitAreaImage::setPosition(float new_x, float new_y){
     float y = new_y;
     isImageWidthNew = true;
     testAddPosX = 0;
-    dialogIndex[0] =  "PP";//>
-    dialogIndex[1] =  "RR";//<<
-    dialogIndex[2] =  "FF";//>>
+    dialogIndex[0] =  "Play";//>
+    dialogIndex[1] =  "REW";//<<
+    dialogIndex[2] =  "FDW";//>>
     dialogIndex[3] =  "REC";//O
     
     for (int i = 0; i < MAX_NUM_IMAGE; i++) {

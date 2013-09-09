@@ -131,8 +131,8 @@ void testApp::setup() {
     newPosTest_X = newPos_X = 0;
     newPosTest_Y = newPos_Y = 0;
     newPosTest_Z = newPos_Z = 0;
-    rampAmount = 0.05;
-    setPosAddres = setPosAddresTest = -1;
+    rampAmount = 0.07;
+    setPosAddres = setPosAddresTest = 0;
     playbackCam_0.setup();
     //-----------------playbackCam--------------------_
     
@@ -510,10 +510,10 @@ void testApp::draw() {
         "Press 'f' to switch to full screen\n"+
         "Press 'h' to switch mirror horizontal for participant\n"+
         "\n" +
-        "Purple boxes (4 of them) are generic nodes with simple circular motion, linked in a hierarchy (with ofNode::setParent).\n" + 
-        "Yellow boxes (2 of them) are cameras. You are looking through one of them so can only see one box on screen.\n" + 
-        "\n" + 
-        "KEYS:\n" + 
+        //"Purple boxes (4 of them) are generic nodes with simple circular motion, linked in a hierarchy (with ofNode::setParent).\n" +
+        //"Yellow boxes (2 of them) are cameras. You are looking through one of them so can only see one box on screen.\n" +
+        //"\n" +
+        "KEYS:\n" +
         "\n" + 
         "'z' reset transforms\n" + 
         "\n" + 
@@ -1036,7 +1036,6 @@ void testApp::mousePressed(int x, int y, int button){
                     playbackCam_0.rampAmount -= rampAmount;
                     if (playbackCam_0.rampAmount <= 0.009) {
                         playbackCam_0.rampAmount = 0.009;
-                        cout << rampAmount << endl;
                     }
                 }
                 if(isRR != isRRTest){
@@ -1064,8 +1063,8 @@ void testApp::mousePressed(int x, int y, int button){
                 }
                 if (playMode == 1) {
                     playbackCam_0.rampAmount += rampAmount;
-                    if (playbackCam_0.rampAmount >= 15.0) {
-                        playbackCam_0.rampAmount = 15.0;
+                    if (playbackCam_0.rampAmount >= 25.0) {
+                        playbackCam_0.rampAmount = 25.0;
                     }
                 }
                 if(isFF != isFFTest){
