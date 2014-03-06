@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxXmlSettings.h"
 #include "guiText.h"
 class audioPlayer{
 
@@ -22,7 +21,7 @@ class audioPlayer{
 		void mouseReleased(int x, int y, int button);
 		
         //xml--------------_
-        ofxXmlSettings getXML;
+        ofXml getXML;
         bool isIndex;
         string setMessageDir;
         string getMessAudioXML[6];

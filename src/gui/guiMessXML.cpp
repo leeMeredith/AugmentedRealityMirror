@@ -24,27 +24,55 @@ void guiMessXML::setup(float newRectX, float newRectY, string newSetDocDir){
 	
 	setDocDir = newSetDocDir;//message_presets.xml;
 	message = "message_presets_ARM.xml";
-	if( getXML.loadFile(setDocDir) ){
+	if( getXML.load(setDocDir) ){
+        //getXML.setTo("MESSAGES");
 		cout << "message_presets.xml loaded from documents folder!" << endl;
 	}else{
+        getXML.addChild("MESSAGES");
+        getXML.setTo("MESSAGES");
 		cout << "unable to load message_presets_ARM.xml check data/ folder" << endl;
 	}
-    maxNumInList = 7;
-    getMessRecordXML[0] = getXML.getValue("RECORD:message_0" , "XML?");
-	getMessRecordXML[1] = getXML.getValue("RECORD:message_1" , "XML?");
-	getMessRecordXML[2] = getXML.getValue("RECORD:message_2" , "XML?");
-	getMessRecordXML[3] = getXML.getValue("RECORD:message_3" , "XML?");
-	getMessRecordXML[4] = getXML.getValue("RECORD:message_4" , "XML?");
-	getMessRecordXML[5] = getXML.getValue("RECORD:message_5" , "XML?");
-   	getMessRecordXML[6] = getXML.getValue("RECORD:message_6" , "XML?");
     
-    getMessRecordXMLTags[0] = getMessRecordXMLTag = getXML.getValue("REALTAGRECORD:message_0" , "XML?");
-	getMessRecordXMLTags[1] = getXML.getValue("REALTAGRECORD:message_1" , "XML?");
-	getMessRecordXMLTags[2] = getXML.getValue("REALTAGRECORD:message_2" , "XML?");
-	getMessRecordXMLTags[3] = getXML.getValue("REALTAGRECORD:message_3" , "XML?");
-	getMessRecordXMLTags[4] = getXML.getValue("REALTAGRECORD:message_4" , "XML?");
-	getMessRecordXMLTags[5] = getXML.getValue("REALTAGRECORD:message_5" , "XML?");
-   	getMessRecordXMLTags[6] = getXML.getValue("REALTAGRECORD:message_6" , "XML?");
+    if(getXML.exists("RECORD")){
+        getXML.setTo("RECORD");
+        getMessRecordXML[0] = getXML.getValue<string>("message[0]", "XML?");
+        getMessRecordXML[1] = getXML.getValue<string>("message[1]", "XML?");
+        getMessRecordXML[2] = getXML.getValue<string>("message[2]", "XML?");
+        getMessRecordXML[3] = getXML.getValue<string>("message[3]", "XML?");
+        getMessRecordXML[4] = getXML.getValue<string>("message[4]", "XML?");
+        getMessRecordXML[5] = getXML.getValue<string>("message[5]", "XML?");
+        getMessRecordXML[6] = getXML.getValue<string>("message[6]", "XML?");
+    }
+    getXML.load(setDocDir);
+    maxNumInList = 7;
+    if(getXML.exists("REALTAGRECORD")){
+        getXML.setTo("REALTAGRECORD");
+        getMessRecordXMLTags[0] = getMessRecordXMLTag = getXML.getValue<string>("message[0]", "XML?");
+        cout << " getMessRecordXMLTags " << getMessRecordXMLTag << endl;
+        getMessRecordXMLTags[1] = getXML.getValue<string>("message[1]", "XML?");
+        getMessRecordXMLTags[2] = getXML.getValue<string>("message[2]", "XML?");
+        getMessRecordXMLTags[3] = getXML.getValue<string>("message[3]", "XML?");
+        getMessRecordXMLTags[4] = getXML.getValue<string>("message[4]", "XML?");
+        getMessRecordXMLTags[5] = getXML.getValue<string>("message[5]", "XML?");
+        getMessRecordXMLTags[6] = getXML.getValue<string>("message[6]", "XML?");
+    }
+
+//    
+//    getMessRecordXML[0] = getXML.getValue("RECORD:message_0" , "XML?");
+//	getMessRecordXML[1] = getXML.getValue("RECORD:message_1" , "XML?");
+//	getMessRecordXML[2] = getXML.getValue("RECORD:message_2" , "XML?");
+//	getMessRecordXML[3] = getXML.getValue("RECORD:message_3" , "XML?");
+//	getMessRecordXML[4] = getXML.getValue("RECORD:message_4" , "XML?");
+//	getMessRecordXML[5] = getXML.getValue("RECORD:message_5" , "XML?");
+//   	getMessRecordXML[6] = getXML.getValue("RECORD:message_6" , "XML?");
+//    
+//    getMessRecordXMLTags[0] = getMessRecordXMLTag = getXML.getValue("REALTAGRECORD:message_0" , "XML?");
+//	getMessRecordXMLTags[1] = getXML.getValue("REALTAGRECORD:message_1" , "XML?");
+//	getMessRecordXMLTags[2] = getXML.getValue("REALTAGRECORD:message_2" , "XML?");
+//	getMessRecordXMLTags[3] = getXML.getValue("REALTAGRECORD:message_3" , "XML?");
+//	getMessRecordXMLTags[4] = getXML.getValue("REALTAGRECORD:message_4" , "XML?");
+//	getMessRecordXMLTags[5] = getXML.getValue("REALTAGRECORD:message_5" , "XML?");
+//   	getMessRecordXMLTags[6] = getXML.getValue("REALTAGRECORD:message_6" , "XML?");
     
 	rectX = newRectX;
 	rectY = newRectY;

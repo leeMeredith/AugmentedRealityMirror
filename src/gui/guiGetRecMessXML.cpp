@@ -10,21 +10,27 @@ void guiGetRecMessXML::setup(float newRectX, float newRectY, string newSetDocDir
 	
 	setDocDir = newSetDocDir;//message_presets.xml;
 	message = "record/message/message_presets_ARM.xml";
-	if( getXML.loadFile(setDocDir) ){
+	if( getXML.load(setDocDir) ){
+        getXML.setTo("MESSAGES");
 		cout << "message_presets.xml loaded from documents folder!" << endl;
 	}else{
+        getXML.addChild("MESSAGES");
+        getXML.setTo("MESSAGES");
 		cout << "unable to load message_presets_ARM.xml check data/ folder" << endl;
 	}
     
-    getMessGetRecordXML[0] = getXML.getValue("GETRECORD:message_0", "XML?");
-    getMessGetRecordXML[1] = getXML.getValue("GETRECORD:message_1", "XML?");
-    getMessGetRecordXML[2] = getXML.getValue("GETRECORD:message_2", "XML?");
-    getMessGetRecordXML[3] = getXML.getValue("GETRECORD:message_3", "XML?");
-    getMessGetRecordXML[4] = getXML.getValue("GETRECORD:message_4", "XML?");
-    getMessGetRecordXML[5] = getXML.getValue("GETRECORD:message_5", "XML?");
-    getMessGetRecordXML[6] = getXML.getValue("GETRECORD:message_6", "XML?");
-    getMessGetRecordXML[7] = getXML.getValue("GETRECORD:message_7", "XML?");
-    	
+    if(getXML.exists("GETRECORD")){
+        getXML.setTo("GETRECORD[0]");
+        getMessGetRecordXML[0] = getXML.getValue<string>("message[0]", "XML?");
+        getMessGetRecordXML[1] = getXML.getValue<string>("message[1]", "XML?");
+        getMessGetRecordXML[2] = getXML.getValue<string>("message[2]", "XML?");
+        getMessGetRecordXML[3] = getXML.getValue<string>("message[3]", "XML?");
+        getMessGetRecordXML[4] = getXML.getValue<string>("message[4]", "XML?");
+        getMessGetRecordXML[5] = getXML.getValue<string>("message[5]", "XML?");
+        getMessGetRecordXML[6] = getXML.getValue<string>("message[6]", "XML?");
+        getMessGetRecordXML[7] = getXML.getValue<string>("message[7]", "XML?");
+    }
+    
 	rectX = newRectX;
 	rectY = newRectY;
 	myFont.loadFont("mono.ttf", 12, false);
@@ -99,14 +105,18 @@ void guiGetRecMessXML::update(float newRectX, float newRectY, string newSetDocDi
 	}
     */
     
-    getMessGetRecordXML[0] = getXML.getValue("GETRECORD:message_0", "XML?");
-    getMessGetRecordXML[1] = getXML.getValue("GETRECORD:message_1", "XML?");
-    getMessGetRecordXML[2] = getXML.getValue("GETRECORD:message_2", "XML?");
-    getMessGetRecordXML[3] = getXML.getValue("GETRECORD:message_3", "XML?");
-    getMessGetRecordXML[4] = getXML.getValue("GETRECORD:message_4", "XML?");
-    getMessGetRecordXML[5] = getXML.getValue("GETRECORD:message_5", "XML?");
-    getMessGetRecordXML[6] = getXML.getValue("GETRECORD:message_6", "XML?");
-    getMessGetRecordXML[7] = getXML.getValue("GETRECORD:message_7", "XML?");
+    if(getXML.exists("GETRECORD")){
+        getXML.setTo("GETRECORD[0]");
+            getMessGetRecordXML[0] = getXML.getValue<string>("message[0]", "XML?");
+            getMessGetRecordXML[1] = getXML.getValue<string>("message[1]", "XML?");
+            getMessGetRecordXML[2] = getXML.getValue<string>("message[2]", "XML?");
+            getMessGetRecordXML[3] = getXML.getValue<string>("message[3]", "XML?");
+            getMessGetRecordXML[4] = getXML.getValue<string>("message[4]", "XML?");
+            getMessGetRecordXML[5] = getXML.getValue<string>("message[5]", "XML?");
+            getMessGetRecordXML[6] = getXML.getValue<string>("message[6]", "XML?");
+            getMessGetRecordXML[7] = getXML.getValue<string>("message[7]", "XML?");
+    }
+           
     
     //recordInt-----------------------_
     int rectIntXW = rectX+rectW+10;

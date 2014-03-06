@@ -2,10 +2,10 @@
 //  Created by Lee Meredith.
 //
 
-#include "recRecordARM.h"
+#include "recSessionARM.h"
 
 //--------------------------------------------------------------
-void recRecordARM::setup(int setX, int setY, string xmlFile){
+void recSessionARM::setup(int setX, int setY, string xmlFile){
     
     recordAddress = 0.1;
     dBug = false;
@@ -15,7 +15,8 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
     
     isNewXmlFile = false;
     xmlFileTest = xmlFile;
-    currentXmlFile = "record/address/flythrough/";
+    
+    currentXmlFile = "record/address/session/";
     currentXmlFile += xmlFile;
     settingsDirectory = currentXmlFile;
     
@@ -23,6 +24,14 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
     if(posLastSlash > 0)settingsDirectory.erase(settingsDirectory.begin()+ posLastSlash+1, settingsDirectory.end()  );
     else settingsDirectory = "";
     //currentXmlFile = settingsDirectory + currentXmlFile;
+    
+    int posLastSess = currentXmlFile.rfind("Sessions");
+    if(posLastSess < 1){
+        int posLastDotXML = currentXmlFile.rfind(".xml");
+        if(posLastDotXML > 0)currentXmlFile.erase(currentXmlFile.begin()+ posLastDotXML, currentXmlFile.end()  );
+        currentXmlFile += "Sessions";
+    }
+    
     int posLastDot = currentXmlFile.rfind(".xml");
     if (posLastDot < 1) {
         currentXmlFile += ".xml";
@@ -44,8 +53,8 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
 		message += " loaded!";
         cout << message << endl;
     }else{
-        settingsRecordARMFile.addChild("FLYTHROUGH");
-        settingsRecordARMFile.setTo("FLYTHROUGH");
+        settingsRecordARMFile.addChild("SESSIONS");
+        settingsRecordARMFile.setTo("SESSIONS");
         cout << "unable to load " << endl;
         message = "unable to load ";
         message += currentXmlFile;
@@ -321,7 +330,7 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
         guiAudio = getAudio;
         
         setGetRecordAddress = 0;
-        //setGetRecordAddressAll = recRecordARM_0.setEventssAddress;
+        //setGetRecordAddressAll = recSessionARM_0.setEventssAddress;
         if (setGetRecordAddressAll >= allCamera.size()) {
             setGetCameraAddress = allCamera.size()-1;
         }
@@ -403,16 +412,23 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
 }
 
 //--------------------------------------------------------------
-void recRecordARM::update(string xmlFile){
+void recSessionARM::update(string xmlFile){
     
     if (xmlFile != xmlFileTest) {
-        currentXmlFile = "record/address/flythrough/";
+        currentXmlFile = "record/address/session/";
         currentXmlFile += xmlFile;
         settingsDirectory = currentXmlFile;
         
         int posLastSlash = settingsDirectory.rfind("/");
         if( posLastSlash > 0) settingsDirectory.erase(settingsDirectory.begin()+ posLastSlash+1, settingsDirectory.end()  );
         else settingsDirectory = "";
+        
+        int posLastSess = currentXmlFile.rfind("Sessions");
+        if(posLastSess < 1){
+            int posLastDotXML = currentXmlFile.rfind(".xml");
+            if(posLastDotXML > 0)currentXmlFile.erase(currentXmlFile.begin()+ posLastDotXML, currentXmlFile.end()  );
+            currentXmlFile += "Sessions";
+        }
         
         int posLastDot = currentXmlFile.rfind(".xml");
         if (posLastDot < 1) {
@@ -487,14 +503,14 @@ void recRecordARM::update(string xmlFile){
             isSetRecordAddressNew = false;
         }
         
-        if(settingsRecordARMFile.exists("FLYTHROUGH")){
+        if(settingsRecordARMFile.exists("SESSIONS")){
             cout << " settingsRecordARMFile.exists(FLYTHROUGH) " << endl;
         }else {
             if (isNewXmlFile == true) {
-                settingsRecordARMFile.addChild("FLYTHROUGH");
+                settingsRecordARMFile.addChild("SESSIONS");
             }
         }
-        settingsRecordARMFile.setTo("FLYTHROUGH");
+        settingsRecordARMFile.setTo("SESSIONS");
         
         if(settingsRecordARMFile.exists("about")){
             int numAboutTags = settingsRecordARMFile.getNumChildren("about");
@@ -856,8 +872,8 @@ void recRecordARM::update(string xmlFile){
     isClearSave = false;
     if (isClearSave == true){
 //        settingsRecordARMFile.clear();
-//        settingsRecordARMFile.addChild("FLYTHROUGH");
-//        settingsRecordARMFile.setTo("FLYTHROUGH");
+//        settingsRecordARMFile.addChild("SESSIONS");
+//        settingsRecordARMFile.setTo("SESSIONS");
         
 //        isAtRun = false;
 //        isTimerStart = true;
@@ -999,10 +1015,10 @@ void recRecordARM::update(string xmlFile){
         
         settingsRecordARMFile.clear();
         
-        if(settingsRecordARMFile.exists("FLYTHROUGH") == false){
-            settingsRecordARMFile.addChild("FLYTHROUGH");
+        if(settingsRecordARMFile.exists("SESSIONS") == false){
+            settingsRecordARMFile.addChild("SESSIONS");
         }
-        settingsRecordARMFile.setTo("FLYTHROUGH");
+        settingsRecordARMFile.setTo("SESSIONS");
         //client about
         ofXml aboutXml;
         aboutXml.addChild("about");
@@ -1077,8 +1093,8 @@ void recRecordARM::update(string xmlFile){
     
     if (clearTagCon == true) {
         settingsRecordARMFile.clear();
-        settingsRecordARMFile.addChild("FLYTHROUGH");
-        settingsRecordARMFile.setTo("FLYTHROUGH");
+        settingsRecordARMFile.addChild("SESSIONS");
+        settingsRecordARMFile.setTo("SESSIONS");
 //        if( settingsRecordARMFile.pushTag("RECORD", setRecordAddress) ){
 //            settingsRecordARMFile.clear(whoClearTagCon, 0);
 //            settingsRecordARMFile.addValue(whoClearTagCon, whichTagCon);
@@ -1110,18 +1126,18 @@ void recRecordARM::update(string xmlFile){
 }
 
 //--------------------------------------------------------------
-void recRecordARM::updateAddress(float setRecordAddress){
+void recSessionARM::updateAddress(float setRecordAddress){
 	recordAddress = setRecordAddress;
 }
 
 //--------------------------------------------------------------
-void recRecordARM::updateClearTagContents(string newWhoClearTagCon, string newWhichTagCon){
+void recSessionARM::updateClearTagContents(string newWhoClearTagCon, string newWhichTagCon){
     whoClearTagCon = newWhoClearTagCon;
     whichTagCon = newWhichTagCon;
 }
 
 //--------------------------------------------------------------
-void recRecordARM::setRGBA(int setR, int setG, int setB, int setA){
+void recSessionARM::setRGBA(int setR, int setG, int setB, int setA){
     r = setR;
     g = setG;
     b = setB;
@@ -1129,7 +1145,7 @@ void recRecordARM::setRGBA(int setR, int setG, int setB, int setA){
 }
 
 //--------------------------------------------------------------
-void recRecordARM::updateInfo(string setSession, string setParticipant, string setAge, string setAmputation, string setAudio){
+void recSessionARM::updateInfo(string setSession, string setParticipant, string setAge, string setAmputation, string setAudio){
     recordSession = setSession;
     recordParticipant = setParticipant;
     recordAge = setAge;
@@ -1137,11 +1153,11 @@ void recRecordARM::updateInfo(string setSession, string setParticipant, string s
     recordAudio = setAudio;
 }
 //--------------------------------------------------------------
-void recRecordARM::draw(int setX, int setY, int setW, int setH){
+void recSessionARM::draw(int setX, int setY, int setW, int setH){
 }
 
 //--------------------------------------------------------------
-void recRecordARM::keyPressed  (int key){
+void recSessionARM::keyPressed  (int key){
     if (isLoggingKey == false) {
         //get-----------------_
         if(key == OF_KEY_UP || key == 357){
@@ -1192,22 +1208,22 @@ void recRecordARM::keyPressed  (int key){
             }
         }
         
-        if(key == 'E'){
-            settingsRecordARMFile.remove("ENDRECORD[" + ofToString(0) + "]");
-            settingsRecordARMFile.addValue("ENDRECORD", recordAddress);
-            settingsRecordARMFile.save(currentXmlFile);
-            message = currentXmlFile;
-            message += " saved to xml!";
-        }
-        
-        if(key == 'R'){
-//            isStartEvents = true;
-            isEventsTest = false;
-            lastRecTagNumber = settingsRecordARMFile.getNumChildren("RECORD");
-            if(settingsRecordARMFile.exists("RECORD")){
-                settingsRecordARMFile.setTo("RECORD[" + ofToString(lastRecTagNumber-1) + "]");
-            }
-        }
+//        if(key == 'E'){
+//            settingsRecordARMFile.remove("ENDRECORD[" + ofToString(0) + "]");
+//            settingsRecordARMFile.addValue("ENDRECORD", recordAddress);
+//            settingsRecordARMFile.save(currentXmlFile);
+//            message = currentXmlFile;
+//            message += " saved to xml!";
+//        }
+//        
+//        if(key == 'R'){
+////            isStartEvents = true;
+//            isEventsTest = false;
+//            lastRecTagNumber = settingsRecordARMFile.getNumChildren("RECORD");
+//            if(settingsRecordARMFile.exists("RECORD")){
+//                settingsRecordARMFile.setTo("RECORD[" + ofToString(lastRecTagNumber-1) + "]");
+//            }
+//        }
     }
 
     if (isLoggingKey == true) {

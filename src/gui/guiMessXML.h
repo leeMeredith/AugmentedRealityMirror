@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxXmlSettings.h"
 #include "guiText.h"
 #include "recordFloat.h"
 #include "recordInt.h"
@@ -46,7 +45,7 @@ public:
 	int maxNumInList;
     
 	//xml--------------_
-	ofxXmlSettings getXML;
+	ofXml getXML;
 	bool isIndex;
 	string message, setDocDir;
 	//-------xml-------_

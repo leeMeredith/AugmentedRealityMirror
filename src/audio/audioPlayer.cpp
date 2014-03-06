@@ -11,18 +11,24 @@ void audioPlayer::setup(int newRectX, int newRectY, string newLargeAudioDir){
     largeAudioDirTest = largeAudioDir = newLargeAudioDir;
     //xml----------------------------_
     setMessageDir = "record/message/message_presets_ARM.xml";
-    if( getXML.loadFile(setMessageDir) ){
-        cout << "message_presets.xml loaded from documents folder!" << endl;
-    }else{
-        cout << "unable to load message_presets.xml check data/ folder" << endl;
-    }
+    if( getXML.load(setMessageDir) ){
+        getXML.setTo("MESSAGES");
+		cout << "message_presets.xml loaded from documents folder!" << endl;
+	}else{
+        getXML.addChild("MESSAGES");
+        getXML.setTo("MESSAGES");
+		cout << "unable to load message_presets_ARM.xml check data/ folder" << endl;
+	}
     audio = play = paused = volume = speed = position = "";
-    getMessAudioXML[0] = getXML.getValue("AUDIO:message_0" , "XML?");
-    getMessAudioXML[1] = getXML.getValue("AUDIO:message_1" , "XML?");
-    getMessAudioXML[2] = getXML.getValue("AUDIO:message_2" , "XML?");
-    getMessAudioXML[3] = getXML.getValue("AUDIO:message_3" , "XML?");
-    getMessAudioXML[4] = getXML.getValue("AUDIO:message_4" , "XML?");
-    getMessAudioXML[5] = getXML.getValue("AUDIO:message_5" , "XML?");
+    if(getXML.exists("AUDIO")){
+        getXML.setTo("AUDIO[0]");
+        getMessAudioXML[0] = getXML.getValue<string>("message[0]", "XML?");
+        getMessAudioXML[1] = getXML.getValue<string>("message[1]", "XML?");
+        getMessAudioXML[2] = getXML.getValue<string>("message[2]", "XML?");
+        getMessAudioXML[3] = getXML.getValue<string>("message[3]", "XML?");
+        getMessAudioXML[4] = getXML.getValue<string>("message[4]", "XML?");
+        getMessAudioXML[5] = getXML.getValue<string>("message[5]", "XML?");
+    }
     //-------------xml---------------_
     
 	knobFont.loadFont("mono.ttf", 12, false);

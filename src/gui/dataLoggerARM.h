@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "ofxXmlSettings.h"
 #include "recRecordARM.h"
+#include "recSessionARM.h"
 #include "guiMessXML.h"
 #include "guiGetRecMessXML.h"
 #include "audioPlayer.h"
@@ -50,6 +50,8 @@ public:
     int recCamera, recPainScore, getAllPositionsXSize;
     float recPosition_X, recPosition_Y, recPosition_Z, recXAxis_X, recXAxis_Y, recXAxis_Z, recYAxis_X, recYAxis_Y, recYAxis_Z, recZAxis_X, recZAxis_Y, recZAxis_Z;
     
+    recSessionARM recSessionARM_0;
+    
     //guiMessXML------------------------_
     bool isDelAtIndexZero;
     int addKeyIndexZero;
@@ -65,6 +67,7 @@ public:
     
     //ofDirectory------------------------_
     ofDirectory recordAddressDir;
+//    ofDirectory recordSessionDir;
     bool isJustAtRunFile;
     int recAddressCurrentDir, recAddressCurrentDirTest;
     bool isRecordAddressR, isRecordAddressL;

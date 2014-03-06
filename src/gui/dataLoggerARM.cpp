@@ -9,12 +9,21 @@ void dataLoggerARM::setup(){
     
     //ofDirectory------------------------_
     //Directory-Address-------_    
-    recordAddressDir.listDir("record/address/");
+    recordAddressDir.listDir("record/address/flythrough/");
 	recordAddressDir.sort(); // in linux the file system doesn't return file lists ordered in alphabetical order
+    
+//    recordSessionDir.listDir("record/address/session/");
+//	recordSessionDir.sort();
+    
+    
     if ((int)recordAddressDir.size() == 0) {
-        setRecordFileDefault = setRecordFile = recordFile = "Demo";// if no file in record/address/????.xml
+        setRecordFileDefault = setRecordFile = recordFile = "DemoMe";// if no file in record/address/????.xml
         recRecordARM_0.isSaveAll = true;
         recRecordARM_0.isGetAll = true;
+        //recSessionARM------------------_
+        recSessionARM_0.isSaveAll = true;
+        recRecordARM_0.isGetAll = true;
+        //---------recSessionARM---------_
     }
     isJustAtRunFile = true;
     recAddressCurrentDir = 0;
@@ -115,6 +124,15 @@ void dataLoggerARM::setup(){
     recRecordWhoClearTagCon = guiMessXML_0.getMessRecordXMLTag;
     recRecordARM_0.updateClearTagContents(recRecordWhoClearTagCon, recRecordWhichTagCon);
     
+    //recSessionARM------------------_
+    recSessionARM_0.setup(graphRecARM_X, graphRecARM_Y, recordFile);
+    recSessionARM_0.updateAddress(audioPlayer_0.getLargePositionMS);
+    recSessionARM_0.setRGBA(graphRecARM_R, graphRecARM_G, graphRecARM_B, graphRecARM_A);
+    recSessionARM_0.updateInfo(recordSession, recordParticipant, recordAge, recordAmputation, recordAudio);
+    recRecordWhoClearTagCon = guiMessXML_0.getMessRecordXMLTag;
+    recSessionARM_0.updateClearTagContents(recRecordWhoClearTagCon, recRecordWhichTagCon);
+    //---------recSessionARM---------_
+    
     float setWithRan = ofRandom(0.9, 10.9);
     recCamera = recPainScore = 1;
     getAllPositionsXSize = 0;
@@ -140,7 +158,29 @@ void dataLoggerARM::setup(){
     
     recRecordARM_0.recordZAxis_X = recZAxis_X;
     recRecordARM_0.recordZAxis_Y = recZAxis_Y;
-    recRecordARM_0.recordZAxis_Z = recZAxis_Z;    
+    recRecordARM_0.recordZAxis_Z = recZAxis_Z;
+    
+    //recSessionARM------------------_
+    recSessionARM_0.recordCamera = recCamera;
+    recSessionARM_0.recordPainScore = recPainScore;
+    recSessionARM_0.recordTime = "-1";
+    
+    recSessionARM_0.recordPosition_X = recPosition_X;
+    recSessionARM_0.recordPosition_Y = recPosition_Y;
+    recSessionARM_0.recordPosition_Z = recPosition_Z;
+    
+    recSessionARM_0.recordXAxis_X = recXAxis_X;
+    recSessionARM_0.recordXAxis_Y = recXAxis_Y;
+    recSessionARM_0.recordXAxis_Z = recXAxis_Z;
+    
+    recSessionARM_0.recordYAxis_X = recYAxis_X;
+    recSessionARM_0.recordYAxis_Y = recYAxis_Y;
+    recSessionARM_0.recordYAxis_Z = recYAxis_Z;
+    
+    recSessionARM_0.recordZAxis_X = recZAxis_X;
+    recSessionARM_0.recordZAxis_Y = recZAxis_Y;
+    recSessionARM_0.recordZAxis_Z = recZAxis_Z;
+    //--------recSessionARM----------_
     //--------recRecordARM----------_
         
     //guiMessXML------------------------_
@@ -295,11 +335,25 @@ void dataLoggerARM::update(){
     recRecordARM_0.updateClearTagContents(recRecordWhoClearTagCon, recRecordWhichTagCon);
     recRecordARM_0.update(recordFile);
     if(isClearAndSaveDoc == true) {
-        recRecordARM_0.clearDoc = true;
+        //recRecordARM_0.clearDoc = true;
         guiMessXML_0.recIndex_Y = guiMessXML_0.maxNumInList;
         isClearAndSaveDoc = false;
     }
     //--------recRecordARM----------_
+    
+    //recSessionARM------------------_
+    recSessionARM_0.updateAddress(audioPlayer_0.getLargePositionMS);
+    recSessionARM_0.setRGBA(graphRecARM_R, graphRecARM_G, graphRecARM_B, graphRecARM_A);
+    recSessionARM_0.updateInfo(recordSession, recordParticipant, recordAge, recordAmputation, recordAudio);
+    recRecordWhoClearTagCon = guiMessXML_0.getMessRecordXMLTag;
+    recSessionARM_0.updateClearTagContents(recRecordWhoClearTagCon, recRecordWhichTagCon);
+    recSessionARM_0.update(recordFile);
+//    if(isClearAndSaveDoc == true) {
+//        //recSessionARM_0.clearDoc = true;
+//        guiMessXML_0.recIndex_Y = guiMessXML_0.maxNumInList;
+//        isClearAndSaveDoc = false;
+//    }
+    //--------recSessionARM----------_
     
     //guiMessXML------------------------_
     if (isKeyFile == false &&
@@ -493,10 +547,31 @@ void dataLoggerARM::update(){
     recRecordARM_0.recordZAxis_Y = recZAxis_Y;
     recRecordARM_0.recordZAxis_Z = recZAxis_Z;
     
+    //recSessionARM------------------_
+    recSessionARM_0.recordCamera = recCamera;
+    recSessionARM_0.recordPainScore = recPainScore;
+    recSessionARM_0.recordTime = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
+//    getAllPositionsXSize = recSessionARM_0.getAllPositionsXSize;
+    recSessionARM_0.recordPosition_X = recPosition_X;
+    recSessionARM_0.recordPosition_Y = recPosition_Y;
+    recSessionARM_0.recordPosition_Z = recPosition_Z;
+    recSessionARM_0.recordXAxis_X = recXAxis_X;
+    recSessionARM_0.recordXAxis_Y = recXAxis_Y;
+    recSessionARM_0.recordXAxis_Z = recXAxis_Z;
+    recSessionARM_0.recordYAxis_X = recYAxis_X;
+    recSessionARM_0.recordYAxis_Y = recYAxis_Y;
+    recSessionARM_0.recordYAxis_Z = recYAxis_Z;
+    recSessionARM_0.recordZAxis_X = recZAxis_X;
+    recSessionARM_0.recordZAxis_Y = recZAxis_Y;
+    recSessionARM_0.recordZAxis_Z = recZAxis_Z;
+    //---------recSessionARM---------_
+    
     //xenoRectOne--------------_
-    getPositions_X = recRecordARM_0.allPositions_X[setPosAddres];//or xenoPosX.prevOne
-    getPositions_Y = recRecordARM_0.allPositions_Y[setPosAddres];
-    getPositions_Z = recRecordARM_0.allPositions_Z[setPosAddres];
+    if (recRecordARM_0.allPositions_X.size()>0) {
+        getPositions_X = recRecordARM_0.allPositions_X[setPosAddres];//or xenoPosX.prevOne
+        getPositions_Y = recRecordARM_0.allPositions_Y[setPosAddres];
+        getPositions_Z = recRecordARM_0.allPositions_Z[setPosAddres];
+    }
     //xenoRectOne--------------_
 }
 
@@ -505,6 +580,9 @@ void dataLoggerARM::draw(){
     //recRecordARM------------------_
     recRecordARM_0.draw(graphRecARM_X, graphRecARM_Y, graphRecARM_W, graphRecARM_H);
     //--------recRecordARM----------_
+    //recSessionARM------------------_
+    recSessionARM_0.draw(graphRecARM_X, graphRecARM_Y, graphRecARM_W, graphRecARM_H);
+    //--------recSessionARM----------_
     
     //guiMessXML------------------------_
     guiMessXML_0.draw();
@@ -552,6 +630,9 @@ void dataLoggerARM::keyPressed  (int key){
     if (isKeyFill == false && guiMessXML_0.recIndex_Y != guiMessXML_0.maxNumInList) {
         if(key == 'C'){
             //recRecordARM_0.isRemoveTag = true;//kill this ?
+            //recSessionARM------------------_
+            //recSessionARM_0.isRemoveTag = true;//kill this ?
+            //--------recSessionARM----------_
         }
     }
     
@@ -581,12 +662,40 @@ void dataLoggerARM::keyPressed  (int key){
     recRecordARM_0.recordZAxis_Y = recZAxis_Y;
     recRecordARM_0.recordZAxis_Z = recZAxis_Z;
     
+    //recSessionARM------------------_
+    recSessionARM_0.recordCamera = recCamera;
+    //recSessionARM_0.recordPainScore = recPainScore;
+    //recSessionARM_0.recordTime = "-1";
+    
+    recSessionARM_0.recordPosition_X = recPosition_X;
+    recSessionARM_0.recordPosition_Y = recPosition_Y;
+    recSessionARM_0.recordPosition_Z = recPosition_Z;
+    
+    recSessionARM_0.recordXAxis_X = recXAxis_X;
+    recSessionARM_0.recordXAxis_Y = recXAxis_Y;
+    recSessionARM_0.recordXAxis_Z = recXAxis_Z;
+    
+    recSessionARM_0.recordYAxis_X = recYAxis_X;
+    recSessionARM_0.recordYAxis_Y = recYAxis_Y;
+    recSessionARM_0.recordYAxis_Z = recYAxis_Z;
+    
+    recSessionARM_0.recordZAxis_X = recZAxis_X;
+    recSessionARM_0.recordZAxis_Y = recZAxis_Y;
+    recSessionARM_0.recordZAxis_Z = recZAxis_Z;
+    //--------recSessionARM----------_
+    
     //recRecordARM------------------_
     if (isKeyFill == false && guiMessXML_0.recIndex_Y == guiMessXML_0.maxNumInList) {
         recRecordARM_0.keyPressed(key);
+        //recSessionARM------------------_
+        recSessionARM_0.keyPressed(key);
+        //--------recSessionARM----------_
         if(key == OF_KEY_DOWN || key == 359 || key == OF_KEY_UP || key == 357){
             isSetAllDefault = true;
             recRecordARM_0.isGetAll = true;
+            //recSessionARM------------------_
+            recSessionARM_0.isGetAll = true;
+            //--------recSessionARM----------_
         }
         isSetRecordFileDefault = isSetAudioDefault = true;
         recAddressCurrentDir = recordAddressDir.size()-1;
@@ -703,21 +812,27 @@ void dataLoggerARM::keyPressed  (int key){
     if(key == '<') {
 		guiMessXML_0.isDownList = true;
         if (guiMessXML_0.recIndex_Y == guiMessXML_0.maxNumInList) {
-            recordAddressDir.listDir("record/address/");
+            recordAddressDir.listDir("record/address/flythrough/");
             recordAddressDir.sort();
         }
         isSetAllDefault = true;
         isKeyFileRL = isKeyAudioRL = false;
         recRecordARM_0.isGetAll = true;
+        //recSessionARM------------------_
+        recSessionARM_0.isGetAll = true;
+        //--------recSessionARM----------_
 	} else if (key == '>' || key == 9) {
         guiMessXML_0.isUpList = true;
         if (guiMessXML_0.recIndex_Y == guiMessXML_0.maxNumInList) {
-            recordAddressDir.listDir("record/address/");
+            recordAddressDir.listDir("record/address/flythrough/");
             recordAddressDir.sort();
         }
         isKeyFileRL = isKeyAudioRL = false;
         isSetAllDefault = true;
         recRecordARM_0.isGetAll = true;
+        //recSessionARM------------------_
+        recSessionARM_0.isGetAll = true;
+        //--------recSessionARM----------_
 	} else if(key == OF_KEY_RETURN || key == 13) {
         addKeyIndexZero = 0;
         toAddZero = "";
@@ -755,7 +870,7 @@ void dataLoggerARM::keyPressed  (int key){
                     recRecordWhichTagCon = recordFile = setRecordFile;
                 }
                 //ofDirectory--------_
-                recordAddressDir.listDir("record/address/");
+                recordAddressDir.listDir("record/address/flythrough/");
                 recordAddressDir.sort();
                 //----ofDirectory----_
                 isKeyFileRL = false;
@@ -764,6 +879,10 @@ void dataLoggerARM::keyPressed  (int key){
             recRecordARM_0.isSaveAll = true;
             recRecordARM_0.isGetAll = true;
             guiMessXML_0.isFileEnter = false;
+            //recSessionARM------------------_
+            recSessionARM_0.isSaveAll = true;
+            recSessionARM_0.isGetAll = true;
+            //---------recSessionARM---------_
         }
         //---ofDirectory-----_
         
@@ -773,6 +892,9 @@ void dataLoggerARM::keyPressed  (int key){
             }
             recRecordWhichTagCon = recordSession = setRecordSession;
             recRecordARM_0.isRemoveTag = true;
+            //recSessionARM------------------_
+            recSessionARM_0.isRemoveTag = true;
+            //---------recSessionARM---------_
             isKeySession = false;
             guiMessXML_0.isSessionEnter = false;
         }
@@ -782,6 +904,9 @@ void dataLoggerARM::keyPressed  (int key){
             }
             recRecordWhichTagCon = recordParticipant = setRecordParticipant;
             recRecordARM_0.isRemoveTag = true;
+            //recSessionARM------------------_
+            recSessionARM_0.isRemoveTag = true;
+            //---------recSessionARM---------_
             isKeyParticipant = false;
             guiMessXML_0.isParticipantEnter = false;
         }
@@ -791,6 +916,9 @@ void dataLoggerARM::keyPressed  (int key){
             }
             recRecordWhichTagCon = recordAge = setRecordAge;
             recRecordARM_0.isRemoveTag = true;
+            //recSessionARM------------------_
+            recSessionARM_0.isRemoveTag = true;
+            //---------recSessionARM---------_
             isKeyRecAge = false;
             guiMessXML_0.isAgeEnter = false;
         }
@@ -800,6 +928,9 @@ void dataLoggerARM::keyPressed  (int key){
             }
             recRecordWhichTagCon = recordAmputation = setRecordAmputation;
             recRecordARM_0.isRemoveTag = true;
+            //recSessionARM------------------_
+            recSessionARM_0.isRemoveTag = true;
+            //---------recSessionARM---------_
             isKeyRecAmputation = false;
             guiMessXML_0.isAmputationEnter = false;
         }
@@ -812,6 +943,9 @@ void dataLoggerARM::keyPressed  (int key){
                 //---ofDirectory-----_
                 isKeyAudioRL = false;
                 recRecordARM_0.isRemoveTag = true;
+                //recSessionARM------------------_
+                recSessionARM_0.isRemoveTag = true;
+                //---------recSessionARM---------_
                 isKeyAudio = false;
                 guiMessXML_0.isAudioEnter = false;
             }

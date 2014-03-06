@@ -365,6 +365,7 @@ void testApp::update() {
             recMode = 0;
             dataLoggerARM_0.isSetAllDefault = true;
             dataLoggerARM_0.recRecordARM_0.isGetAll = true;
+            dataLoggerARM_0.recSessionARM_0.isGetAll = true;
             isDataLoggerARM = false;
         }
         isPlayReset = false;
@@ -383,7 +384,6 @@ void testApp::update() {
 	}
     if (playMode == 1) {
         if (playbackCam_0.testMe == false) {
-            // cout << "           startTimer " << playbackCamTimer_0.topTimer.startTimer << endl;
             if (playbackCam_0.isTested == true){
                 playbackCamTimer_0.topTimer.startTimer = true;
                 playbackCam_0.isTested = false;
@@ -409,7 +409,6 @@ void testApp::update() {
 //            if (isPlay == false)isPlay = true;
 //            cout << "isPlay " << isPlay << endl;
 //        }
-        cout << "setPosAddres " << setPosAddres << endl;
     }
 	
     playbackCamTimer_0.thisLongTop = howLongPlaybackCam;//"This Long in Frame"
@@ -959,6 +958,7 @@ void testApp::mousePressed(int x, int y, int button){
     if (isMouseMovBott == true || isMouseMovTop == true || isDrHitAreaImage == true) {
         if (drHitAreaImage_0.isHitOk == false && drPLayHitAreaImage_0.isHitOk == false) {
             dataLoggerARM_0.recRecordARM_0.isLogging = true;
+            if (isSession == true)dataLoggerARM_0.recSessionARM_0.isLogging = true;
         }
     }
     //drHitAreaImage----------------------------------_
@@ -967,12 +967,15 @@ void testApp::mousePressed(int x, int y, int button){
         if (drHitAreaImage_0.isHitOk == true) {
             if (drHitAreaImage_0.hitAreaImageIndex == 1) {
                 isPlayReset = true;
+                dataLoggerARM_0.recSessionARM_0.isLoggingKey = false;
             }
             if (drHitAreaImage_0.hitAreaImageIndex == 2) {
                 isPlayReset = true;
+                dataLoggerARM_0.recSessionARM_0.isLoggingKey = false;
             }
             if (drHitAreaImage_0.hitAreaImageIndex == 3) {
                 isPlayReset = true;
+                dataLoggerARM_0.recSessionARM_0.isLoggingKey = false;
             }
             if (drHitAreaImage_0.hitAreaImageIndex == 4) {
                 isPlayReset = true;
@@ -981,6 +984,9 @@ void testApp::mousePressed(int x, int y, int button){
                 //playMode = 0;
                 drPLayHitAreaImage_0.menuMode = 0;
                 orbitRadius = 500;
+                
+                isDataLoggerARM = true;
+                dataLoggerARM_0.recSessionARM_0.isLoggingKey = true;
             }
         }
     }
@@ -1003,6 +1009,7 @@ void testApp::mousePressed(int x, int y, int button){
                 playMode = !playMode;
                 if (playMode == 0) {
                     drPLayHitAreaImage_0.menuMode = 0;
+                    dataLoggerARM_0.recSessionARM_0.isGetAll = true;
                     //cout << " playMode " << playMode << endl;
                 }
                 if (playMode == 1) {
@@ -1012,7 +1019,7 @@ void testApp::mousePressed(int x, int y, int button){
                     playbackCamTimer_0.topTimer.startTimer = true;
                     //cout << " playMode " << playMode << endl;
                 }
-                isDataLoggerARM = false;
+                //isDataLoggerARM = false;
             }
             if (drPLayHitAreaImage_0.hitAreaImageIndex == 2) {
                 cameraMode = 1;
@@ -1041,7 +1048,7 @@ void testApp::mousePressed(int x, int y, int button){
                 if(isRR != isRRTest){
                     isRRTest = isRR;
                 }
-                isDataLoggerARM = false;
+                //isDataLoggerARM = false;
             }
             if (drPLayHitAreaImage_0.hitAreaImageIndex == 3) {
                 cameraMode = 1;
@@ -1070,7 +1077,7 @@ void testApp::mousePressed(int x, int y, int button){
                 if(isFF != isFFTest){
                     isFFTest = isFF;
                 }
-                isDataLoggerARM = false;
+                //isDataLoggerARM = false;
             }
             if (drPLayHitAreaImage_0.hitAreaImageIndex == 4) {
                 cameraMode = 0;
@@ -1093,12 +1100,15 @@ void testApp::mousePressed(int x, int y, int button){
                     dataLoggerARM_0.recRecordARM_0.isGetAll = true;
                     drPLayHitAreaImage_0.menuMode = 0;
                     dataLoggerARM_0.recRecordARM_0.isLoggingKey = false;
-                    isDataLoggerARM = false;
+                    if (isSession == true)dataLoggerARM_0.recSessionARM_0.isLoggingKey = true;
+                    //isDataLoggerARM = false;
                 }
                 if (recMode == 1) {
                     drPLayHitAreaImage_0.menuMode = 2;
                     dataLoggerARM_0.recRecordARM_0.isLoggingKey = true;
-                    isDataLoggerARM = true;
+                    dataLoggerARM_0.recSessionARM_0.isGetAll = true;
+                    dataLoggerARM_0.recSessionARM_0.isLoggingKey = false;
+                    //isDataLoggerARM = true;
                 }
             }
         }

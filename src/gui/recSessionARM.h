@@ -6,7 +6,7 @@
 
 #include "ofMain.h"
 
-class recRecordARM{
+class recSessionARM{
 
 	public:
 
