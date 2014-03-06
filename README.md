@@ -20,7 +20,7 @@ Example
 
 To do
 -------
-Cut out ofxXmlSettings and add ofXml.
+test
 
 Recognition
 -----------
