@@ -2,33 +2,33 @@
 //  Created by Lee Meredith.
 //
 
-#include "guiGetRecMessXML.h"
+#include "guiGetRecMessJson.h"
 
 
 //--------------------------------------------------------------
-void guiGetRecMessXML::setup(float newRectX, float newRectY, string newSetDocDir){
+void guiGetRecMessJson::setup(float newRectX, float newRectY, string newSetDocDir){
 	
-	setDocDir = newSetDocDir;//message_presets.xml;
-	message = "record/message/message_presets_ARM.xml";
-	if( getXML.load(setDocDir) ){
-        getXML.setTo("MESSAGES");
-		cout << "message_presets.xml loaded from documents folder!" << endl;
+	setDocDir = newSetDocDir;//message_presets_ARM.json;
+	message = "record/message/message_presets_ARM.json";
+	if( jsonDocument.load(ofToDataPath(setDocDir)) ){
+        jsonDocument.setTo("MESSAGES");
+		cout << "message_presets_ARM.json loaded from documents folder!" << endl;
 	}else{
-        getXML.addChild("MESSAGES");
-        getXML.setTo("MESSAGES");
-		cout << "unable to load message_presets_ARM.xml check data/ folder" << endl;
+        jsonDocument.addChild("MESSAGES");
+        jsonDocument.setTo("MESSAGES");
+		cout << "unable to load message_presets_ARM.json check data/ folder" << endl;
 	}
     
-    if(getXML.exists("GETRECORD")){
-        getXML.setTo("GETRECORD[0]");
-        getMessGetRecordXML[0] = getXML.getValue<string>("message[0]", "XML?");
-        getMessGetRecordXML[1] = getXML.getValue<string>("message[1]", "XML?");
-        getMessGetRecordXML[2] = getXML.getValue<string>("message[2]", "XML?");
-        getMessGetRecordXML[3] = getXML.getValue<string>("message[3]", "XML?");
-        getMessGetRecordXML[4] = getXML.getValue<string>("message[4]", "XML?");
-        getMessGetRecordXML[5] = getXML.getValue<string>("message[5]", "XML?");
-        getMessGetRecordXML[6] = getXML.getValue<string>("message[6]", "XML?");
-        getMessGetRecordXML[7] = getXML.getValue<string>("message[7]", "XML?");
+    if(jsonDocument.exists("GETRECORD")){
+        jsonDocument.setTo("GETRECORD[0]");
+        getMessGetRecordJson[0] = jsonDocument.getValue<string>("message[0]", "JSON?");
+        getMessGetRecordJson[1] = jsonDocument.getValue<string>("message[1]", "JSON?");
+        getMessGetRecordJson[2] = jsonDocument.getValue<string>("message[2]", "JSON?");
+        getMessGetRecordJson[3] = jsonDocument.getValue<string>("message[3]", "JSON?");
+        getMessGetRecordJson[4] = jsonDocument.getValue<string>("message[4]", "JSON?");
+        getMessGetRecordJson[5] = jsonDocument.getValue<string>("message[5]", "JSON?");
+        getMessGetRecordJson[6] = jsonDocument.getValue<string>("message[6]", "JSON?");
+        getMessGetRecordJson[7] = jsonDocument.getValue<string>("message[7]", "JSON?");
     }
     
 	rectX = newRectX;
@@ -36,7 +36,7 @@ void guiGetRecMessXML::setup(float newRectX, float newRectY, string newSetDocDir
 	myFont.loadFont("mono.ttf", 12, false);
 	guiText_0.setup();
 	guiText_0.setFont(myFont);
-	guiText_0.setText(getMessGetRecordXML[1]);
+	guiText_0.setText(getMessGetRecordJson[1]);
 	rectW = guiText_0.getTextWidth();
 	rectH = guiText_0.getTextHeight();
 	
@@ -90,31 +90,31 @@ void guiGetRecMessXML::setup(float newRectX, float newRectY, string newSetDocDir
 }
 
 //--------------------------------------------------------------
-void guiGetRecMessXML::update(float newRectX, float newRectY, string newSetDocDir){
+void guiGetRecMessJson::update(float newRectX, float newRectY, string newSetDocDir){
 	rectX = newRectX;
 	rectY = newRectY;
 	/*
-	//getIndexXML[0] = 1;
+	//getIndexJson[0] = 1;
 	if (isIndex == true) {
 		for (int i = 0; i < 6; i++) {
-			char tempGetIndexXMLString[255];
-			sprintf(tempGetIndexXMLString,"%i", (int)getIndexXML[i]);
-			newGetIndexXMLString[i] = tempGetIndexXMLString;
+			char tempGetIndexJsonString[255];
+			sprintf(tempGetIndexJsonString,"%i", (int)getIndexJson[i]);
+			newGetIndexJsonString[i] = tempGetIndexJsonString;
 		}
 		//isIndex = false;
 	}
     */
     
-    if(getXML.exists("GETRECORD")){
-        getXML.setTo("GETRECORD[0]");
-            getMessGetRecordXML[0] = getXML.getValue<string>("message[0]", "XML?");
-            getMessGetRecordXML[1] = getXML.getValue<string>("message[1]", "XML?");
-            getMessGetRecordXML[2] = getXML.getValue<string>("message[2]", "XML?");
-            getMessGetRecordXML[3] = getXML.getValue<string>("message[3]", "XML?");
-            getMessGetRecordXML[4] = getXML.getValue<string>("message[4]", "XML?");
-            getMessGetRecordXML[5] = getXML.getValue<string>("message[5]", "XML?");
-            getMessGetRecordXML[6] = getXML.getValue<string>("message[6]", "XML?");
-            getMessGetRecordXML[7] = getXML.getValue<string>("message[7]", "XML?");
+    if(jsonDocument.exists("GETRECORD")){
+        jsonDocument.setTo("GETRECORD[0]");
+            getMessGetRecordJson[0] = jsonDocument.getValue<string>("message[0]", "JSON?");
+            getMessGetRecordJson[1] = jsonDocument.getValue<string>("message[1]", "JSON?");
+            getMessGetRecordJson[2] = jsonDocument.getValue<string>("message[2]", "JSON?");
+            getMessGetRecordJson[3] = jsonDocument.getValue<string>("message[3]", "JSON?");
+            getMessGetRecordJson[4] = jsonDocument.getValue<string>("message[4]", "JSON?");
+            getMessGetRecordJson[5] = jsonDocument.getValue<string>("message[5]", "JSON?");
+            getMessGetRecordJson[6] = jsonDocument.getValue<string>("message[6]", "JSON?");
+            getMessGetRecordJson[7] = jsonDocument.getValue<string>("message[7]", "JSON?");
     }
            
     
@@ -192,7 +192,7 @@ void guiGetRecMessXML::update(float newRectX, float newRectY, string newSetDocDi
 }
 
 //--------------------------------------------------------------
-void guiGetRecMessXML::draw(){
+void guiGetRecMessJson::draw(){
 	ofFill();
     ofEnableAlphaBlending();
 	ofSetColor(playRecordRectColor);
@@ -205,15 +205,15 @@ void guiGetRecMessXML::draw(){
     ofFill();
     int rectXW = rectX+rectW+50;
     ofSetColor(playRecordColor);//ofSetColor(playRecordRectColor);
-	guiText_0.renderString(getMessGetRecordXML[0], rectX-10, rectY-80);
-	guiText_0.renderString(getMessGetRecordXML[1], rectX-10, rectY-65);
-	guiText_0.renderString(getMessGetRecordXML[2], rectX-10, rectY-50);
+	guiText_0.renderString(getMessGetRecordJson[0], rectX-10, rectY-80);
+	guiText_0.renderString(getMessGetRecordJson[1], rectX-10, rectY-65);
+	guiText_0.renderString(getMessGetRecordJson[2], rectX-10, rectY-50);
     guiText_0.renderString(timeVal, rectXW, rectY-50);
-	guiText_0.renderString(getMessGetRecordXML[3], rectX-10, rectY-35);
-	guiText_0.renderString(getMessGetRecordXML[4], rectX-10, rectY-20);
-    guiText_0.renderString(getMessGetRecordXML[5], rectX-10, rectY-5);
-    guiText_0.renderString(getMessGetRecordXML[6], rectX-10, rectY+10);
-    guiText_0.renderString(getMessGetRecordXML[7], rectX-10, rectY+25);
+	guiText_0.renderString(getMessGetRecordJson[3], rectX-10, rectY-35);
+	guiText_0.renderString(getMessGetRecordJson[4], rectX-10, rectY-20);
+    guiText_0.renderString(getMessGetRecordJson[5], rectX-10, rectY-5);
+    guiText_0.renderString(getMessGetRecordJson[6], rectX-10, rectY+10);
+    guiText_0.renderString(getMessGetRecordJson[7], rectX-10, rectY+25);
     
     //recordInt-----------------------_
     cameraSize.draw();

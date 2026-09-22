@@ -5,11 +5,12 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ArmJsonDocument.h"
 #include "guiText.h"
 #include "recordFloat.h"
 #include "recordInt.h"
 
-class guiMessXML{
+class guiMessJson{
 	
 public:
     bool checkHit(float x, float y);
@@ -44,8 +45,8 @@ public:
 	int messIndex;
 	int maxNumInList;
     
-	//xml--------------_
-	ofXml getXML;
+	//json--------------_
+	ArmJsonDocument jsonDocument;
 	bool isIndex;
 	string message, setDocDir;
 	//-------xml-------_
@@ -61,9 +62,9 @@ public:
     ofColor playRecordRectColor, recRecordRectColor;
     ofColor enterColor;
     
-    string getMessRecordXMLTag;
-    string getMessRecordXML[10];
-    string getMessRecordXMLTags[10];
+    string getMessRecordJsonTag;
+    string getMessRecordJson[10];
+    string getMessRecordJsonTags[10];
     string file, dateTime, session, participant, age, amputation, audio;
     
     //recordFloat-----------------------_

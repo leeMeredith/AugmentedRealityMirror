@@ -57,7 +57,7 @@ float guiText::getTextSingleLineHeight(){
 }
 
 //-------------------------------------------
-void guiText::setText(string textStr){
+void guiText::setText(std::string textStr){
 	textString = textStr;
 	
 	numNewLines = 0;
@@ -77,7 +77,7 @@ void guiText::renderText(float x, float y){
 }
 
 //--------------------------------------------
-void guiText::renderString(string textToRender, float x, float y){
+void guiText::renderString(std::string textToRender, float x, float y){
 	
 	if(bRealFont){
 		ourFont.drawString(textToRender, x, y);
@@ -86,7 +86,7 @@ void guiText::renderString(string textToRender, float x, float y){
 }
 
 //--------------------------------------------
-float guiText::stringHeight(string textToRender){
+float guiText::stringHeight(std::string textToRender){
 	float textHeight = 0;
 	
 	if(bRealFont)textHeight = ourFont.stringHeight(textToRender);
@@ -101,7 +101,7 @@ float guiText::stringHeight(string textToRender){
 }
 
 //--------------------------------------------
-float guiText::stringWidth(string textToRender){
+float guiText::stringWidth(std::string textToRender){
 	
 	float textWidth = 0;
 	

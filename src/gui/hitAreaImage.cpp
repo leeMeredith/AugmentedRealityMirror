@@ -15,6 +15,7 @@ bool hitAreaImage::checkHit(float x, float y){
 	}else {
         isIn = false;
     }
+    return isIn;
 }
 
 //-----------------------------------------------
@@ -31,10 +32,10 @@ void hitAreaImage::setPosition(float x, float y){
 
 //------------------------------------------------
 void hitAreaImage::setDimensions(){
-	myHitAreaImage.width       = myImage.width;
-	myHitAreaImage.height      = myImage.height;
-	boundingBox.width   = myImage.width;
-	boundingBox.height  = myImage.height;
+	myHitAreaImage.width       = myImage.getWidth();
+	myHitAreaImage.height      = myImage.getHeight();
+	boundingBox.width   = myImage.getWidth();
+	boundingBox.height  = myImage.getHeight();
 }
 
 //--------------------------------------------------------------
@@ -48,11 +49,11 @@ void hitAreaImage::draw(float x, float y){
     if (isSel == true) {
         ofNoFill();
         ofSetColor(setColorSel_0);
-        ofRect(x-1, y-1, myImage.width+2, myImage.height+2);
+        ofRect(x-1, y-1, myImage.getWidth()+2, myImage.getHeight()+2);
     }else {
         ofNoFill();
         ofSetColor(setColorSel_1);
-        ofRect(x-1, y-1, myImage.width+2, myImage.height+2);
+        ofRect(x-1, y-1, myImage.getWidth()+2, myImage.getHeight()+2);
     }
     ofFill();
     if (isIn == true) {
@@ -61,6 +62,6 @@ void hitAreaImage::draw(float x, float y){
         ofSetColor(setColorIn_1);
     }
     
-	boundingBox.set(x, y, myImage.width, myImage.height);
+	boundingBox.set(x, y, myImage.getWidth(), myImage.getHeight());
     myImage.draw(x, y);
 }
