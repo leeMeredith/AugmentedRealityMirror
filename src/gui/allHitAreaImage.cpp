@@ -28,6 +28,7 @@ bool allHitAreaImage::checkHit(float new_x, float new_y){
         hitAreaImage_0[3].isIn == false){
         isHitOk = false;
     }
+    return isHitOk;
 }
 
 //--------------------------------------------------------------

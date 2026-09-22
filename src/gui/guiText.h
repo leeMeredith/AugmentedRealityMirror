@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ofTrueTypeFont.h"
+#include <string>
 
 class guiText {
 	
@@ -14,15 +15,15 @@ public:
 	float getTextWidth();
 	float getTextHeight();
 	float getTextSingleLineHeight();
-	void setText(string textStr);
+	void setText(std::string textStr);
 	void renderText(float x, float y);
-	void renderString(string textToRender, float x, float y);
-	float stringHeight(string textToRender);
-	float stringWidth(string textToRender);
+	void renderString(std::string textToRender, float x, float y);
+	float stringHeight(std::string textToRender);
+	float stringWidth(std::string textToRender);
 	
 	ofTrueTypeFont ourFont;
 	
-	string textString;
+	std::string textString;
 	
 	int numNewLines;
 	int fontSize;

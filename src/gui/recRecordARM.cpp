@@ -5,7 +5,7 @@
 #include "recRecordARM.h"
 
 //--------------------------------------------------------------
-void recRecordARM::setup(int setX, int setY, string xmlFile){
+void recRecordARM::setup(int setX, int setY, string jsonFile){
     
     recordAddress = 0.1;
     dBug = false;
@@ -13,34 +13,27 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
     x = setX;
     y = setY;
     
-    isNewXmlFile = false;
-    xmlFileTest = xmlFile;
-    currentXmlFile = "record/address/flythrough/";
-    currentXmlFile += xmlFile;
-    settingsDirectory = currentXmlFile;
+    isNewJsonFile = false;
+    jsonFileTest = jsonFile;
+    currentJsonFile = armJsonRecordPath(jsonFile, false);
+    settingsDirectory = currentJsonFile;
     
     int posLastSlash = settingsDirectory.rfind("/");
     if(posLastSlash > 0)settingsDirectory.erase(settingsDirectory.begin()+ posLastSlash+1, settingsDirectory.end()  );
     else settingsDirectory = "";
-    //currentXmlFile = settingsDirectory + currentXmlFile;
-    int posLastDot = currentXmlFile.rfind(".xml");
-    if (posLastDot < 1) {
-        currentXmlFile += ".xml";
-    }
-    //currentXmlFile += "/";
+    //currentJsonFile = settingsDirectory + currentJsonFile;
+    //currentJsonFile += "/";
     
     //the string is printed at the top of the app
 	//to give the user some feedback
 	message = "loading ";
-    message += currentXmlFile;
+    message += currentJsonFile;
 	//we load our settings file
 	//if it doesn't exist we can still make one
 	//by hitting the 's' key
     
-    if( settingsRecordARMFile.load(currentXmlFile) ){
-        message = currentXmlFile + ".xml loaded!";
-        
-        message = currentXmlFile;
+    if( settingsRecordARMFile.load(ofToDataPath(currentJsonFile)) ){
+        message = currentJsonFile;
 		message += " loaded!";
         cout << message << endl;
     }else{
@@ -48,7 +41,7 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
         settingsRecordARMFile.setTo("FLYTHROUGH");
         cout << "unable to load " << endl;
         message = "unable to load ";
-        message += currentXmlFile;
+        message += currentJsonFile;
         cout << message << endl;
     }
     
@@ -72,7 +65,7 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
 	lastRecTagNumber = 0;    
 	   
     //-------
-	//this is a more advanced use of ofXMLSettings
+	//this is a more advanced use of the record data
 	//we are going to be reading multiple tags with the same name
     
     setRecordAddressTest = setRecordAddress = 0;
@@ -84,19 +77,19 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
             int numAboutTags = settingsRecordARMFile.getNumChildren("about");
         }else{
             //client about
-            ofXml aboutXml;
+            ArmJsonDocument aboutXml;
             aboutXml.addChild("about");
             aboutXml.setTo("about");
             aboutXml.setAttribute("id", ofToString(0));
             
-            aboutXml.addValue("file", currentXmlFile);
+            aboutXml.addValue("file", currentJsonFile);
             date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
             aboutXml.addValue("DATE", date);
             aboutXml.addValue("client","--AugmentedRealityMirror-- Version: BETA.0");
             aboutXml.addValue("authors", "Lee Meredith");
             aboutXml.addValue("url","https://github.com/leeMeredith/AugmentedRealityMirror");
             aboutXml.addValue("github", "https://github.com/leeMeredith/AugmentedRealityMirror");
-            settingsRecordARMFile.addXml(aboutXml);
+            settingsRecordARMFile.addDocument(aboutXml);
             //client end about
         }
         
@@ -104,14 +97,14 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
             int numVersTags = settingsRecordARMFile.getNumChildren("version");
         }else{
             //version
-            ofXml versionXml;
+            ArmJsonDocument versionXml;
             versionXml.addChild("version");
             versionXml.setTo("version");
             versionXml.setAttribute("id", ofToString(0));
             
             versionXml.addValue("major", 4);
             versionXml.addValue("minor", 0);
-            settingsRecordARMFile.addXml(versionXml);
+            settingsRecordARMFile.addDocument(versionXml);
             //end version
         }
         
@@ -233,12 +226,12 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
             settingsRecordARMFile.setToParent();
         }else{
             //recordARM header
-            ofXml recXml;
+            ArmJsonDocument recXml;
             recXml.addChild("RECORD");
             recXml.setTo("RECORD");
             recXml.setAttribute("id", ofToString(0));
             
-            recXml.addValue("file", currentXmlFile);
+            recXml.addValue("file", currentJsonFile);
             date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
             recXml.addValue("DATE", date);
             recXml.addValue("SESSION", recordSession);
@@ -283,10 +276,10 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
             recXml.addValue("YAXIS_Z", recordYAxis_Z);
             
             recXml.addValue("ZAXIS_X", recordZAxis_X);
-            recXml.addValue("ZAXIS_y", recordZAxis_Y);
+            recXml.addValue("ZAXIS_Y", recordZAxis_Y);
             recXml.addValue("ZAXIS_Z", recordZAxis_Z);
             recXml.addValue("ENDRECORD", -1);
-            settingsRecordARMFile.addXml(recXml);
+            settingsRecordARMFile.addDocument(recXml);
             
             allCamera.push_back(recordCamera);
             allPainScores.push_back(recordPainScore);
@@ -390,9 +383,8 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
         if (allScale.size() > 0)guiScaleVal = allScale[setGetScaleAddress];
         guiEndRecVal = lastTagNumberEndRec;
     }
-    settingsRecordARMFile.save(currentXmlFile);
-    message = currentXmlFile;
-    message += " saved to xml!";
+    message = currentJsonFile + (settingsRecordARMFile.save(ofToDataPath(currentJsonFile))
+        ? " saved to JSON!" : " could not be saved");
     isSaveAll = false;
     //---------------get-------------------_
     
@@ -403,33 +395,28 @@ void recRecordARM::setup(int setX, int setY, string xmlFile){
 }
 
 //--------------------------------------------------------------
-void recRecordARM::update(string xmlFile){
+void recRecordARM::update(string jsonFile){
     
-    if (xmlFile != xmlFileTest) {
-        currentXmlFile = "record/address/flythrough/";
-        currentXmlFile += xmlFile;
-        settingsDirectory = currentXmlFile;
+    if (jsonFile != jsonFileTest) {
+        currentJsonFile = armJsonRecordPath(jsonFile, false);
+        settingsDirectory = currentJsonFile;
         
         int posLastSlash = settingsDirectory.rfind("/");
         if( posLastSlash > 0) settingsDirectory.erase(settingsDirectory.begin()+ posLastSlash+1, settingsDirectory.end()  );
         else settingsDirectory = "";
         
-        int posLastDot = currentXmlFile.rfind(".xml");
-        if (posLastDot < 1) {
-            currentXmlFile += ".xml";
-        }
-        //currentXmlFile += "/";
+        //currentJsonFile += "/";
         
         message = "loading ";
-        message += currentXmlFile;
+        message += currentJsonFile;
         
-        if( settingsRecordARMFile.load(currentXmlFile) ){
-            message = currentXmlFile;
+        if( settingsRecordARMFile.load(ofToDataPath(currentJsonFile)) ){
+            message = currentJsonFile;
             message += " loaded!";
         }else{
            
             message = "unable to load ";
-            message += currentXmlFile;
+            message += currentJsonFile;
             
             date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
             whoClearTagCon = "SESSION";
@@ -441,8 +428,8 @@ void recRecordARM::update(string xmlFile){
             recordAmputation = "BK";
             recordAudio = "heyYou.wav";
         }
-        //settingsRecordARMFile.load(currentXmlFile);
-        xmlFileTest = xmlFile;
+        //settingsRecordARMFile.load(ofToDataPath(currentJsonFile));
+        jsonFileTest = jsonFile;
     }
     
     //get----------------------------------_
@@ -465,18 +452,17 @@ void recRecordARM::update(string xmlFile){
         allZAxis_Z.clear();
         allScale.clear();
         
-        if( settingsRecordARMFile.load(currentXmlFile) ){
-            message = currentXmlFile + ".xml loaded!";
-            isNewXmlFile = false;
-            message = currentXmlFile;
+        if( settingsRecordARMFile.load(ofToDataPath(currentJsonFile)) ){
+            isNewJsonFile = false;
+            message = currentJsonFile;
             message += " loaded!";
             cout << message << endl;
         }else{
             cout << "unable to load " << endl;
             message = "unable to load ";
-            message += currentXmlFile;
+            message += currentJsonFile;
             cout << message << endl;
-            isNewXmlFile = true;
+            isNewJsonFile = true;
         }
         
         if (setRecordAddress != setRecordAddressTest) {
@@ -490,7 +476,7 @@ void recRecordARM::update(string xmlFile){
         if(settingsRecordARMFile.exists("FLYTHROUGH")){
             cout << " settingsRecordARMFile.exists(FLYTHROUGH) " << endl;
         }else {
-            if (isNewXmlFile == true) {
+            if (isNewJsonFile == true) {
                 settingsRecordARMFile.addChild("FLYTHROUGH");
             }
         }
@@ -500,19 +486,19 @@ void recRecordARM::update(string xmlFile){
             int numAboutTags = settingsRecordARMFile.getNumChildren("about");
         }else{
             //client about
-            ofXml aboutXml;
+            ArmJsonDocument aboutXml;
             aboutXml.addChild("about");
             aboutXml.setTo("about");
             aboutXml.setAttribute("id", ofToString(0));
             
-            aboutXml.addValue("file", currentXmlFile);
+            aboutXml.addValue("file", currentJsonFile);
             date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
             aboutXml.addValue("DATE", date);
             aboutXml.addValue("client","--AugmentedRealityMirror-- Version: BETA.0");
             aboutXml.addValue("authors", "Lee Meredith");
             aboutXml.addValue("url","https://github.com/leeMeredith/AugmentedRealityMirror");
             aboutXml.addValue("github", "https://github.com/leeMeredith/AugmentedRealityMirror");
-            settingsRecordARMFile.addXml(aboutXml);
+            settingsRecordARMFile.addDocument(aboutXml);
             //client end about
         }
         
@@ -520,14 +506,14 @@ void recRecordARM::update(string xmlFile){
             int numVersTags = settingsRecordARMFile.getNumChildren("version");
         }else{
             //version
-            ofXml versionXml;
+            ArmJsonDocument versionXml;
             versionXml.addChild("version");
             versionXml.setTo("version");
             versionXml.setAttribute("id", ofToString(0));
             
             versionXml.addValue("major", 4);
             versionXml.addValue("minor", 0);
-            settingsRecordARMFile.addXml(versionXml);
+            settingsRecordARMFile.addDocument(versionXml);
             //end version
         }
 
@@ -650,12 +636,12 @@ void recRecordARM::update(string xmlFile){
             settingsRecordARMFile.setToParent();
         }else{
             //recordARM header
-            ofXml recXml;
+            ArmJsonDocument recXml;
             recXml.addChild("RECORD");
             recXml.setTo("RECORD");
             recXml.setAttribute("id", ofToString(0));
             
-            recXml.addValue("file", currentXmlFile);
+            recXml.addValue("file", currentJsonFile);
             date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
             recXml.addValue("DATE", date);
             recXml.addValue("SESSION", recordSession);
@@ -700,11 +686,11 @@ void recRecordARM::update(string xmlFile){
             recXml.addValue("YAXIS_Z", recordYAxis_Z);
             
             recXml.addValue("ZAXIS_X", recordZAxis_X);
-            recXml.addValue("ZAXIS_y", recordZAxis_Y);
+            recXml.addValue("ZAXIS_Y", recordZAxis_Y);
             recXml.addValue("ZAXIS_Z", recordZAxis_Z);
             
             recXml.addValue("ENDRECORD", -1);
-            settingsRecordARMFile.addXml(recXml);
+            settingsRecordARMFile.addDocument(recXml);
             
         }
         isGetAll = false;
@@ -864,35 +850,35 @@ void recRecordARM::update(string xmlFile){
 //        //isLoaded[currentDirXmlFile] = true;
 //        isTimerOn = true;
         //client about
-        ofXml aboutXml;
+        ArmJsonDocument aboutXml;
         aboutXml.addChild("about");
         aboutXml.setTo("about");
         aboutXml.setAttribute("id", ofToString(0));
         
-        aboutXml.addValue("file", currentXmlFile);
+        aboutXml.addValue("file", currentJsonFile);
         date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
         aboutXml.addValue("DATE", date);
         aboutXml.addValue("client","--AugmentedRealityMirror-- Version: BETA.0");
         aboutXml.addValue("authors", "Lee Meredith");
         aboutXml.addValue("url","https://github.com/leeMeredith/AugmentedRealityMirror");
         aboutXml.addValue("github", "https://github.com/leeMeredith/AugmentedRealityMirror");
-        settingsRecordARMFile.addXml(aboutXml);
+        settingsRecordARMFile.addDocument(aboutXml);
         //client end about
         
         //version
-        ofXml versionXml;
+        ArmJsonDocument versionXml;
         versionXml.addChild("version");
         versionXml.setTo("version");
         versionXml.setAttribute("id", ofToString(0));
         
         versionXml.addValue("major", 4);
         versionXml.addValue("minor", 0);
-        settingsRecordARMFile.addXml(versionXml);
+        settingsRecordARMFile.addDocument(versionXml);
         //end version
 
         if (allCamera.size() > 0){
             for (int i=0; i < allCamera.size(); i++) {
-                ofXml recXml;
+                ArmJsonDocument recXml;
                 recXml.addChild("RECORD");
                 recXml.setTo("RECORD");
                 recXml.setAttribute("id", ofToString(0));
@@ -911,7 +897,7 @@ void recRecordARM::update(string xmlFile){
                 recXml.addValue("ZAXIS_X", allZAxis_X[i]);
                 recXml.addValue("ZAXIS_Y", allZAxis_Y[i]);
                 recXml.addValue("ZAXIS_Z", allZAxis_Z[i]);
-                settingsRecordARMFile.addXml(recXml);
+                settingsRecordARMFile.addDocument(recXml);
             }
             isClearSave = false;
         }
@@ -925,9 +911,8 @@ void recRecordARM::update(string xmlFile){
     }
     
     if (isSaveAll == true) {
-        settingsRecordARMFile.save(currentXmlFile);
-        message = currentXmlFile;
-        message += " saved to xml!";
+        message = currentJsonFile + (settingsRecordARMFile.save(ofToDataPath(currentJsonFile))
+            ? " saved to JSON!" : " could not be saved");
         isSaveAll = false;
     }
 //is this need or ???
@@ -969,13 +954,12 @@ void recRecordARM::update(string xmlFile){
         settingsRecordARMFile.addValue("YAXIS_Z", recordYAxis_Z);
         
         settingsRecordARMFile.addValue("ZAXIS_X", recordZAxis_X);
-        settingsRecordARMFile.addValue("ZAXIS_y", recordZAxis_Y);
+        settingsRecordARMFile.addValue("ZAXIS_Y", recordZAxis_Y);
         settingsRecordARMFile.addValue("ZAXIS_Z", recordZAxis_Z);
 
         
-        settingsRecordARMFile.save(currentXmlFile);
-        message = currentXmlFile;
-        message += " saved to xml!";
+        message = currentJsonFile + (settingsRecordARMFile.save(ofToDataPath(currentJsonFile))
+            ? " saved to JSON!" : " could not be saved");
         isSaveEvents = false;
     }
     
@@ -1004,39 +988,39 @@ void recRecordARM::update(string xmlFile){
         }
         settingsRecordARMFile.setTo("FLYTHROUGH");
         //client about
-        ofXml aboutXml;
+        ArmJsonDocument aboutXml;
         aboutXml.addChild("about");
         aboutXml.setTo("about");
         aboutXml.setAttribute("id", ofToString(0));
         
-        aboutXml.addValue("file", currentXmlFile);
+        aboutXml.addValue("file", currentJsonFile);
         date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
         aboutXml.addValue("DATE", date);
         aboutXml.addValue("client","--AugmentedRealityMirror-- Version: BETA.0");
         aboutXml.addValue("authors", "Lee Meredith");
         aboutXml.addValue("url","https://github.com/leeMeredith/AugmentedRealityMirror");
         aboutXml.addValue("github", "https://github.com/leeMeredith/AugmentedRealityMirror");
-        settingsRecordARMFile.addXml(aboutXml);
+        settingsRecordARMFile.addDocument(aboutXml);
         //client end about
         
         //version
-        ofXml versionXml;
+        ArmJsonDocument versionXml;
         versionXml.addChild("version");
         versionXml.setTo("version");
         versionXml.setAttribute("id", ofToString(0));
         
         versionXml.addValue("major", 4);
         versionXml.addValue("minor", 0);
-        settingsRecordARMFile.addXml(versionXml);
+        settingsRecordARMFile.addDocument(versionXml);
         //end version
         
         //recordARM header
-        ofXml recXml;
+        ArmJsonDocument recXml;
         recXml.addChild("RECORD");
         recXml.setTo("RECORD");
         recXml.setAttribute("id", ofToString(0));
         
-        recXml.addValue("file", currentXmlFile);
+        recXml.addValue("file", currentJsonFile);
         date = ofToString(ofGetYear()) +"-"+ ofToString(ofGetMonth()) +"-"+ ofToString(ofGetDay()) +"-"+ ofToString(ofGetHours()) +"-"+ ofToString(ofGetMinutes())+"-"+ ofToString(ofGetSeconds());
         recXml.addValue("DATE", date);
         recXml.addValue("SESSION", recordSession);
@@ -1064,14 +1048,13 @@ void recRecordARM::update(string xmlFile){
         recXml.addValue("YAXIS_Z", recordYAxis_Z);
         
         recXml.addValue("ZAXIS_X", recordZAxis_X);
-        recXml.addValue("ZAXIS_y", recordZAxis_Y);
+        recXml.addValue("ZAXIS_Y", recordZAxis_Y);
         recXml.addValue("ZAXIS_Z", recordZAxis_Z);
         recXml.addValue("ENDRECORD", -1);
-        settingsRecordARMFile.addXml(recXml);
+        settingsRecordARMFile.addDocument(recXml);
         
-        settingsRecordARMFile.save(currentXmlFile);
-        message = currentXmlFile;
-        message += " saved to xml!";
+        message = currentJsonFile + (settingsRecordARMFile.save(ofToDataPath(currentJsonFile))
+            ? " saved to JSON!" : " could not be saved");
         clearDoc = false;
     }
     
@@ -1084,9 +1067,9 @@ void recRecordARM::update(string xmlFile){
 //            settingsRecordARMFile.addValue(whoClearTagCon, whichTagCon);
 //            settingsRecordARMFile.popTag();
 //            
-//            settingsRecordARMFile.saveFile(currentXmlFile);
-//            message = currentXmlFile;
-//            message += " saved to xml!";
+//            settingsRecordARMFile.saveFile(currentJsonFile);
+//            message = currentJsonFile;
+//            message += " saved to JSON!";
 //        }
         clearTagCon = false;
     }
@@ -1099,9 +1082,8 @@ void recRecordARM::update(string xmlFile){
             cout << " whoClearTagCon " << whoClearTagCon << " whichTagCon " <<  whichTagCon << endl;
         }
  
-        settingsRecordARMFile.save(currentXmlFile);
-        message = currentXmlFile;
-        message += " saved to xml!";
+        message = currentJsonFile + (settingsRecordARMFile.save(ofToDataPath(currentJsonFile))
+            ? " saved to JSON!" : " could not be saved");
         
         isRemoveTag = false;
     }
@@ -1183,9 +1165,8 @@ void recRecordARM::keyPressed  (int key){
         
             if(key == 'S'){
                 isSaveAll = true;
-                settingsRecordARMFile.save(currentXmlFile);
-                message = currentXmlFile;
-                message += " saved to xml!";
+                message = currentJsonFile + (settingsRecordARMFile.save(ofToDataPath(currentJsonFile))
+                    ? " saved to JSON!" : " could not be saved");
             }
             if(key == 's'){
                 isSaveEvents = true;
@@ -1195,9 +1176,8 @@ void recRecordARM::keyPressed  (int key){
         if(key == 'E'){
             settingsRecordARMFile.remove("ENDRECORD[" + ofToString(0) + "]");
             settingsRecordARMFile.addValue("ENDRECORD", recordAddress);
-            settingsRecordARMFile.save(currentXmlFile);
-            message = currentXmlFile;
-            message += " saved to xml!";
+            message = currentJsonFile + (settingsRecordARMFile.save(ofToDataPath(currentJsonFile))
+                ? " saved to JSON!" : " could not be saved");
         }
         
         if(key == 'R'){
@@ -1242,7 +1222,7 @@ void recRecordARM::keyPressed  (int key){
             settingsRecordARMFile.addValue("YAXIS_Z", recordYAxis_Z);
             
             settingsRecordARMFile.addValue("ZAXIS_X", recordZAxis_X);
-            settingsRecordARMFile.addValue("ZAXIS_y", recordZAxis_Y);
+            settingsRecordARMFile.addValue("ZAXIS_Y", recordZAxis_Y);
             settingsRecordARMFile.addValue("ZAXIS_Z", recordZAxis_Z);
             
             //isStartEvents = true;

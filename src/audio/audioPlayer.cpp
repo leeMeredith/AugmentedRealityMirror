@@ -9,46 +9,53 @@ void audioPlayer::setup(int newRectX, int newRectY, string newLargeAudioDir){
     rectX = newRectX;
 	rectY = newRectY;
     largeAudioDirTest = largeAudioDir = newLargeAudioDir;
-    //xml----------------------------_
-    setMessageDir = "record/message/message_presets_ARM.xml";
-    if( getXML.load(setMessageDir) ){
-        getXML.setTo("MESSAGES");
-		cout << "message_presets.xml loaded from documents folder!" << endl;
+    //json----------------------------_
+    setMessageDir = "record/message/message_presets_ARM.json";
+    if( jsonDocument.load(ofToDataPath(setMessageDir)) ){
+        jsonDocument.setTo("MESSAGES");
+		cout << "message_presets_ARM.json loaded from documents folder!" << endl;
 	}else{
-        getXML.addChild("MESSAGES");
-        getXML.setTo("MESSAGES");
-		cout << "unable to load message_presets_ARM.xml check data/ folder" << endl;
+        jsonDocument.addChild("MESSAGES");
+        jsonDocument.setTo("MESSAGES");
+		cout << "unable to load message_presets_ARM.json check data/ folder" << endl;
 	}
     audio = play = paused = volume = speed = position = "";
-    if(getXML.exists("AUDIO")){
-        getXML.setTo("AUDIO[0]");
-        getMessAudioXML[0] = getXML.getValue<string>("message[0]", "XML?");
-        getMessAudioXML[1] = getXML.getValue<string>("message[1]", "XML?");
-        getMessAudioXML[2] = getXML.getValue<string>("message[2]", "XML?");
-        getMessAudioXML[3] = getXML.getValue<string>("message[3]", "XML?");
-        getMessAudioXML[4] = getXML.getValue<string>("message[4]", "XML?");
-        getMessAudioXML[5] = getXML.getValue<string>("message[5]", "XML?");
+    if(jsonDocument.exists("AUDIO")){
+        jsonDocument.setTo("AUDIO[0]");
+        getMessAudioJson[0] = jsonDocument.getValue<string>("message[0]", "JSON?");
+        getMessAudioJson[1] = jsonDocument.getValue<string>("message[1]", "JSON?");
+        getMessAudioJson[2] = jsonDocument.getValue<string>("message[2]", "JSON?");
+        getMessAudioJson[3] = jsonDocument.getValue<string>("message[3]", "JSON?");
+        getMessAudioJson[4] = jsonDocument.getValue<string>("message[4]", "JSON?");
+        getMessAudioJson[5] = jsonDocument.getValue<string>("message[5]", "JSON?");
     }
     //-------------xml---------------_
     
 	knobFont.loadFont("mono.ttf", 12, false);
 	guiText_0.setup();
 	guiText_0.setFont(knobFont);
-	guiText_0.setText(getMessAudioXML[5]);
+	guiText_0.setText(getMessAudioJson[5]);
 	rectW = guiText_0.getTextWidth();
 	rectH = guiText_0.getTextHeight();
     
     
-	large.loadSound(largeAudioDir);
-	large.setVolume(0.75f);
-	large.setMultiPlay(false);
+	if (large.load(largeAudioDir)) {
+		large.setVolume(0.75f);
+		large.setMultiPlay(false);
+	}
     
     isPlay = isPaused = false;
     
-    getLargePositionMS = large.getPositionMS();
-    getLargePosition = large.getPosition();// just to have a 0-1 Position
-    getLargeSpeed = large.getSpeed();
-    getLargeVolume = large.getVolume();
+    getLargePositionMS = 0;
+    getLargePosition = 0;
+    getLargeSpeed = 1;
+    getLargeVolume = 0.75f;
+    if (large.isLoaded()) {
+        getLargePositionMS = large.getPositionMS();
+        getLargePosition = large.getPosition();// just to have a 0-1 Position
+        getLargeSpeed = large.getSpeed();
+        getLargeVolume = large.getVolume();
+    }
     
     //ofxSimpleSlider-----------------_
     playColor.set(255, 255, 255, 255);
@@ -64,8 +71,14 @@ void audioPlayer::update(int newRectX, int newRectY, string newLargeAudioDir){
     
     if (largeAudioDir != largeAudioDirTest) {
         large.unloadSound();
-        large.loadSound(largeAudioDir);
+        large.load(largeAudioDir);
         largeAudioDirTest = largeAudioDir;
+    }
+
+    if (!large.isLoaded()) {
+        isPlay = false;
+        isPaused = false;
+        return;
     }
     
     //ofxSimpleSlider-----------------_
@@ -124,15 +137,15 @@ void audioPlayer::draw(){
 
     ofFill();
     ofSetColor(100, 100, 255, 255);
-	guiText_0.renderString(getMessAudioXML[0], rectX-10, rectY-85);
+	guiText_0.renderString(getMessAudioJson[0], rectX-10, rectY-85);
     ofSetColor(playColor);
-	guiText_0.renderString(getMessAudioXML[1], rectX-10, rectY-65);
+	guiText_0.renderString(getMessAudioJson[1], rectX-10, rectY-65);
     ofSetColor(pausedColor);
-	guiText_0.renderString(getMessAudioXML[2], rectX+40, rectY-65);
+	guiText_0.renderString(getMessAudioJson[2], rectX+40, rectY-65);
     //ofSetColor(controlColor);
-	//guiText_0.renderString(getMessAudioXML[3], rectX-10, rectY-45);
-	//guiText_0.renderString(getMessAudioXML[4], rectX-10, rectY-25);
-    //guiText_0.renderString(getMessAudioXML[5], rectX-10, rectY-5);
+	//guiText_0.renderString(getMessAudioJson[3], rectX-10, rectY-45);
+	//guiText_0.renderString(getMessAudioJson[4], rectX-10, rectY-25);
+    //guiText_0.renderString(getMessAudioJson[5], rectX-10, rectY-5);
     ofDisableAlphaBlending();
 }
 

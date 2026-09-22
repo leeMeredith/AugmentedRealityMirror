@@ -5,13 +5,14 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ArmJsonDocument.h"
 
 class recRecordARM{
 
 	public:
 
-		void setup(int setX, int setY, string xmlFile);
-        void update(string xmlFile);
+		void setup(int setX, int setY, string jsonFile);
+        void update(string jsonFile);
 		void updateAddress(float setRecordAddress);
         void updateInfo(string setSession, string setParticipant, string setAge, string setAmputation, string setAudio);
         void updateClearTagContents(string newWhoClearTagCon, string newWhichTagCon);
@@ -19,8 +20,8 @@ class recRecordARM{
 		void draw(int setX, int setY, int setW, int setH);
 		void keyPressed(int key);
         
-        bool dBug, isLogging, isLoggingKey, isNewXmlFile;;
-        string xmlName, xmlFileTest, settingsDirectory, currentXmlFile;
+        bool dBug, isLogging, isLoggingKey, isNewJsonFile;;
+        string jsonName, jsonFileTest, settingsDirectory, currentJsonFile;
         string whoClearTagCon, whichTagCon;
         bool isRemoveTag;
         bool isRemoveLastRecTag;
@@ -109,10 +110,10 @@ class recRecordARM{
         int x, y, w, h;
 		int r, g, b, a;
     
-        ofXml settingsRecordARMFile;
+        ArmJsonDocument settingsRecordARMFile;
 		ofTrueTypeFont TTF;
 
-		string xmlStructure;
+		string jsonStructure;
 		string message;
 
 		int lastRecTagNumber;

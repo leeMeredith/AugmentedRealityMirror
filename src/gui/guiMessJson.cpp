@@ -2,84 +2,85 @@
 //  Created by Lee Meredith.
 //
 
-#include "guiMessXML.h"
+#include "guiMessJson.h"
 
 static bool isInsideRect(float x, float y, ofRectangle rect){
     return ( x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height );
 }
 
 //-------------------------------------------
-bool guiMessXML::checkHit(float x, float y){
+bool guiMessJson::checkHit(float x, float y){
 	if(isInsideRect(x, y, boundingBox)){
 		isIn = true;
 	}else {
         isIn = false;
     }
+    return isIn;
 }
 
 //--------------------------------------------------------------
-void guiMessXML::setup(float newRectX, float newRectY, string newSetDocDir){
+void guiMessJson::setup(float newRectX, float newRectY, string newSetDocDir){
     
     boundingBox.set(rectX-15, rectY-128, rectW+13, rectH*10-3);
 	
-	setDocDir = newSetDocDir;//message_presets.xml;
-	message = "message_presets_ARM.xml";
-	if( getXML.load(setDocDir) ){
-        //getXML.setTo("MESSAGES");
-		cout << "message_presets.xml loaded from documents folder!" << endl;
+	setDocDir = newSetDocDir;//message_presets_ARM.json;
+	message = "message_presets_ARM.json";
+	if( jsonDocument.load(ofToDataPath(setDocDir)) ){
+        //jsonDocument.setTo("MESSAGES");
+		cout << "message_presets_ARM.json loaded from documents folder!" << endl;
 	}else{
-        getXML.addChild("MESSAGES");
-        getXML.setTo("MESSAGES");
-		cout << "unable to load message_presets_ARM.xml check data/ folder" << endl;
+        jsonDocument.addChild("MESSAGES");
+        jsonDocument.setTo("MESSAGES");
+		cout << "unable to load message_presets_ARM.json check data/ folder" << endl;
 	}
     
-    if(getXML.exists("RECORD")){
-        getXML.setTo("RECORD");
-        getMessRecordXML[0] = getXML.getValue<string>("message[0]", "XML?");
-        getMessRecordXML[1] = getXML.getValue<string>("message[1]", "XML?");
-        getMessRecordXML[2] = getXML.getValue<string>("message[2]", "XML?");
-        getMessRecordXML[3] = getXML.getValue<string>("message[3]", "XML?");
-        getMessRecordXML[4] = getXML.getValue<string>("message[4]", "XML?");
-        getMessRecordXML[5] = getXML.getValue<string>("message[5]", "XML?");
-        getMessRecordXML[6] = getXML.getValue<string>("message[6]", "XML?");
+    if(jsonDocument.exists("RECORD")){
+        jsonDocument.setTo("RECORD");
+        getMessRecordJson[0] = jsonDocument.getValue<string>("message[0]", "JSON?");
+        getMessRecordJson[1] = jsonDocument.getValue<string>("message[1]", "JSON?");
+        getMessRecordJson[2] = jsonDocument.getValue<string>("message[2]", "JSON?");
+        getMessRecordJson[3] = jsonDocument.getValue<string>("message[3]", "JSON?");
+        getMessRecordJson[4] = jsonDocument.getValue<string>("message[4]", "JSON?");
+        getMessRecordJson[5] = jsonDocument.getValue<string>("message[5]", "JSON?");
+        getMessRecordJson[6] = jsonDocument.getValue<string>("message[6]", "JSON?");
     }
-    getXML.load(setDocDir);
+    jsonDocument.load(ofToDataPath(setDocDir));
     maxNumInList = 7;
-    if(getXML.exists("REALTAGRECORD")){
-        getXML.setTo("REALTAGRECORD");
-        getMessRecordXMLTags[0] = getMessRecordXMLTag = getXML.getValue<string>("message[0]", "XML?");
-        cout << " getMessRecordXMLTags " << getMessRecordXMLTag << endl;
-        getMessRecordXMLTags[1] = getXML.getValue<string>("message[1]", "XML?");
-        getMessRecordXMLTags[2] = getXML.getValue<string>("message[2]", "XML?");
-        getMessRecordXMLTags[3] = getXML.getValue<string>("message[3]", "XML?");
-        getMessRecordXMLTags[4] = getXML.getValue<string>("message[4]", "XML?");
-        getMessRecordXMLTags[5] = getXML.getValue<string>("message[5]", "XML?");
-        getMessRecordXMLTags[6] = getXML.getValue<string>("message[6]", "XML?");
+    if(jsonDocument.exists("REALTAGRECORD")){
+        jsonDocument.setTo("REALTAGRECORD");
+        getMessRecordJsonTags[0] = getMessRecordJsonTag = jsonDocument.getValue<string>("message[0]", "JSON?");
+        cout << " getMessRecordJsonTags " << getMessRecordJsonTag << endl;
+        getMessRecordJsonTags[1] = jsonDocument.getValue<string>("message[1]", "JSON?");
+        getMessRecordJsonTags[2] = jsonDocument.getValue<string>("message[2]", "JSON?");
+        getMessRecordJsonTags[3] = jsonDocument.getValue<string>("message[3]", "JSON?");
+        getMessRecordJsonTags[4] = jsonDocument.getValue<string>("message[4]", "JSON?");
+        getMessRecordJsonTags[5] = jsonDocument.getValue<string>("message[5]", "JSON?");
+        getMessRecordJsonTags[6] = jsonDocument.getValue<string>("message[6]", "JSON?");
     }
 
 //    
-//    getMessRecordXML[0] = getXML.getValue("RECORD:message_0" , "XML?");
-//	getMessRecordXML[1] = getXML.getValue("RECORD:message_1" , "XML?");
-//	getMessRecordXML[2] = getXML.getValue("RECORD:message_2" , "XML?");
-//	getMessRecordXML[3] = getXML.getValue("RECORD:message_3" , "XML?");
-//	getMessRecordXML[4] = getXML.getValue("RECORD:message_4" , "XML?");
-//	getMessRecordXML[5] = getXML.getValue("RECORD:message_5" , "XML?");
-//   	getMessRecordXML[6] = getXML.getValue("RECORD:message_6" , "XML?");
+//    getMessRecordJson[0] = jsonDocument.getValue("RECORD:message_0" , "JSON?");
+//	getMessRecordJson[1] = jsonDocument.getValue("RECORD:message_1" , "JSON?");
+//	getMessRecordJson[2] = jsonDocument.getValue("RECORD:message_2" , "JSON?");
+//	getMessRecordJson[3] = jsonDocument.getValue("RECORD:message_3" , "JSON?");
+//	getMessRecordJson[4] = jsonDocument.getValue("RECORD:message_4" , "JSON?");
+//	getMessRecordJson[5] = jsonDocument.getValue("RECORD:message_5" , "JSON?");
+//   	getMessRecordJson[6] = jsonDocument.getValue("RECORD:message_6" , "JSON?");
 //    
-//    getMessRecordXMLTags[0] = getMessRecordXMLTag = getXML.getValue("REALTAGRECORD:message_0" , "XML?");
-//	getMessRecordXMLTags[1] = getXML.getValue("REALTAGRECORD:message_1" , "XML?");
-//	getMessRecordXMLTags[2] = getXML.getValue("REALTAGRECORD:message_2" , "XML?");
-//	getMessRecordXMLTags[3] = getXML.getValue("REALTAGRECORD:message_3" , "XML?");
-//	getMessRecordXMLTags[4] = getXML.getValue("REALTAGRECORD:message_4" , "XML?");
-//	getMessRecordXMLTags[5] = getXML.getValue("REALTAGRECORD:message_5" , "XML?");
-//   	getMessRecordXMLTags[6] = getXML.getValue("REALTAGRECORD:message_6" , "XML?");
+//    getMessRecordJsonTags[0] = getMessRecordJsonTag = jsonDocument.getValue("REALTAGRECORD:message_0" , "JSON?");
+//	getMessRecordJsonTags[1] = jsonDocument.getValue("REALTAGRECORD:message_1" , "JSON?");
+//	getMessRecordJsonTags[2] = jsonDocument.getValue("REALTAGRECORD:message_2" , "JSON?");
+//	getMessRecordJsonTags[3] = jsonDocument.getValue("REALTAGRECORD:message_3" , "JSON?");
+//	getMessRecordJsonTags[4] = jsonDocument.getValue("REALTAGRECORD:message_4" , "JSON?");
+//	getMessRecordJsonTags[5] = jsonDocument.getValue("REALTAGRECORD:message_5" , "JSON?");
+//   	getMessRecordJsonTags[6] = jsonDocument.getValue("REALTAGRECORD:message_6" , "JSON?");
     
 	rectX = newRectX;
 	rectY = newRectY;
 	myFont.loadFont("mono.ttf", 15, false);
 	guiText_0.setup();
 	guiText_0.setFont(myFont);
-	guiText_0.setText(getMessRecordXML[3]);
+	guiText_0.setText(getMessRecordJson[3]);
 	rectW = guiText_0.getTextWidth();
 	rectH = guiText_0.getTextHeight();
 	
@@ -117,7 +118,7 @@ void guiMessXML::setup(float newRectX, float newRectY, string newSetDocDir){
 }
 
 //--------------------------------------------------------------
-void guiMessXML::update(float newRectX, float newRectY, string newSetDocDir){
+void guiMessJson::update(float newRectX, float newRectY, string newSetDocDir){
 	rectX = newRectX;
 	rectY = newRectY;
     boundingBox.set(rectX-15, rectY-128, rectW+13, rectH*10-3);
@@ -241,15 +242,15 @@ void guiMessXML::update(float newRectX, float newRectY, string newSetDocDir){
             recIndex_Y = 0;
         }
         if (recIndex_Y == maxNumInList){
-            getMessRecordXMLTag = "";
+            getMessRecordJsonTag = "";
         }else {
-            getMessRecordXMLTag = getMessRecordXMLTags[recIndex_Y];
+            getMessRecordJsonTag = getMessRecordJsonTags[recIndex_Y];
         }
         cursor_X = newCursor_X + ((float)guiText_0.fontSize-1) * stringSize;
         cursorRightLeft = 0;
         stringIndexRightLeft = stringSize-1; 
         isUpList = false;
-        //cout << getMessRecordXMLTag << "       " << recIndex_Y << " isUpList " <<  endl;
+        //cout << getMessRecordJsonTag << "       " << recIndex_Y << " isUpList " <<  endl;
     }
     if (isDownList == true) {
         recIndex_Y--;
@@ -309,15 +310,15 @@ void guiMessXML::update(float newRectX, float newRectY, string newSetDocDir){
             recIndex_Y = maxNumInList;
         }
         if (recIndex_Y == maxNumInList){
-            getMessRecordXMLTag = "";
+            getMessRecordJsonTag = "";
         }else {
-            getMessRecordXMLTag = getMessRecordXMLTags[recIndex_Y];
+            getMessRecordJsonTag = getMessRecordJsonTags[recIndex_Y];
         }
         cursor_X = newCursor_X + ((float)guiText_0.fontSize-1) * stringSize;
         cursorRightLeft = 0;
         stringIndexRightLeft = stringSize-1; 
         isDownList = false;
-        //cout << getMessRecordXMLTag << "       " << recIndex_Y << " isDownList " << endl;
+        //cout << getMessRecordJsonTag << "       " << recIndex_Y << " isDownList " << endl;
     }
     
     if (isLeft == true) {
@@ -380,7 +381,7 @@ void guiMessXML::update(float newRectX, float newRectY, string newSetDocDir){
 }
 
 //--------------------------------------------------------------
-void guiMessXML::draw(){
+void guiMessJson::draw(){
 	ofFill();
     ofEnableAlphaBlending();
     ofSetColor(playRecordRectColor);
@@ -416,7 +417,7 @@ void guiMessXML::draw(){
         }
     }
     guiText_0.renderString(file, rectXW, rectY-110);
-    guiText_0.renderString(getMessRecordXML[0], rectX-10, rectY-110);
+    guiText_0.renderString(getMessRecordJson[0], rectX-10, rectY-110);
     
     if (recIndex_Y == 1) {
         if (isDateTimeEnter == true) {
@@ -432,7 +433,7 @@ void guiMessXML::draw(){
         }
     }
     guiText_0.renderString(dateTime, rectXW, rectY-92);
-    guiText_0.renderString(getMessRecordXML[1], rectX-10, rectY-92);
+    guiText_0.renderString(getMessRecordJson[1], rectX-10, rectY-92);
     
     if (recIndex_Y == 2) {
         if (isSessionEnter == true) {
@@ -448,7 +449,7 @@ void guiMessXML::draw(){
         }
     }
     guiText_0.renderString(session, rectXW, rectY-74);
-	guiText_0.renderString(getMessRecordXML[2], rectX-10, rectY-74);
+	guiText_0.renderString(getMessRecordJson[2], rectX-10, rectY-74);
     
     if (recIndex_Y == 3) {
         if (isParticipantEnter == true) {
@@ -464,7 +465,7 @@ void guiMessXML::draw(){
         }
     }
     guiText_0.renderString(participant, rectXW, rectY-56);
-	guiText_0.renderString(getMessRecordXML[3], rectX-10, rectY-56);
+	guiText_0.renderString(getMessRecordJson[3], rectX-10, rectY-56);
     
     if (recIndex_Y == 4) {
         if (isAgeEnter == true) {
@@ -480,7 +481,7 @@ void guiMessXML::draw(){
         }
     }
     guiText_0.renderString(age, rectXW, rectY-38);
-	guiText_0.renderString(getMessRecordXML[4], rectX-10, rectY-38);
+	guiText_0.renderString(getMessRecordJson[4], rectX-10, rectY-38);
     
     if (recIndex_Y == 5) {
         if (isAmputationEnter == true) {
@@ -496,7 +497,7 @@ void guiMessXML::draw(){
         }
     }
     guiText_0.renderString(amputation, rectXW, rectY-20);
-	guiText_0.renderString(getMessRecordXML[5], rectX-10, rectY-20);
+	guiText_0.renderString(getMessRecordJson[5], rectX-10, rectY-20);
     
     if (recIndex_Y == 6) {
         if (isAudioEnter == true) {
@@ -512,7 +513,7 @@ void guiMessXML::draw(){
         }
     }
     guiText_0.renderString(audio, rectXW, rectY-2);
-	guiText_0.renderString(getMessRecordXML[6], rectX-10, rectY-2);
+	guiText_0.renderString(getMessRecordJson[6], rectX-10, rectY-2);
     
     if (recIndex_Y != maxNumInList) {
         if (testCursorCounter) {
