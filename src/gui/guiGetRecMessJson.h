@@ -5,11 +5,12 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ArmJsonDocument.h"
 #include "guiText.h"
 #include "recordFloat.h"
 #include "recordInt.h"
 
-class guiGetRecMessXML{
+class guiGetRecMessJson{
 	
 public:
 	void setup(float newRectX, float newRectY, string newSetDocDir);
@@ -26,8 +27,8 @@ public:
 	
 	int messIndex;
 	
-	//xml--------------_
-    ofXml getXML;
+	//json--------------_
+    ArmJsonDocument jsonDocument;
 	bool isIndex;
 	string message, setDocDir;
 	//-------xml-------_
@@ -49,7 +50,7 @@ public:
     ofColor playRecordFloatRectColor, recRecordFloatRectColor;
     ofColor playRecordColor, recRecordColor;
     ofColor playRecordRectColor, recRecordRectColor;
-    string getMessGetRecordXML[8], timeVal;
+    string getMessGetRecordJson[8], timeVal;
     float positionVal_X, positionVal_Y, positionVal_Z;
     
     float xAxisXVal, xAxisYVal, xAxisZVal;

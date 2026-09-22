@@ -6,8 +6,8 @@
 
 #include "recRecordARM.h"
 #include "recSessionARM.h"
-#include "guiMessXML.h"
-#include "guiGetRecMessXML.h"
+#include "guiMessJson.h"
+#include "guiGetRecMessJson.h"
 #include "audioPlayer.h"
 
 class dataLoggerARM{
@@ -52,14 +52,14 @@ public:
     
     recSessionARM recSessionARM_0;
     
-    //guiMessXML------------------------_
+    //guiMessJson------------------------_
     bool isDelAtIndexZero;
     int addKeyIndexZero;
     int stringSizeWas;
     string toAddZero;
-    guiMessXML guiMessXML_0;
-    guiGetRecMessXML guiGetRecMessXML_0;
-    //-----------guiMessXML-------------_
+    guiMessJson guiMessJson_0;
+    guiGetRecMessJson guiGetRecMessJson_0;
+    //-----------guiMessJson-------------_
     
     //letterForm----------------------_
     string letterForm;

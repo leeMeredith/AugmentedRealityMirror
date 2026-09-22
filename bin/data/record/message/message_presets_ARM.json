@@ -1,0 +1,67 @@
+{
+  "MESSAGES": {
+    "about": {
+      "message_0": "Date",
+      "message_1": "Client",
+      "message_2": "Authors",
+      "message_3": "url",
+      "message_4": "github"
+    },
+    "AUDIO": {
+      "title": "Audio",
+      "message": [
+        "Audio",
+        "Play",
+        "Paused",
+        "Volume",
+        "Speed",
+        "Position"
+      ]
+    },
+    "RECORD": {
+      "title": "RECORD",
+      "message": [
+        "File",
+        "Date",
+        "Session",
+        "Participant",
+        "Age",
+        "Amputation",
+        "Audio"
+      ]
+    },
+    "AL": {
+      "title": "Amputation Level",
+      "message_0": "AE- Above the elbow",
+      "message_1": "AK- Above the knee",
+      "message_2": "Bilateral- both sides",
+      "message_3": "BE- Below elbow",
+      "message_4": "BK- Below the knee"
+    },
+    "REALTAGRECORD": {
+      "title": "Record fields",
+      "message": [
+        "file",
+        "DATE",
+        "SESSION",
+        "PARTICIPANT",
+        "AGE",
+        "AMPUTATION",
+        "AUDIO"
+      ]
+    },
+    "GETRECORD": {
+      "title": "Camera",
+      "message": [
+        "Camera",
+        "Pain Score",
+        "Time",
+        "Position",
+        "X Axis",
+        "Y Axis",
+        "Z Axis",
+        "Rec End"
+      ]
+    }
+  }
+}

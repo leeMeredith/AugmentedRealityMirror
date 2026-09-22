@@ -30,9 +30,9 @@ public:
     int score;
     bool isIndex;
 	string message, setDocDir;
-	string getMessXML;
+	string getMessJson;
 	string newScoreString;
-	string getMenuMessXML;
-	int getIndexXML;
+	string getMenuMessJson;
+	int getIndexJson;
 	
 };

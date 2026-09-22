@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "../gui/ArmJsonDocument.h"
 #include "guiText.h"
 class audioPlayer{
 
@@ -20,11 +21,11 @@ class audioPlayer{
 		void mousePressed(int x, int y, int button);
 		void mouseReleased(int x, int y, int button);
 		
-        //xml--------------_
-        ofXml getXML;
+        //json--------------_
+        ArmJsonDocument jsonDocument;
         bool isIndex;
         string setMessageDir;
-        string getMessAudioXML[6];
+        string getMessAudioJson[6];
         string audio, play, paused, volume, speed, position;
         //-------xml-------_
         

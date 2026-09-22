@@ -160,7 +160,7 @@ void testApp::update() {
 	if(kinect.isFrameNew()) {
 		
 		// load grayscale depth image from the kinect source
-		grayImage.setFromPixels(kinect.getDepthPixels(), kinect.width, kinect.height);
+		grayImage.setFromPixels(kinect.getDepthPixels());
 		
 		// we do two thresholds - one for the far plane and one for the near plane
 		// we then do a cvAnd to get the pixels which are a union of the two thresholds
@@ -173,7 +173,7 @@ void testApp::update() {
 		} else {
 			
 			// or we do it ourselves - show people how they can work with the pixels
-			unsigned char * pix = grayImage.getPixels();
+			unsigned char * pix = grayImage.getPixels().getData();
 			
 			int numPixels = grayImage.getWidth() * grayImage.getHeight();
 			for(int i = 0; i < numPixels; i++) {
@@ -309,7 +309,7 @@ void testApp::update() {
             isDrPLayHitAreaImage = false;
             dataLoggerARM_0.isKeyFill = false;
             isDataLoggerARM = false;
-            dataLoggerARM_0.guiMessXML_0.recIndex_Y = dataLoggerARM_0.guiMessXML_0.maxNumInList;
+            dataLoggerARM_0.guiMessJson_0.recIndex_Y = dataLoggerARM_0.guiMessJson_0.maxNumInList;
             isGuiAll = true;
         }
         
@@ -332,7 +332,7 @@ void testApp::update() {
             isGuiCamera = true;
             isDataLoggerARM = false;
             dataLoggerARM_0.isKeyFill = false;
-            dataLoggerARM_0.guiMessXML_0.recIndex_Y = dataLoggerARM_0.guiMessXML_0.maxNumInList;
+            dataLoggerARM_0.guiMessJson_0.recIndex_Y = dataLoggerARM_0.guiMessJson_0.maxNumInList;
             isGuiAll = false;
         }else {
             isGuiCamera = false;
@@ -345,7 +345,7 @@ void testApp::update() {
             isSession = true;
             isGuiAll = false;
             dataLoggerARM_0.isKeyFill = false;
-            dataLoggerARM_0.guiMessXML_0.recIndex_Y = dataLoggerARM_0.guiMessXML_0.maxNumInList;
+            dataLoggerARM_0.guiMessJson_0.recIndex_Y = dataLoggerARM_0.guiMessJson_0.maxNumInList;
         }else{
             isSession = false;
         }
@@ -762,7 +762,7 @@ void testApp::exit() {
 //--------------------------------------------------------------
 void testApp::keyPressed (int key) {
     
-    if (dataLoggerARM_0.isKeyFill == false && dataLoggerARM_0.guiMessXML_0.recIndex_Y == dataLoggerARM_0.guiMessXML_0.maxNumInList) {
+    if (dataLoggerARM_0.isKeyFill == false && dataLoggerARM_0.guiMessJson_0.recIndex_Y == dataLoggerARM_0.guiMessJson_0.maxNumInList) {
         if(key == 'f'){
             
             bFullscreen = !bFullscreen;
