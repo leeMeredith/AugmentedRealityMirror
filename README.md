@@ -45,7 +45,7 @@ The source depends on openFrameworks 0.12.1 and its bundled `ofxKinect` and `ofx
 
 ## Continuing development
 
-The next milestone is a Kinect-connected demonstration of capture, mirroring, camera controls, and session playback. See the [restoration roadmap](docs/ROADMAP.md) for concrete completion criteria and [CONTRIBUTING.md](CONTRIBUTING.md) for how to report a build or propose a change.
+The next milestone is a Kinect-connected demonstration of capture, mirroring, camera controls, and session playback. Planned comparison work includes a camera-only mirrored split screen with screen recording and a point-cloud mode with independently selectable quadrants. See the [restoration roadmap](docs/ROADMAP.md) for the research questions and concrete completion criteria, and [CONTRIBUTING.md](CONTRIBUTING.md) for how to report a build or propose a change.
 
 The [possible collaborators](docs/POSSIBLE_COLLABORATORS.md) page describes areas of expertise that could help assess ARM. It does not name or imply any committed partners.
 
