@@ -39,6 +39,12 @@ void testApp::setup() {
     ofSetWindowTitle("ARM");//"Aaugmented Reality Mirror"
     ofSetWindowPosition(10, 10);
     bFullscreen	= 0;
+    isDrawOpenCV = true;
+    isSession = false;
+    isGuiKinect = true;
+    isGuiCamera = false;
+    isWhoKey = false;
+    dBug = false;
     
     isMouseMovTop = isMouseMovBott = false;
     //mouseMovTop = mouseMovBott = 0;
@@ -58,7 +64,7 @@ void testApp::setup() {
 	//kinect.init(true); // shows infrared instead of RGB video image
 	//kinect.init(false, false); // disable video image (faster fps)
 	
-	kinect.open();		// opens first available kinect
+	kinect.open(0);		// opens the first Kinect and remembers its index for reconnects
 	//kinect.open(1);	// open a kinect by id, starting with 0 (sorted by serial # lexicographically))
 	//kinect.open("A00362A08602047A");	// open a kinect using it's unique serial #
 	
@@ -817,13 +823,16 @@ void testApp::keyPressed (int key) {
                 break;
                 
             case 'o':
-                kinect.setCameraTiltAngle(angle); // go back to prev tilt
-                kinect.open();
+                if (kinect.isConnected()) {
+                    kinect.close();
+                }
+                kinect.open(0);
+                kinect.setCameraTiltAngle(angle); // go back to previous tilt
                 break;
                 
             case 'c':
                 kinect.setCameraTiltAngle(0); // zero the tilt
-                //kinect.close();
+                kinect.close();
                 break;
                 
             case OF_KEY_UP:

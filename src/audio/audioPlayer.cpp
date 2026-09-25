@@ -5,9 +5,10 @@
 #include "audioPlayer.h"
 
 //--------------------------------------------------------------
-void audioPlayer::setup(int newRectX, int newRectY, string newLargeAudioDir){
+void audioPlayer::setup(int newRectX, int newRectY, string newLargeAudioDir, bool enablePlayback){
     rectX = newRectX;
 	rectY = newRectY;
+    isPlaybackEnabled = enablePlayback;
     largeAudioDirTest = largeAudioDir = newLargeAudioDir;
     //json----------------------------_
     setMessageDir = "record/message/message_presets_ARM.json";
@@ -39,7 +40,7 @@ void audioPlayer::setup(int newRectX, int newRectY, string newLargeAudioDir){
 	rectH = guiText_0.getTextHeight();
     
     
-	if (large.load(largeAudioDir)) {
+	if (isPlaybackEnabled && large.load(largeAudioDir)) {
 		large.setVolume(0.75f);
 		large.setMultiPlay(false);
 	}
@@ -68,6 +69,18 @@ void audioPlayer::setup(int newRectX, int newRectY, string newLargeAudioDir){
 //--------------------------------------------------------------
 void audioPlayer::update(int newRectX, int newRectY, string newLargeAudioDir){
     largeAudioDir = newLargeAudioDir;
+
+    if (!isPlaybackEnabled) {
+        if (large.isLoaded()) {
+            large.stop();
+            large.unloadSound();
+        }
+        isPlay = false;
+        isPaused = false;
+        getLargePositionMS = 0;
+        getLargePosition = 0;
+        return;
+    }
     
     if (largeAudioDir != largeAudioDirTest) {
         large.unloadSound();
@@ -125,6 +138,10 @@ void audioPlayer::update(int newRectX, int newRectY, string newLargeAudioDir){
 
 //--------------------------------------------------------------
 void audioPlayer::draw(){
+    if (!isPlaybackEnabled) {
+        return;
+    }
+
     ofFill();
     ofEnableAlphaBlending();
 	ofSetColor(0, 0, 255, 40);
@@ -151,6 +168,10 @@ void audioPlayer::draw(){
 
 //--------------------------------------------------------------
 void audioPlayer::keyPressed  (int key){
+    if (!isPlaybackEnabled) {
+        return;
+    }
+
     if(key == 'p'){
         isPlay = true;
         //newGetLargePositionMS = large.getPositionMS();

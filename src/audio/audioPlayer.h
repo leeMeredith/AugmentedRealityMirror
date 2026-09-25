@@ -10,7 +10,7 @@
 class audioPlayer{
 
 	public:
-		void setup(int newRectX, int newRectY, string newLargeAudioDir);
+		void setup(int newRectX, int newRectY, string newLargeAudioDir, bool enablePlayback = false);
 		void update(int newRectX, int newRectY, string newLargeAudioDir);
 		void draw();
 
@@ -39,10 +39,9 @@ class audioPlayer{
     
         
         string largeAudioDir, largeAudioDirTest;
-        bool isPlay, isPaused;
+        bool isPlaybackEnabled, isPlay, isPaused;
         float largeAudioPosition, largeAudioSpeed, largeAudioVolume;
         float getLargePositionMS, newGetLargePositionMS, getLargePosition, getLargeSpeed, getLargeVolume;
         ofSoundPlayer  large;
         
 };
-

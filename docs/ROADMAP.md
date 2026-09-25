@@ -11,7 +11,7 @@ The first milestone is a reproducible technical demonstration that others can in
 
 The source now contains focused openFrameworks 0.12.1 compatibility changes. Bundled media was preserved.
 
-Verification: the Release target builds on Apple silicon. The pre-JSON version launched, loaded runtime assets and audio, and created/reopened XML records. A Kinect v1 displayed a live ARM view from Xcode after clearing a stale process and reconnecting the sensor. Pressing `h` switched the mirrored side, and moving the mouse changed the viewpoint while capture stayed live. The JSON version builds and passes storage roundtrip tests; a new live run, recording/playback, longer stability, and mirror alignment remain pending.
+Verification: the Release and Debug targets build on Apple silicon. The JSON version passes storage roundtrip tests and displayed live Kinect color and depth data on September 24, 2026. It now starts on the Kinect screen, and its `c`/`o` close-and-reopen cycle was verified. Audio playback is disabled by default. Mirror-side switching and viewpoint movement worked on the earlier XML build; repeat checks, recording/playback, longer stability, and mirror alignment remain pending.
 
 ## 1. Recover a working demonstration
 
@@ -19,7 +19,7 @@ Verification: the Release target builds on Apple silicon. The pre-JSON version l
 | --- | --- | --- |
 | Establish build environment | **Complete for this Mac:** openFrameworks 0.12.1, Xcode 27.0, Apple silicon | A fresh checkout can be built using documented versions and commands |
 | Check the sensor independently | `testApp::setup()` initializes and opens a Kinect | SDK example and ARM both show stable capture on the documented device |
-| Resolve startup audio | **Complete:** startup now uses bundled `heyYou.wav`; failed loads are guarded | The intended bundled audio loads, or optional audio is explicitly disabled |
+| Park startup audio | **Complete:** audio playback is explicitly disabled by default; the file and code remain available for later work | Startup and camera controls remain silent |
 | Handle output directories and bad files | **Partial:** output directories are created; malformed JSON is preserved by the storage layer, but the app's response needs checking | Empty/missing directories and malformed records produce predictable behavior |
 | Audit record indexing | Camera playback reads multiple position arrays and updates record addresses | Empty, one-entry, and boundary navigation cases are exercised without invalid access |
 | Document mirror geometry | `drawPointCloud()` assumes 640×480, uses half-image selection, and hard-coded translations | Both sides and viewpoint changes match a recorded reference and coordinate units are documented |

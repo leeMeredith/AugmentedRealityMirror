@@ -4,6 +4,10 @@
 
 #include "dataLoggerARM.h"
 
+namespace {
+constexpr bool kEnableAudioPlayback = false;
+}
+
 //--------------------------------------------------------------
 void dataLoggerARM::setup(){
 
@@ -77,7 +81,7 @@ void dataLoggerARM::setup(){
 
     //audioPlayer--------------_
     nameOfDirPathAudio = "record/media/audio/heyYou.wav";
-    audioPlayer_0.setup(20, 440, nameOfDirPathAudio);
+    audioPlayer_0.setup(20, 440, nameOfDirPathAudio, kEnableAudioPlayback);
     //-------audioPlayer-------_
 
 	ofBackground(75,75,75);

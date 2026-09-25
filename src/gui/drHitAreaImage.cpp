@@ -31,6 +31,8 @@ void drHitAreaImage::setup(){
     //-------allHitAreaImage------_
     
     currentDialogImage = 0;
+    hitAreaImageIndex = 1;
+    hitDialogIndex = "SENSOR";
     setRecordImageFolderTest = dirDialogImageString;
     //----Directory-Image---_
     

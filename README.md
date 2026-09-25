@@ -4,7 +4,7 @@ A Kinect-based digital mirror prototype by Lee Meredith, created to explore visu
 
 ARM uses a Kinect depth camera to capture a colored point cloud, mirror one side of the captured scene, and display both views on a monitor. A virtual camera lets the viewer change the perspective on that point cloud.
 
-**Status:** ARM builds with openFrameworks 0.12.1 on Apple silicon. On September 21, 2026, the prior XML build ran from Xcode with a live Kinect view; pressing `h` switched the mirrored side, and moving the mouse changed the viewpoint while capture remained live. The September 22 JSON conversion builds and passes storage roundtrip tests, but its live ARM window has not yet been rechecked. Longer stability, mirror alignment, recording controls, and session playback still need hardware testing. Clinical effectiveness has not been established by evidence included in this repository.
+**Status:** ARM builds with openFrameworks 0.12.1 on Apple silicon. On September 24, 2026, the JSON build opened directly into the Kinect screen and displayed live color and depth data after the sensor's startup retry. The repaired `c` and `o` controls closed and reopened the Kinect successfully. Audio playback is parked and disabled by default. Longer stability, mirror alignment, recording controls, and session playback still need hardware testing. Clinical effectiveness has not been established by evidence included in this repository.
 
 [Watch the original demonstration](https://vimeo.com/49252026) · [Read the project overview](docs/PROJECT_OVERVIEW.md) · [Restore a development build](docs/BUILD.md)
 
@@ -20,9 +20,9 @@ The virtual camera changes the view of what the sensor captured. It does not rec
 - Two virtual cameras, orbit controls, and camera-position playback code.
 - Kinect, form, camera, and session interface modes.
 - JSON-based flythrough and session records, including camera coordinates, participant fields, and pain-score entries.
-- Audio playback and timing support.
+- Audio files and playback code retained for possible later work; playback is disabled by default.
 
-These are features visible in the implementation. Live capture, mirror-side switching, and viewpoint movement were observed with Kinect hardware before the JSON change; the converted build needs a repeat run. Recording/playback refers to camera and session state, not a verified depth-video recording system.
+These are features visible in the implementation. Live capture was observed with Kinect hardware after the JSON change; mirror-side switching and viewpoint movement were observed before it and still need a repeat check on the current build. Recording/playback refers to camera and session state, not a verified depth-video recording system.
 
 ## Getting started
 
