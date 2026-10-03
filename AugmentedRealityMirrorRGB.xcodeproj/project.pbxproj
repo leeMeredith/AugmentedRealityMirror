@@ -4,6 +4,34 @@
 	"classes": {},
 	"objectVersion": "54",
 	"objects": {
+		"A12000000000000000000001": {
+			"fileRef": "A12000000000000000000002",
+			"isa": "PBXBuildFile"
+		},
+		"A12000000000000000000002": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "mirrorControls.cpp",
+			"sourceTree": "<group>"
+		},
+		"A12000000000000000000003": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "mirrorControls.h",
+			"sourceTree": "<group>"
+		},
+		"A12000000000000000000004": {
+			"children": [
+				"A12000000000000000000002",
+				"A12000000000000000000003"
+			],
+			"isa": "PBXGroup",
+			"name": "controls",
+			"path": "controls",
+			"sourceTree": "<group>"
+		},
 		"A11000000000000000000001": {
 			"fileRef": "A11000000000000000000002",
 			"isa": "PBXBuildFile"
@@ -361,6 +389,7 @@
 				"E4B69E210A3A1BDC003C02F2",
 				"BAF515D8-A71B-470F-A4E7-7FAB9073871F",
 				"A11000000000000000000001",
+				"A12000000000000000000001",
 				"096B9C87-F49D-4DFA-A1F3-203EF3F5A18A",
 				"E975C1EE-2241-493B-8659-8A9DF5492D4E",
 				"20FC7278-50A6-4DFA-8CCD-AB58A539406C",
@@ -469,7 +498,8 @@
 				"E4B69E1E0A3A1BDC003C02F2",
 				"E4B69E1F0A3A1BDC003C02F2",
 				"269881DB-1CEB-4C8F-9236-94FD3126B68F",
-				"A11000000000000000000004"
+				"A11000000000000000000004",
+				"A12000000000000000000004"
 			],
 			"isa": "PBXGroup",
 			"path": "src",

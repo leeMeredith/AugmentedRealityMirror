@@ -3,6 +3,7 @@
 void ofApp::setup() {
     ofSetVerticalSync(true);
     ofBackground(0);
+    controls.setup();
 
     if (!rgbCamera.setup(0, 640, 480, 30)) {
         ofLogError("ofApp") << "Unable to initialize RGB camera device 0";
@@ -17,12 +18,14 @@ void ofApp::draw() {
     if (!rgbCamera.isReady()) {
         ofSetColor(255);
         ofDrawBitmapString("Waiting for RGB camera...", 20, 30);
+        controls.draw();
         return;
     }
 
     ofRectangle preview(0, 0, rgbCamera.getWidth(), rgbCamera.getHeight());
     preview.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
-    regionView.draw(rgbCamera.getTexture(), preview);
+    regionView.draw(rgbCamera.getTexture(), preview, controls.selection());
+    controls.draw();
 }
 
 void ofApp::exit() {
@@ -32,20 +35,20 @@ void ofApp::exit() {
 void ofApp::keyPressed(int key) {
     switch (key) {
         case '1':
-            regionView.toggle(mirrorRegions::Region::topLeft);
+            controls.toggle(mirrorRegions::Region::topLeft);
             break;
         case '2':
-            regionView.toggle(mirrorRegions::Region::topRight);
+            controls.toggle(mirrorRegions::Region::topRight);
             break;
         case '3':
-            regionView.toggle(mirrorRegions::Region::bottomLeft);
+            controls.toggle(mirrorRegions::Region::bottomLeft);
             break;
         case '4':
-            regionView.toggle(mirrorRegions::Region::bottomRight);
+            controls.toggle(mirrorRegions::Region::bottomRight);
             break;
         case 'r':
         case 'R':
-            regionView.clear();
+            controls.clear();
             break;
         default:
             break;

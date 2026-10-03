@@ -15,14 +15,10 @@ public:
         count
     };
 
-    void draw(const ofTexture& texture, const ofRectangle& bounds) const;
-    void toggle(Region region);
-    void clear();
+    using Selection = std::array<bool, static_cast<std::size_t>(Region::count)>;
 
-    bool isMirrored(Region region) const;
-
-private:
-    static std::size_t indexFor(Region region);
-
-    std::array<bool, static_cast<std::size_t>(Region::count)> mirrored{};
+    void draw(
+        const ofTexture& texture,
+        const ofRectangle& bounds,
+        const Selection& mirrored) const;
 };

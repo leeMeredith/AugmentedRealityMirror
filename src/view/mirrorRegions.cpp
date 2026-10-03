@@ -14,7 +14,10 @@ const char* regionLabel(std::size_t index) {
 }
 }
 
-void mirrorRegions::draw(const ofTexture& texture, const ofRectangle& bounds) const {
+void mirrorRegions::draw(
+    const ofTexture& texture,
+    const ofRectangle& bounds,
+    const Selection& mirrored) const {
     if (!texture.isAllocated() || bounds.isEmpty()) {
         return;
     }
@@ -92,21 +95,4 @@ void mirrorRegions::draw(const ofTexture& texture, const ofRectangle& bounds) co
     }
 
     ofPopStyle();
-}
-
-void mirrorRegions::toggle(Region region) {
-    const auto index = indexFor(region);
-    mirrored[index] = !mirrored[index];
-}
-
-void mirrorRegions::clear() {
-    mirrored.fill(false);
-}
-
-bool mirrorRegions::isMirrored(Region region) const {
-    return mirrored[indexFor(region)];
-}
-
-std::size_t mirrorRegions::indexFor(Region region) {
-    return static_cast<std::size_t>(region);
 }

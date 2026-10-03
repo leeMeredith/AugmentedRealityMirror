@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "captureRGB.h"
+#include "controls/mirrorControls.h"
 #include "view/mirrorRegions.h"
 
 class ofApp : public ofBaseApp {
@@ -15,4 +16,5 @@ public:
 private:
     captureRGB rgbCamera;
     mirrorRegions regionView;
+    mirrorControls controls;
 };
