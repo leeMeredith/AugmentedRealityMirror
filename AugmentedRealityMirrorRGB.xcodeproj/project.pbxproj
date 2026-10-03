@@ -4,6 +4,52 @@
 	"classes": {},
 	"objectVersion": "54",
 	"objects": {
+		"A13000000000000000000001": {
+			"fileRef": "A13000000000000000000002",
+			"isa": "PBXBuildFile"
+		},
+		"A13000000000000000000002": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "studySession.cpp",
+			"sourceTree": "<group>"
+		},
+		"A13000000000000000000003": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "studySession.h",
+			"sourceTree": "<group>"
+		},
+		"A13000000000000000000004": {
+			"children": [
+				"A13000000000000000000002",
+				"A13000000000000000000003"
+			],
+			"isa": "PBXGroup",
+			"name": "session",
+			"path": "session",
+			"sourceTree": "<group>"
+		},
+		"A14000000000000000000001": {
+			"fileRef": "A14000000000000000000002",
+			"isa": "PBXBuildFile"
+		},
+		"A14000000000000000000002": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "sessionControls.cpp",
+			"sourceTree": "<group>"
+		},
+		"A14000000000000000000003": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "sessionControls.h",
+			"sourceTree": "<group>"
+		},
 		"A12000000000000000000001": {
 			"fileRef": "A12000000000000000000002",
 			"isa": "PBXBuildFile"
@@ -25,7 +71,9 @@
 		"A12000000000000000000004": {
 			"children": [
 				"A12000000000000000000002",
-				"A12000000000000000000003"
+				"A12000000000000000000003",
+				"A14000000000000000000002",
+				"A14000000000000000000003"
 			],
 			"isa": "PBXGroup",
 			"name": "controls",
@@ -390,6 +438,8 @@
 				"BAF515D8-A71B-470F-A4E7-7FAB9073871F",
 				"A11000000000000000000001",
 				"A12000000000000000000001",
+				"A13000000000000000000001",
+				"A14000000000000000000001",
 				"096B9C87-F49D-4DFA-A1F3-203EF3F5A18A",
 				"E975C1EE-2241-493B-8659-8A9DF5492D4E",
 				"20FC7278-50A6-4DFA-8CCD-AB58A539406C",
@@ -499,7 +549,8 @@
 				"E4B69E1F0A3A1BDC003C02F2",
 				"269881DB-1CEB-4C8F-9236-94FD3126B68F",
 				"A11000000000000000000004",
-				"A12000000000000000000004"
+				"A12000000000000000000004",
+				"A13000000000000000000004"
 			],
 			"isa": "PBXGroup",
 			"path": "src",

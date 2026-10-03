@@ -4,6 +4,7 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
     ofBackground(0);
     controls.setup();
+    studyControls.setup();
 
     if (!rgbCamera.setup(0, 640, 480, 30)) {
         ofLogError("ofApp") << "Unable to initialize RGB camera device 0";
@@ -12,6 +13,7 @@ void ofApp::setup() {
 
 void ofApp::update() {
     rgbCamera.update();
+    studyControls.update(controls.selection());
 }
 
 void ofApp::draw() {
@@ -20,6 +22,7 @@ void ofApp::draw() {
         ofDrawBitmapString("Waiting for RGB camera...", 20, 30);
         if (showInterface) {
             controls.draw();
+            studyControls.draw();
         }
         return;
     }
@@ -34,10 +37,12 @@ void ofApp::draw() {
 
     if (showInterface) {
         controls.draw();
+        studyControls.draw();
     }
 }
 
 void ofApp::exit() {
+    studyControls.exit();
     rgbCamera.close();
 }
 
