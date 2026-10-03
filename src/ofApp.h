@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "captureRGB.h"
+#include "view/mirrorRegions.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -9,7 +10,9 @@ public:
     void update() override;
     void draw() override;
     void exit() override;
+    void keyPressed(int key) override;
 
 private:
     captureRGB rgbCamera;
+    mirrorRegions regionView;
 };

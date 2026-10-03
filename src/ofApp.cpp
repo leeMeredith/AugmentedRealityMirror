@@ -22,11 +22,32 @@ void ofApp::draw() {
 
     ofRectangle preview(0, 0, rgbCamera.getWidth(), rgbCamera.getHeight());
     preview.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
-
-    ofSetColor(255);
-    rgbCamera.getTexture().draw(preview.x, preview.y, preview.width, preview.height);
+    regionView.draw(rgbCamera.getTexture(), preview);
 }
 
 void ofApp::exit() {
     rgbCamera.close();
+}
+
+void ofApp::keyPressed(int key) {
+    switch (key) {
+        case '1':
+            regionView.toggle(mirrorRegions::Region::topLeft);
+            break;
+        case '2':
+            regionView.toggle(mirrorRegions::Region::topRight);
+            break;
+        case '3':
+            regionView.toggle(mirrorRegions::Region::bottomLeft);
+            break;
+        case '4':
+            regionView.toggle(mirrorRegions::Region::bottomRight);
+            break;
+        case 'r':
+        case 'R':
+            regionView.clear();
+            break;
+        default:
+            break;
+    }
 }
