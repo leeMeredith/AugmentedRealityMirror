@@ -4,6 +4,31 @@
 	"classes": {},
 	"objectVersion": "54",
 	"objects": {
+		"A15000000000000000000001": {
+			"fileRef": "A15000000000000000000002",
+			"isa": "PBXBuildFile"
+		},
+		"A15000000000000000000002": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "splitScreenView.cpp",
+			"sourceTree": "<group>"
+		},
+		"A15000000000000000000003": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "splitScreenView.h",
+			"sourceTree": "<group>"
+		},
+		"A15000000000000000000004": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "viewConfiguration.h",
+			"sourceTree": "<group>"
+		},
 		"A13000000000000000000001": {
 			"fileRef": "A13000000000000000000002",
 			"isa": "PBXBuildFile"
@@ -101,7 +126,10 @@
 		"A11000000000000000000004": {
 			"children": [
 				"A11000000000000000000002",
-				"A11000000000000000000003"
+				"A11000000000000000000003",
+				"A15000000000000000000002",
+				"A15000000000000000000003",
+				"A15000000000000000000004"
 			],
 			"isa": "PBXGroup",
 			"name": "view",
@@ -440,6 +468,7 @@
 				"A12000000000000000000001",
 				"A13000000000000000000001",
 				"A14000000000000000000001",
+				"A15000000000000000000001",
 				"096B9C87-F49D-4DFA-A1F3-203EF3F5A18A",
 				"E975C1EE-2241-493B-8659-8A9DF5492D4E",
 				"20FC7278-50A6-4DFA-8CCD-AB58A539406C",

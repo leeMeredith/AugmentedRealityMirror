@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "viewConfiguration.h"
 
-#include <array>
 #include <cstddef>
 
 class mirrorRegions {
@@ -15,7 +15,7 @@ public:
         count
     };
 
-    using Selection = std::array<bool, static_cast<std::size_t>(Region::count)>;
+    using Selection = viewConfiguration::RegionSelection;
 
     void draw(
         const ofTexture& texture,

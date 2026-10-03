@@ -28,7 +28,9 @@ bool studySession::start(
     return true;
 }
 
-bool studySession::recordPain(int requestedPainScore, const RegionSelection& regions) {
+bool studySession::recordPain(
+    int requestedPainScore,
+    const viewConfiguration& configuration) {
     error.clear();
     if (!active) {
         error = "Start a session first";
@@ -39,7 +41,7 @@ bool studySession::recordPain(int requestedPainScore, const RegionSelection& reg
     measurement.elapsedSeconds = ofGetElapsedTimef() - startedAtElapsedSeconds;
     measurement.painScore = ofClamp(requestedPainScore, 0, 10);
     measurement.recordedAt = currentTimestamp();
-    measurement.regions = regions;
+    measurement.configuration = configuration;
     measurements.push_back(measurement);
     return true;
 }
@@ -98,7 +100,7 @@ std::string studySession::newSessionId() {
 
 ofJson studySession::makeJson(const std::string& endedAt) const {
     ofJson json;
-    json["schemaVersion"] = 1;
+    json["schemaVersion"] = 2;
     json["application"]["name"] = "AugmentedRealityMirrorRGB";
     json["application"]["cameraMode"] = "RGB";
 
@@ -118,10 +120,19 @@ ofJson studySession::makeJson(const std::string& endedAt) const {
         entry["recordedAt"] = measurement.recordedAt;
         entry["elapsedSeconds"] = measurement.elapsedSeconds;
         entry["painScore"] = measurement.painScore;
-        entry["mirrorRegions"]["topLeft"] = measurement.regions[0];
-        entry["mirrorRegions"]["topRight"] = measurement.regions[1];
-        entry["mirrorRegions"]["bottomLeft"] = measurement.regions[2];
-        entry["mirrorRegions"]["bottomRight"] = measurement.regions[3];
+        entry["view"]["mode"] = measurement.configuration.mode == rgbViewMode::splitScreen
+            ? "splitScreen"
+            : "regionalMirror";
+        entry["view"]["mirrorOnLeft"] = measurement.configuration.mirrorOnLeft;
+        entry["view"]["dividerPosition"] = measurement.configuration.dividerPosition;
+        entry["view"]["oppositeCopyRegions"]["topLeft"] =
+            measurement.configuration.oppositeCopyRegions[0];
+        entry["view"]["oppositeCopyRegions"]["topRight"] =
+            measurement.configuration.oppositeCopyRegions[1];
+        entry["view"]["oppositeCopyRegions"]["bottomLeft"] =
+            measurement.configuration.oppositeCopyRegions[2];
+        entry["view"]["oppositeCopyRegions"]["bottomRight"] =
+            measurement.configuration.oppositeCopyRegions[3];
         json["measurements"].push_back(entry);
 
         chartSource.push_back({measurement.elapsedSeconds, measurement.painScore});

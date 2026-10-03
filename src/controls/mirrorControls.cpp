@@ -7,13 +7,16 @@ mirrorControls::~mirrorControls() {
 void mirrorControls::setup() {
     clearButton.addListener(this, &mirrorControls::clearPressed);
 
-    panel.setup("Mirror Regions");
+    panel.setup("View Controls");
     panel.setPosition(12.0f, 12.0f);
+    panel.add(splitScreen.setup("V  Split screen", false));
+    panel.add(mirrorOnLeft.setup("Mirror on left", false));
+    panel.add(dividerPosition.setup("Divider", 0.5f, 0.2f, 0.8f));
     panel.add(topLeft.setup("Q  Top left", false));
     panel.add(topRight.setup("W  Top right", false));
     panel.add(bottomLeft.setup("A  Bottom left", false));
     panel.add(bottomRight.setup("S  Bottom right", false));
-    panel.add(clearButton.setup("Reset all"));
+    panel.add(clearButton.setup("Reset regions"));
 }
 
 void mirrorControls::draw() {
@@ -39,6 +42,10 @@ void mirrorControls::toggle(mirrorRegions::Region region) {
     }
 }
 
+void mirrorControls::toggleSplitScreen() {
+    splitScreen = !splitScreen;
+}
+
 void mirrorControls::clear() {
     topLeft = false;
     topRight = false;
@@ -46,8 +53,13 @@ void mirrorControls::clear() {
     bottomRight = false;
 }
 
-mirrorRegions::Selection mirrorControls::selection() {
-    return {topLeft, topRight, bottomLeft, bottomRight};
+viewConfiguration mirrorControls::configuration() {
+    viewConfiguration result;
+    result.mode = splitScreen ? rgbViewMode::splitScreen : rgbViewMode::regionalMirror;
+    result.oppositeCopyRegions = {topLeft, topRight, bottomLeft, bottomRight};
+    result.mirrorOnLeft = mirrorOnLeft;
+    result.dividerPosition = dividerPosition;
+    return result;
 }
 
 void mirrorControls::clearPressed() {

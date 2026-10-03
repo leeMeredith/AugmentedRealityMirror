@@ -2,6 +2,7 @@
 
 #include "ofxGui.h"
 #include "view/mirrorRegions.h"
+#include "view/viewConfiguration.h"
 
 class mirrorControls {
 public:
@@ -11,14 +12,18 @@ public:
     void setup();
     void draw();
     void toggle(mirrorRegions::Region region);
+    void toggleSplitScreen();
     void clear();
 
-    mirrorRegions::Selection selection();
+    viewConfiguration configuration();
 
 private:
     void clearPressed();
 
     ofxPanel panel;
+    ofxToggle splitScreen;
+    ofxToggle mirrorOnLeft;
+    ofxFloatSlider dividerPosition;
     ofxToggle topLeft;
     ofxToggle topRight;
     ofxToggle bottomLeft;

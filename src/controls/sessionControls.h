@@ -2,7 +2,7 @@
 
 #include "ofxGui.h"
 #include "session/studySession.h"
-#include "view/mirrorRegions.h"
+#include "view/viewConfiguration.h"
 
 class sessionControls {
 public:
@@ -10,8 +10,8 @@ public:
     ~sessionControls();
 
     void setup();
-    void update(const mirrorRegions::Selection& regions);
-    void recordPainScore(int selectedPainScore, const mirrorRegions::Selection& regions);
+    void update(const viewConfiguration& configuration);
+    void recordPainScore(int selectedPainScore, const viewConfiguration& configuration);
     void draw();
     void exit();
 

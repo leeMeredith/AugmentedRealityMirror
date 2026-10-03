@@ -13,7 +13,7 @@ void ofApp::setup() {
 
 void ofApp::update() {
     rgbCamera.update();
-    studyControls.update(controls.selection());
+    studyControls.update(controls.configuration());
 }
 
 void ofApp::draw() {
@@ -29,11 +29,21 @@ void ofApp::draw() {
 
     ofRectangle preview(0, 0, rgbCamera.getWidth(), rgbCamera.getHeight());
     preview.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
-    regionView.draw(
-        rgbCamera.getTexture(),
-        preview,
-        controls.selection(),
-        showInterface);
+
+    const auto configuration = controls.configuration();
+    if (configuration.mode == rgbViewMode::splitScreen) {
+        comparisonView.draw(
+            rgbCamera.getTexture(),
+            preview,
+            configuration,
+            showInterface);
+    } else {
+        regionView.draw(
+            rgbCamera.getTexture(),
+            preview,
+            configuration.oppositeCopyRegions,
+            showInterface);
+    }
 
     if (showInterface) {
         controls.draw();
@@ -48,12 +58,12 @@ void ofApp::exit() {
 
 void ofApp::keyPressed(int key) {
     if (key >= '1' && key <= '9') {
-        studyControls.recordPainScore(key - '0', controls.selection());
+        studyControls.recordPainScore(key - '0', controls.configuration());
         return;
     }
 
     if (key == '0') {
-        studyControls.recordPainScore(10, controls.selection());
+        studyControls.recordPainScore(10, controls.configuration());
         return;
     }
 
@@ -73,6 +83,10 @@ void ofApp::keyPressed(int key) {
         case 's':
         case 'S':
             controls.toggle(mirrorRegions::Region::bottomRight);
+            break;
+        case 'v':
+        case 'V':
+            controls.toggleSplitScreen();
             break;
         case 'r':
         case 'R':

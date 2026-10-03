@@ -27,7 +27,7 @@ void sessionControls::setup() {
     panel.add(statusLabel.setup("Status", "Ready"));
 }
 
-void sessionControls::update(const mirrorRegions::Selection& regions) {
+void sessionControls::update(const viewConfiguration& configuration) {
     if (startRequested) {
         startRequested = false;
         if (session.start(participantId, administratorId)) {
@@ -39,7 +39,7 @@ void sessionControls::update(const mirrorRegions::Selection& regions) {
 
     if (recordRequested) {
         recordRequested = false;
-        recordPainScore(painScore.get(), regions);
+        recordPainScore(painScore.get(), configuration);
     }
 
     if (finishRequested) {
@@ -54,11 +54,11 @@ void sessionControls::update(const mirrorRegions::Selection& regions) {
 
 void sessionControls::recordPainScore(
     int selectedPainScore,
-    const mirrorRegions::Selection& regions) {
+    const viewConfiguration& configuration) {
     const int score = ofClamp(selectedPainScore, 0, 10);
     painScore = score;
 
-    if (session.recordPain(score, regions)) {
+    if (session.recordPain(score, configuration)) {
         statusLabel = "Recorded " + ofToString(score)
             + " (#" + ofToString(session.painScoreCount()) + ")";
     } else {

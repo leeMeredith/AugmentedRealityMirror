@@ -5,6 +5,7 @@
 #include "controls/mirrorControls.h"
 #include "controls/sessionControls.h"
 #include "view/mirrorRegions.h"
+#include "view/splitScreenView.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -17,6 +18,7 @@ public:
 private:
     captureRGB rgbCamera;
     mirrorRegions regionView;
+    splitScreenView comparisonView;
     mirrorControls controls;
     sessionControls studyControls;
     bool showInterface = true;

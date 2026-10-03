@@ -1,17 +1,15 @@
 #pragma once
 
 #include "ofMain.h"
+#include "view/viewConfiguration.h"
 
-#include <array>
 #include <string>
 #include <vector>
 
 class studySession {
 public:
-    using RegionSelection = std::array<bool, 4>;
-
     bool start(const std::string& participantId, const std::string& administratorId);
-    bool recordPain(int painScore, const RegionSelection& regions);
+    bool recordPain(int painScore, const viewConfiguration& configuration);
     bool finishAndSave();
 
     bool isActive() const;
@@ -24,7 +22,7 @@ private:
         double elapsedSeconds = 0.0;
         int painScore = 0;
         std::string recordedAt;
-        RegionSelection regions{};
+        viewConfiguration configuration;
     };
 
     static std::string currentTimestamp();
