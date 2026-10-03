@@ -9,6 +9,7 @@ public:
     void close();
 
     bool isReady() const;
+    bool isFrameNew() const;
     const ofTexture& getTexture() const;
     float getWidth() const;
     float getHeight() const;

@@ -4,6 +4,54 @@
 	"classes": {},
 	"objectVersion": "54",
 	"objects": {
+		"A16000000000000000000001": {
+			"fileRef": "A16000000000000000000002",
+			"isa": "PBXBuildFile"
+		},
+		"A16000000000000000000002": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.objcpp",
+			"name": "screenRecorder.mm",
+			"sourceTree": "<group>"
+		},
+		"A16000000000000000000003": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "screenRecorder.h",
+			"sourceTree": "<group>"
+		},
+		"A16000000000000000000004": {
+			"fileRef": "A16000000000000000000005",
+			"isa": "PBXBuildFile"
+		},
+		"A16000000000000000000005": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "recordingControls.cpp",
+			"sourceTree": "<group>"
+		},
+		"A16000000000000000000006": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "recordingControls.h",
+			"sourceTree": "<group>"
+		},
+		"A16000000000000000000007": {
+			"children": [
+				"A16000000000000000000005",
+				"A16000000000000000000006",
+				"A16000000000000000000002",
+				"A16000000000000000000003"
+			],
+			"isa": "PBXGroup",
+			"name": "recording",
+			"path": "recording",
+			"sourceTree": "<group>"
+		},
 		"A15000000000000000000001": {
 			"fileRef": "A15000000000000000000002",
 			"isa": "PBXBuildFile"
@@ -469,6 +517,8 @@
 				"A13000000000000000000001",
 				"A14000000000000000000001",
 				"A15000000000000000000001",
+				"A16000000000000000000001",
+				"A16000000000000000000004",
 				"096B9C87-F49D-4DFA-A1F3-203EF3F5A18A",
 				"E975C1EE-2241-493B-8659-8A9DF5492D4E",
 				"20FC7278-50A6-4DFA-8CCD-AB58A539406C",
@@ -579,7 +629,8 @@
 				"269881DB-1CEB-4C8F-9236-94FD3126B68F",
 				"A11000000000000000000004",
 				"A12000000000000000000004",
-				"A13000000000000000000004"
+				"A13000000000000000000004",
+				"A16000000000000000000007"
 			],
 			"isa": "PBXGroup",
 			"path": "src",

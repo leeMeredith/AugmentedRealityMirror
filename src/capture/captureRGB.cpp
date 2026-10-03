@@ -25,6 +25,10 @@ bool captureRGB::isReady() const {
     return camera.isInitialized();
 }
 
+bool captureRGB::isFrameNew() const {
+    return camera.isFrameNew();
+}
+
 const ofTexture& captureRGB::getTexture() const {
     return camera.getTexture();
 }

@@ -5,6 +5,7 @@ void ofApp::setup() {
     ofBackground(0);
     controls.setup();
     studyControls.setup();
+    recording.setup();
 
     if (!rgbCamera.setup(0, 640, 480, 30)) {
         ofLogError("ofApp") << "Unable to initialize RGB camera device 0";
@@ -13,7 +14,13 @@ void ofApp::setup() {
 
 void ofApp::update() {
     rgbCamera.update();
-    studyControls.update(controls.configuration());
+
+    const auto configuration = controls.configuration();
+    studyControls.update(configuration);
+    recording.update(
+        rgbCamera.isReady() ? static_cast<int>(rgbCamera.getWidth()) : 0,
+        rgbCamera.isReady() ? static_cast<int>(rgbCamera.getHeight()) : 0,
+        configuration);
 }
 
 void ofApp::draw() {
@@ -23,35 +30,57 @@ void ofApp::draw() {
         if (showInterface) {
             controls.draw();
             studyControls.draw();
+            recording.draw();
         }
         return;
     }
 
-    ofRectangle preview(0, 0, rgbCamera.getWidth(), rgbCamera.getHeight());
-    preview.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
+    const int frameWidth = static_cast<int>(rgbCamera.getWidth());
+    const int frameHeight = static_cast<int>(rgbCamera.getHeight());
+    if (!viewFrame.isAllocated()
+        || viewFrame.getWidth() != frameWidth
+        || viewFrame.getHeight() != frameHeight) {
+        viewFrame.allocate(frameWidth, frameHeight, GL_RGBA);
+    }
 
     const auto configuration = controls.configuration();
+    const ofRectangle frameBounds(0, 0, frameWidth, frameHeight);
+
+    viewFrame.begin();
+    ofClear(0, 0, 0, 255);
     if (configuration.mode == rgbViewMode::splitScreen) {
         comparisonView.draw(
             rgbCamera.getTexture(),
-            preview,
+            frameBounds,
             configuration,
             showInterface);
     } else {
         regionView.draw(
             rgbCamera.getTexture(),
-            preview,
+            frameBounds,
             configuration.oppositeCopyRegions,
             showInterface);
+    }
+    viewFrame.end();
+
+    ofRectangle preview(0, 0, frameWidth, frameHeight);
+    preview.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
+    ofSetColor(255);
+    viewFrame.draw(preview);
+
+    if (rgbCamera.isFrameNew()) {
+        recording.captureFrame(viewFrame, configuration);
     }
 
     if (showInterface) {
         controls.draw();
         studyControls.draw();
+        recording.draw();
     }
 }
 
 void ofApp::exit() {
+    recording.exit();
     studyControls.exit();
     rgbCamera.close();
 }
