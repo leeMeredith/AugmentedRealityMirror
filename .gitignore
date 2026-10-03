@@ -1,0 +1,11 @@
+.DS_Store
+._*
+/build/
+/obj/
+DerivedData/
+*.app/
+*.dSYM/
+*.xcuserstate
+xcuserdata/
+/bin/*
+!/bin/data/
