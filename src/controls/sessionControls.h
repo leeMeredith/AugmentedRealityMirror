@@ -11,6 +11,7 @@ public:
 
     void setup();
     void update(const mirrorRegions::Selection& regions);
+    void recordPainScore(int selectedPainScore, const mirrorRegions::Selection& regions);
     void draw();
     void exit();
 
@@ -23,6 +24,7 @@ private:
     ofParameter<std::string> participantId;
     ofParameter<std::string> administratorId;
     ofParameter<int> painScore;
+    ofxLabel painKeysLabel;
     ofxButton startButton;
     ofxButton recordButton;
     ofxButton finishButton;

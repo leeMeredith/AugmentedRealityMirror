@@ -9,10 +9,10 @@ void mirrorControls::setup() {
 
     panel.setup("Mirror Regions");
     panel.setPosition(12.0f, 12.0f);
-    panel.add(topLeft.setup("1  Top left", false));
-    panel.add(topRight.setup("2  Top right", false));
-    panel.add(bottomLeft.setup("3  Bottom left", false));
-    panel.add(bottomRight.setup("4  Bottom right", false));
+    panel.add(topLeft.setup("Q  Top left", false));
+    panel.add(topRight.setup("W  Top right", false));
+    panel.add(bottomLeft.setup("A  Bottom left", false));
+    panel.add(bottomRight.setup("S  Bottom right", false));
     panel.add(clearButton.setup("Reset all"));
 }
 

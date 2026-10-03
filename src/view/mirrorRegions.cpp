@@ -5,10 +5,10 @@ constexpr std::size_t regionCount = 4;
 
 const char* regionLabel(std::size_t index) {
     static constexpr std::array<const char*, regionCount> labels{
-        "1  TOP LEFT",
-        "2  TOP RIGHT",
-        "3  BOTTOM LEFT",
-        "4  BOTTOM RIGHT"
+        "Q  TOP LEFT",
+        "W  TOP RIGHT",
+        "A  BOTTOM LEFT",
+        "S  BOTTOM RIGHT"
     };
     return labels.at(index);
 }
@@ -34,14 +34,15 @@ void mirrorRegions::draw(
     for (std::size_t index = 0; index < regionCount; ++index) {
         const std::size_t column = index % 2;
         const std::size_t row = index / 2;
-        const std::size_t sourceColumn = mirrored[index] ? 1 - column : column;
+        const bool useBaseMirror = !mirrored[index];
+        const std::size_t sourceColumn = useBaseMirror ? 1 - column : column;
 
         const float destinationX = bounds.getX() + column * destinationWidth;
         const float destinationY = bounds.getY() + row * destinationHeight;
         const float sourceX = sourceColumn * sourceWidth;
         const float sourceY = row * sourceHeight;
 
-        if (mirrored[index]) {
+        if (useBaseMirror) {
             ofPushMatrix();
             ofTranslate(destinationX + destinationWidth, destinationY);
             ofScale(-1.0f, 1.0f);
@@ -91,7 +92,7 @@ void mirrorRegions::draw(
             ofDrawRectangle(x + 2.0f, y + 2.0f, destinationWidth - 4.0f, destinationHeight - 4.0f);
         }
 
-        const std::string status = mirrored[index] ? "  MIRRORED" : "  LIVE";
+        const std::string status = mirrored[index] ? "  OPPOSITE COPY" : "  BASE MIRROR";
         ofDrawBitmapStringHighlight(
             std::string(regionLabel(index)) + status,
             x + 10.0f,

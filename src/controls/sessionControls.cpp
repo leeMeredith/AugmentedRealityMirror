@@ -20,6 +20,7 @@ void sessionControls::setup() {
     panel.add(participantId);
     panel.add(administratorId);
     panel.add(painScore);
+    panel.add(painKeysLabel.setup("Pain keys", "1-9, 0 = 10"));
     panel.add(startButton.setup("Start session"));
     panel.add(recordButton.setup("Record pain score"));
     panel.add(finishButton.setup("Finish and save"));
@@ -38,11 +39,7 @@ void sessionControls::update(const mirrorRegions::Selection& regions) {
 
     if (recordRequested) {
         recordRequested = false;
-        if (session.recordPain(painScore, regions)) {
-            statusLabel = "Recorded #" + ofToString(session.painScoreCount());
-        } else {
-            statusLabel = session.lastError();
-        }
+        recordPainScore(painScore.get(), regions);
     }
 
     if (finishRequested) {
@@ -52,6 +49,20 @@ void sessionControls::update(const mirrorRegions::Selection& regions) {
         } else {
             statusLabel = session.lastError();
         }
+    }
+}
+
+void sessionControls::recordPainScore(
+    int selectedPainScore,
+    const mirrorRegions::Selection& regions) {
+    const int score = ofClamp(selectedPainScore, 0, 10);
+    painScore = score;
+
+    if (session.recordPain(score, regions)) {
+        statusLabel = "Recorded " + ofToString(score)
+            + " (#" + ofToString(session.painScoreCount()) + ")";
+    } else {
+        statusLabel = session.lastError();
     }
 }
 

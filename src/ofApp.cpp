@@ -47,17 +47,31 @@ void ofApp::exit() {
 }
 
 void ofApp::keyPressed(int key) {
+    if (key >= '1' && key <= '9') {
+        studyControls.recordPainScore(key - '0', controls.selection());
+        return;
+    }
+
+    if (key == '0') {
+        studyControls.recordPainScore(10, controls.selection());
+        return;
+    }
+
     switch (key) {
-        case '1':
+        case 'q':
+        case 'Q':
             controls.toggle(mirrorRegions::Region::topLeft);
             break;
-        case '2':
+        case 'w':
+        case 'W':
             controls.toggle(mirrorRegions::Region::topRight);
             break;
-        case '3':
+        case 'a':
+        case 'A':
             controls.toggle(mirrorRegions::Region::bottomLeft);
             break;
-        case '4':
+        case 's':
+        case 'S':
             controls.toggle(mirrorRegions::Region::bottomRight);
             break;
         case 'r':
