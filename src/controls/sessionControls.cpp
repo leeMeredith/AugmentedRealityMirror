@@ -15,7 +15,7 @@ void sessionControls::setup() {
     recordButton.addListener(this, &sessionControls::recordPressed);
     finishButton.addListener(this, &sessionControls::finishPressed);
 
-    panel.setup("Study Session");
+    panel.setup("Study Session", "settings.json");
     panel.setPosition(230.0f, 12.0f);
     panel.add(participantId);
     panel.add(administratorId);

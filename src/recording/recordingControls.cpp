@@ -14,7 +14,7 @@ void recordingControls::setup() {
     startButton.addListener(this, &recordingControls::startPressed);
     stopButton.addListener(this, &recordingControls::stopPressed);
 
-    panel.setup("View Recording");
+    panel.setup("View Recording", "settings.json");
     panel.setPosition(448.0f, 12.0f);
     panel.add(formatLabel.setup("Format", "Silent MOV + JSON"));
     panel.add(startButton.setup("Start recording"));
@@ -168,7 +168,7 @@ bool recordingControls::saveMetadata(
     bool videoCompleted,
     const std::string& videoError) {
     ofJson json;
-    json["schemaVersion"] = 1;
+    json["schemaVersion"] = 2;
     json["videoFile"] = recordingId + ".mov";
     json["videoCompleted"] = videoCompleted;
     if (!videoError.empty()) {
@@ -197,8 +197,12 @@ bool recordingControls::configurationsMatch(
     const viewConfiguration& second) {
     return first.mode == second.mode
         && first.oppositeCopyRegions == second.oppositeCopyRegions
-        && first.mirrorOnLeft == second.mirrorOnLeft
-        && std::abs(first.dividerPosition - second.dividerPosition) < 0.001f;
+        && first.splitDirection == second.splitDirection
+        && first.mirrorOnFirstSide == second.mirrorOnFirstSide
+        && std::abs(
+            first.verticalDividerPosition - second.verticalDividerPosition) < 0.001f
+        && std::abs(
+            first.horizontalDividerPosition - second.horizontalDividerPosition) < 0.001f;
 }
 
 ofJson recordingControls::configurationJson(const viewConfiguration& configuration) {
@@ -206,8 +210,18 @@ ofJson recordingControls::configurationJson(const viewConfiguration& configurati
     json["mode"] = configuration.mode == rgbViewMode::splitScreen
         ? "splitScreen"
         : "regionalMirror";
-    json["mirrorOnLeft"] = configuration.mirrorOnLeft;
-    json["dividerPosition"] = configuration.dividerPosition;
+    const bool horizontalSplit = configuration.splitDirection
+        == splitOrientation::horizontal;
+    json["splitOrientation"] = horizontalSplit ? "horizontal" : "vertical";
+    json["mirrorOnFirstSide"] = configuration.mirrorOnFirstSide;
+    json["mirrorSide"] = horizontalSplit
+        ? (configuration.mirrorOnFirstSide ? "top" : "bottom")
+        : (configuration.mirrorOnFirstSide ? "left" : "right");
+    json["activeDividerPosition"] = horizontalSplit
+        ? configuration.horizontalDividerPosition
+        : configuration.verticalDividerPosition;
+    json["verticalDividerPosition"] = configuration.verticalDividerPosition;
+    json["horizontalDividerPosition"] = configuration.horizontalDividerPosition;
     json["oppositeCopyRegions"]["topLeft"] = configuration.oppositeCopyRegions[0];
     json["oppositeCopyRegions"]["topRight"] = configuration.oppositeCopyRegions[1];
     json["oppositeCopyRegions"]["bottomLeft"] = configuration.oppositeCopyRegions[2];

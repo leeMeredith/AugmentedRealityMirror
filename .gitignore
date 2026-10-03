@@ -11,3 +11,5 @@ xcuserdata/
 !/bin/data/
 /bin/data/sessions/
 /bin/data/recordings/
+/bin/data/settings.json
+/bin/data/settings.xml

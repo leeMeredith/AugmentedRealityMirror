@@ -100,7 +100,7 @@ std::string studySession::newSessionId() {
 
 ofJson studySession::makeJson(const std::string& endedAt) const {
     ofJson json;
-    json["schemaVersion"] = 2;
+    json["schemaVersion"] = 3;
     json["application"]["name"] = "AugmentedRealityMirrorRGB";
     json["application"]["cameraMode"] = "RGB";
 
@@ -123,8 +123,23 @@ ofJson studySession::makeJson(const std::string& endedAt) const {
         entry["view"]["mode"] = measurement.configuration.mode == rgbViewMode::splitScreen
             ? "splitScreen"
             : "regionalMirror";
-        entry["view"]["mirrorOnLeft"] = measurement.configuration.mirrorOnLeft;
-        entry["view"]["dividerPosition"] = measurement.configuration.dividerPosition;
+        const bool horizontalSplit = measurement.configuration.splitDirection
+            == splitOrientation::horizontal;
+        entry["view"]["splitOrientation"] = horizontalSplit
+            ? "horizontal"
+            : "vertical";
+        entry["view"]["mirrorOnFirstSide"] =
+            measurement.configuration.mirrorOnFirstSide;
+        entry["view"]["mirrorSide"] = horizontalSplit
+            ? (measurement.configuration.mirrorOnFirstSide ? "top" : "bottom")
+            : (measurement.configuration.mirrorOnFirstSide ? "left" : "right");
+        entry["view"]["activeDividerPosition"] = horizontalSplit
+            ? measurement.configuration.horizontalDividerPosition
+            : measurement.configuration.verticalDividerPosition;
+        entry["view"]["verticalDividerPosition"] =
+            measurement.configuration.verticalDividerPosition;
+        entry["view"]["horizontalDividerPosition"] =
+            measurement.configuration.horizontalDividerPosition;
         entry["view"]["oppositeCopyRegions"]["topLeft"] =
             measurement.configuration.oppositeCopyRegions[0];
         entry["view"]["oppositeCopyRegions"]["topRight"] =
