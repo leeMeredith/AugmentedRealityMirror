@@ -1,81 +1,32 @@
 #include "ofApp.h"
 
-//--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::setup() {
+    ofSetVerticalSync(true);
+    ofBackground(0);
 
+    if (!rgbCamera.setup(0, 640, 480, 30)) {
+        ofLogError("ofApp") << "Unable to initialize RGB camera device 0";
+    }
 }
 
-//--------------------------------------------------------------
-void ofApp::update(){
-
+void ofApp::update() {
+    rgbCamera.update();
 }
 
-//--------------------------------------------------------------
-void ofApp::draw(){
+void ofApp::draw() {
+    if (!rgbCamera.isReady()) {
+        ofSetColor(255);
+        ofDrawBitmapString("Waiting for RGB camera...", 20, 30);
+        return;
+    }
 
+    ofRectangle preview(0, 0, rgbCamera.getWidth(), rgbCamera.getHeight());
+    preview.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
+
+    ofSetColor(255);
+    rgbCamera.getTexture().draw(preview.x, preview.y, preview.width, preview.height);
 }
 
-//--------------------------------------------------------------
-void ofApp::exit(){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+void ofApp::exit() {
+    rgbCamera.close();
 }
