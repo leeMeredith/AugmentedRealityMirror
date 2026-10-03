@@ -15,8 +15,12 @@ void ofApp::setup() {
 void ofApp::update() {
     rgbCamera.update();
 
+    studyControls.update(controls.configuration());
+    if (const auto loadedConfiguration = studyControls.takeLoadedConfiguration()) {
+        controls.applyConfiguration(*loadedConfiguration);
+    }
+
     const auto configuration = controls.configuration();
-    studyControls.update(configuration);
     recording.update(
         rgbCamera.isReady() ? static_cast<int>(rgbCamera.getWidth()) : 0,
         rgbCamera.isReady() ? static_cast<int>(rgbCamera.getHeight()) : 0,
@@ -83,7 +87,7 @@ void ofApp::draw() {
 
 void ofApp::exit() {
     recording.exit();
-    studyControls.exit();
+    studyControls.exit(controls.configuration());
     rgbCamera.close();
 }
 

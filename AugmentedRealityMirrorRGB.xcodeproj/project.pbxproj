@@ -4,6 +4,13 @@
 	"classes": {},
 	"objectVersion": "54",
 	"objects": {
+		"A17000000000000000000001": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "viewConfigurationJson.h",
+			"sourceTree": "<group>"
+		},
 		"A16000000000000000000001": {
 			"fileRef": "A16000000000000000000002",
 			"isa": "PBXBuildFile"
@@ -177,7 +184,8 @@
 				"A11000000000000000000003",
 				"A15000000000000000000002",
 				"A15000000000000000000003",
-				"A15000000000000000000004"
+				"A15000000000000000000004",
+				"A17000000000000000000001"
 			],
 			"isa": "PBXGroup",
 			"name": "view",

@@ -14,6 +14,7 @@ public:
     void toggle(mirrorRegions::Region region);
     void toggleSplitScreen();
     void clear();
+    void applyConfiguration(const viewConfiguration& configuration);
 
     viewConfiguration configuration();
 

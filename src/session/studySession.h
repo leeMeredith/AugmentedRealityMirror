@@ -8,9 +8,24 @@
 
 class studySession {
 public:
-    bool start(const std::string& participantId, const std::string& administratorId);
+    struct Continuation {
+        std::string participantId;
+        std::string previousSessionId;
+        viewConfiguration configuration;
+    };
+
+    static bool loadContinuation(
+        const std::string& filePath,
+        Continuation& continuation,
+        std::string& error);
+
+    bool start(
+        const std::string& participantId,
+        const std::string& administratorId,
+        const viewConfiguration& configuration,
+        const std::string& previousSessionId = "");
     bool recordPain(int painScore, const viewConfiguration& configuration);
-    bool finishAndSave();
+    bool finishAndSave(const viewConfiguration& configuration);
 
     bool isActive() const;
     std::size_t painScoreCount() const;
@@ -34,7 +49,10 @@ private:
     std::string sessionId;
     std::string participantId;
     std::string administratorId;
+    std::string previousSessionId;
     std::string startedAt;
+    viewConfiguration initialConfiguration;
+    viewConfiguration finalConfiguration;
     std::vector<PainMeasurement> measurements;
     std::string error;
     std::string savedPath;

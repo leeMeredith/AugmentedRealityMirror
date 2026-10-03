@@ -71,6 +71,20 @@ void mirrorControls::clear() {
     bottomRight = false;
 }
 
+void mirrorControls::applyConfiguration(const viewConfiguration& configuration) {
+    splitScreen = configuration.mode == rgbViewMode::splitScreen;
+    horizontalDivider = configuration.splitDirection == splitOrientation::horizontal;
+    mirrorOnFirstSide = configuration.mirrorOnFirstSide;
+    verticalDividerPosition = configuration.verticalDividerPosition;
+    horizontalDividerPosition = configuration.horizontalDividerPosition;
+    regionVerticalDividerPosition = configuration.regionVerticalDividerPosition;
+    regionHorizontalDividerPosition = configuration.regionHorizontalDividerPosition;
+    topLeft = configuration.oppositeCopyRegions[0];
+    topRight = configuration.oppositeCopyRegions[1];
+    bottomLeft = configuration.oppositeCopyRegions[2];
+    bottomRight = configuration.oppositeCopyRegions[3];
+}
+
 viewConfiguration mirrorControls::configuration() {
     viewConfiguration result;
     result.mode = splitScreen ? rgbViewMode::splitScreen : rgbViewMode::regionalMirror;

@@ -35,10 +35,6 @@ private:
     void appendConfiguration(const viewConfiguration& configuration);
     bool saveMetadata(bool videoCompleted, const std::string& videoError);
 
-    static bool configurationsMatch(
-        const viewConfiguration& first,
-        const viewConfiguration& second);
-    static ofJson configurationJson(const viewConfiguration& configuration);
     static std::string currentTimestamp();
     static std::string newRecordingId();
 

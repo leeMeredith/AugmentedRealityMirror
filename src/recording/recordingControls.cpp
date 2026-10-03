@@ -1,6 +1,5 @@
 #include "recordingControls.h"
-
-#include <cmath>
+#include "view/viewConfigurationJson.h"
 
 recordingControls::~recordingControls() {
     if (recorder.isRecording()) {
@@ -150,7 +149,8 @@ void recordingControls::stopRecording() {
 }
 
 void recordingControls::appendConfiguration(const viewConfiguration& configuration) {
-    if (hasLastConfiguration && configurationsMatch(lastConfiguration, configuration)) {
+    if (hasLastConfiguration
+        && viewConfigurationJson::matches(lastConfiguration, configuration)) {
         return;
     }
 
@@ -184,59 +184,12 @@ bool recordingControls::saveMetadata(
     json["configurationTimeline"] = ofJson::array();
 
     for (const auto& event : configurationTimeline) {
-        ofJson entry = configurationJson(event.configuration);
+        ofJson entry = viewConfigurationJson::make(event.configuration);
         entry["elapsedSeconds"] = event.elapsedSeconds;
         json["configurationTimeline"].push_back(entry);
     }
 
     return ofSavePrettyJson(metadataPath, json);
-}
-
-bool recordingControls::configurationsMatch(
-    const viewConfiguration& first,
-    const viewConfiguration& second) {
-    return first.mode == second.mode
-        && first.oppositeCopyRegions == second.oppositeCopyRegions
-        && first.splitDirection == second.splitDirection
-        && first.mirrorOnFirstSide == second.mirrorOnFirstSide
-        && std::abs(
-            first.verticalDividerPosition - second.verticalDividerPosition) < 0.001f
-        && std::abs(
-            first.horizontalDividerPosition - second.horizontalDividerPosition) < 0.001f
-        && std::abs(
-            first.regionVerticalDividerPosition
-                - second.regionVerticalDividerPosition) < 0.001f
-        && std::abs(
-            first.regionHorizontalDividerPosition
-                - second.regionHorizontalDividerPosition) < 0.001f;
-}
-
-ofJson recordingControls::configurationJson(const viewConfiguration& configuration) {
-    ofJson json;
-    json["mode"] = configuration.mode == rgbViewMode::splitScreen
-        ? "splitScreen"
-        : "regionalMirror";
-    const bool horizontalSplit = configuration.splitDirection
-        == splitOrientation::horizontal;
-    json["splitOrientation"] = horizontalSplit ? "horizontal" : "vertical";
-    json["mirrorOnFirstSide"] = configuration.mirrorOnFirstSide;
-    json["mirrorSide"] = horizontalSplit
-        ? (configuration.mirrorOnFirstSide ? "top" : "bottom")
-        : (configuration.mirrorOnFirstSide ? "left" : "right");
-    json["activeDividerPosition"] = horizontalSplit
-        ? configuration.horizontalDividerPosition
-        : configuration.verticalDividerPosition;
-    json["verticalDividerPosition"] = configuration.verticalDividerPosition;
-    json["horizontalDividerPosition"] = configuration.horizontalDividerPosition;
-    json["regionVerticalDividerPosition"] =
-        configuration.regionVerticalDividerPosition;
-    json["regionHorizontalDividerPosition"] =
-        configuration.regionHorizontalDividerPosition;
-    json["oppositeCopyRegions"]["topLeft"] = configuration.oppositeCopyRegions[0];
-    json["oppositeCopyRegions"]["topRight"] = configuration.oppositeCopyRegions[1];
-    json["oppositeCopyRegions"]["bottomLeft"] = configuration.oppositeCopyRegions[2];
-    json["oppositeCopyRegions"]["bottomRight"] = configuration.oppositeCopyRegions[3];
-    return json;
 }
 
 std::string recordingControls::currentTimestamp() {

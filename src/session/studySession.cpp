@@ -1,8 +1,85 @@
 #include "studySession.h"
+#include "view/viewConfigurationJson.h"
+
+bool studySession::loadContinuation(
+    const std::string& filePath,
+    Continuation& continuation,
+    std::string& loadError) {
+    loadError.clear();
+
+    try {
+        const ofJson json = ofLoadJson(filePath);
+        if (!json.is_object() || !json.contains("session")) {
+            loadError = "The selected file is not a study session";
+            return false;
+        }
+
+        const auto& savedSession = json.at("session");
+        continuation.participantId = savedSession.value("participantId", "");
+        continuation.previousSessionId = savedSession.value("id", "");
+        if (continuation.participantId.empty()
+            || continuation.previousSessionId.empty()) {
+            loadError = "The selected session is missing its participant or session ID";
+            return false;
+        }
+
+        const ofJson* savedView = nullptr;
+        ofJson legacyView;
+        if (savedSession.contains("viewAtEnd")
+            && savedSession.at("viewAtEnd").is_object()) {
+            savedView = &savedSession.at("viewAtEnd");
+        } else if (json.contains("measurements")
+            && json.at("measurements").is_array()) {
+            const auto& measurements = json.at("measurements");
+            for (auto entry = measurements.rbegin(); entry != measurements.rend(); ++entry) {
+                if (entry->contains("view") && entry->at("view").is_object()) {
+                    savedView = &entry->at("view");
+                    break;
+                }
+                if (entry->contains("mirrorRegions")
+                    && entry->at("mirrorRegions").is_object()) {
+                    const auto& legacyRegions = entry->at("mirrorRegions");
+                    legacyView["mode"] = "regionalMirror";
+                    legacyView["oppositeCopyRegions"]["topLeft"] =
+                        !legacyRegions.value("topLeft", false);
+                    legacyView["oppositeCopyRegions"]["topRight"] =
+                        !legacyRegions.value("topRight", false);
+                    legacyView["oppositeCopyRegions"]["bottomLeft"] =
+                        !legacyRegions.value("bottomLeft", false);
+                    legacyView["oppositeCopyRegions"]["bottomRight"] =
+                        !legacyRegions.value("bottomRight", false);
+                    savedView = &legacyView;
+                    break;
+                }
+            }
+        }
+
+        if (savedView == nullptr
+            && savedSession.contains("viewAtStart")
+            && savedSession.at("viewAtStart").is_object()) {
+            savedView = &savedSession.at("viewAtStart");
+        }
+        if (savedView == nullptr) {
+            loadError = "The selected session has no saved view settings";
+            return false;
+        }
+
+        return viewConfigurationJson::read(
+            *savedView,
+            continuation.configuration,
+            loadError);
+    } catch (const std::exception& exception) {
+        loadError = "Could not load the selected session: ";
+        loadError += exception.what();
+        return false;
+    }
+}
 
 bool studySession::start(
     const std::string& requestedParticipantId,
-    const std::string& requestedAdministratorId) {
+    const std::string& requestedAdministratorId,
+    const viewConfiguration& configuration,
+    const std::string& requestedPreviousSessionId) {
     error.clear();
     savedPath.clear();
 
@@ -23,7 +100,10 @@ bool studySession::start(
     sessionId = newSessionId();
     participantId = cleanParticipantId;
     administratorId = cleanAdministratorId;
+    previousSessionId = requestedPreviousSessionId;
     startedAt = currentTimestamp();
+    initialConfiguration = configuration;
+    finalConfiguration = configuration;
     measurements.clear();
     return true;
 }
@@ -46,7 +126,7 @@ bool studySession::recordPain(
     return true;
 }
 
-bool studySession::finishAndSave() {
+bool studySession::finishAndSave(const viewConfiguration& configuration) {
     error.clear();
     savedPath.clear();
     if (!active) {
@@ -54,6 +134,7 @@ bool studySession::finishAndSave() {
         return false;
     }
 
+    finalConfiguration = configuration;
     const std::string directoryPath = ofToDataPath("sessions", true);
     if (!ofDirectory::doesDirectoryExist(directoryPath, false)
         && !ofDirectory::createDirectory(directoryPath, false, true)) {
@@ -89,7 +170,15 @@ const std::string& studySession::lastSavedPath() const {
 }
 
 std::string studySession::currentTimestamp() {
-    return ofGetTimestampString("%Y-%m-%dT%H:%M:%S%z");
+    std::string timestamp = ofGetTimestampString("%Y-%m-%dT%H:%M:%S%z");
+    if (timestamp.size() >= 5) {
+        const std::size_t offsetStart = timestamp.size() - 5;
+        if ((timestamp[offsetStart] == '+' || timestamp[offsetStart] == '-')
+            && timestamp[timestamp.size() - 3] != ':') {
+            timestamp.insert(timestamp.size() - 2, ":");
+        }
+    }
+    return timestamp;
 }
 
 std::string studySession::newSessionId() {
@@ -100,7 +189,7 @@ std::string studySession::newSessionId() {
 
 ofJson studySession::makeJson(const std::string& endedAt) const {
     ofJson json;
-    json["schemaVersion"] = 4;
+    json["schemaVersion"] = 5;
     json["application"]["name"] = "AugmentedRealityMirrorRGB";
     json["application"]["cameraMode"] = "RGB";
 
@@ -109,9 +198,17 @@ ofJson studySession::makeJson(const std::string& endedAt) const {
     json["session"]["administratorId"] = administratorId;
     json["session"]["startedAt"] = startedAt;
     json["session"]["endedAt"] = endedAt;
+    if (!previousSessionId.empty()) {
+        json["session"]["continuedFromSessionId"] = previousSessionId;
+    }
+    json["session"]["viewAtStart"] =
+        viewConfigurationJson::make(initialConfiguration);
+    json["session"]["viewAtEnd"] =
+        viewConfigurationJson::make(finalConfiguration);
 
     json["measurements"] = ofJson::array();
     ofJson chartSource = ofJson::array();
+    ofJson longitudinalSource = ofJson::array();
 
     for (std::size_t index = 0; index < measurements.size(); ++index) {
         const auto& measurement = measurements[index];
@@ -120,41 +217,16 @@ ofJson studySession::makeJson(const std::string& endedAt) const {
         entry["recordedAt"] = measurement.recordedAt;
         entry["elapsedSeconds"] = measurement.elapsedSeconds;
         entry["painScore"] = measurement.painScore;
-        entry["view"]["mode"] = measurement.configuration.mode == rgbViewMode::splitScreen
-            ? "splitScreen"
-            : "regionalMirror";
-        const bool horizontalSplit = measurement.configuration.splitDirection
-            == splitOrientation::horizontal;
-        entry["view"]["splitOrientation"] = horizontalSplit
-            ? "horizontal"
-            : "vertical";
-        entry["view"]["mirrorOnFirstSide"] =
-            measurement.configuration.mirrorOnFirstSide;
-        entry["view"]["mirrorSide"] = horizontalSplit
-            ? (measurement.configuration.mirrorOnFirstSide ? "top" : "bottom")
-            : (measurement.configuration.mirrorOnFirstSide ? "left" : "right");
-        entry["view"]["activeDividerPosition"] = horizontalSplit
-            ? measurement.configuration.horizontalDividerPosition
-            : measurement.configuration.verticalDividerPosition;
-        entry["view"]["verticalDividerPosition"] =
-            measurement.configuration.verticalDividerPosition;
-        entry["view"]["horizontalDividerPosition"] =
-            measurement.configuration.horizontalDividerPosition;
-        entry["view"]["regionVerticalDividerPosition"] =
-            measurement.configuration.regionVerticalDividerPosition;
-        entry["view"]["regionHorizontalDividerPosition"] =
-            measurement.configuration.regionHorizontalDividerPosition;
-        entry["view"]["oppositeCopyRegions"]["topLeft"] =
-            measurement.configuration.oppositeCopyRegions[0];
-        entry["view"]["oppositeCopyRegions"]["topRight"] =
-            measurement.configuration.oppositeCopyRegions[1];
-        entry["view"]["oppositeCopyRegions"]["bottomLeft"] =
-            measurement.configuration.oppositeCopyRegions[2];
-        entry["view"]["oppositeCopyRegions"]["bottomRight"] =
-            measurement.configuration.oppositeCopyRegions[3];
+        entry["view"] = viewConfigurationJson::make(measurement.configuration);
         json["measurements"].push_back(entry);
 
         chartSource.push_back({measurement.elapsedSeconds, measurement.painScore});
+        longitudinalSource.push_back({
+            measurement.recordedAt,
+            measurement.painScore,
+            sessionId,
+            measurement.elapsedSeconds
+        });
     }
 
     json["echarts"]["dataset"]["dimensions"] = {"elapsedSeconds", "painScore"};
@@ -174,6 +246,14 @@ ofJson studySession::makeJson(const std::string& endedAt) const {
         {"name", "Pain score"},
         {"encode", {{"x", "elapsedSeconds"}, {"y", "painScore"}}}
     }});
+
+    json["echarts"]["longitudinalDataset"]["dimensions"] = {
+        "recordedAt",
+        "painScore",
+        "sessionId",
+        "elapsedSeconds"
+    };
+    json["echarts"]["longitudinalDataset"]["source"] = longitudinalSource;
 
     return json;
 }
