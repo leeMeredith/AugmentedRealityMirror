@@ -17,4 +17,5 @@ private:
     captureRGB rgbCamera;
     mirrorRegions regionView;
     mirrorControls controls;
+    bool showInterface = true;
 };

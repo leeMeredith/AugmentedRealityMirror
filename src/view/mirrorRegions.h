@@ -20,5 +20,6 @@ public:
     void draw(
         const ofTexture& texture,
         const ofRectangle& bounds,
-        const Selection& mirrored) const;
+        const Selection& mirrored,
+        bool showOverlay) const;
 };

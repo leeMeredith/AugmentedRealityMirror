@@ -17,7 +17,8 @@ const char* regionLabel(std::size_t index) {
 void mirrorRegions::draw(
     const ofTexture& texture,
     const ofRectangle& bounds,
-    const Selection& mirrored) const {
+    const Selection& mirrored,
+    bool showOverlay) const {
     if (!texture.isAllocated() || bounds.isEmpty()) {
         return;
     }
@@ -65,6 +66,11 @@ void mirrorRegions::draw(
                 sourceWidth,
                 sourceHeight);
         }
+    }
+
+    if (!showOverlay) {
+        ofPopStyle();
+        return;
     }
 
     ofSetLineWidth(1.0f);

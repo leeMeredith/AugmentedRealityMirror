@@ -18,14 +18,23 @@ void ofApp::draw() {
     if (!rgbCamera.isReady()) {
         ofSetColor(255);
         ofDrawBitmapString("Waiting for RGB camera...", 20, 30);
-        controls.draw();
+        if (showInterface) {
+            controls.draw();
+        }
         return;
     }
 
     ofRectangle preview(0, 0, rgbCamera.getWidth(), rgbCamera.getHeight());
     preview.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
-    regionView.draw(rgbCamera.getTexture(), preview, controls.selection());
-    controls.draw();
+    regionView.draw(
+        rgbCamera.getTexture(),
+        preview,
+        controls.selection(),
+        showInterface);
+
+    if (showInterface) {
+        controls.draw();
+    }
 }
 
 void ofApp::exit() {
@@ -49,6 +58,14 @@ void ofApp::keyPressed(int key) {
         case 'r':
         case 'R':
             controls.clear();
+            break;
+        case 'f':
+        case 'F':
+            ofToggleFullscreen();
+            break;
+        case 'h':
+        case 'H':
+            showInterface = !showInterface;
             break;
         default:
             break;
