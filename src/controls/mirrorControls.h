@@ -19,7 +19,8 @@ public:
 
 private:
     void clearPressed();
-    void resetDividersPressed();
+    void resetSplitDividersPressed();
+    void resetRegionDividersPressed();
 
     ofxPanel panel;
     ofxToggle splitScreen;
@@ -27,7 +28,10 @@ private:
     ofxToggle mirrorOnFirstSide;
     ofxFloatSlider verticalDividerPosition;
     ofxFloatSlider horizontalDividerPosition;
-    ofxButton resetDividersButton;
+    ofxButton resetSplitDividersButton;
+    ofxFloatSlider regionVerticalDividerPosition;
+    ofxFloatSlider regionHorizontalDividerPosition;
+    ofxButton resetRegionDividersButton;
     ofxToggle topLeft;
     ofxToggle topRight;
     ofxToggle bottomLeft;

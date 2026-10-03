@@ -100,7 +100,7 @@ std::string studySession::newSessionId() {
 
 ofJson studySession::makeJson(const std::string& endedAt) const {
     ofJson json;
-    json["schemaVersion"] = 3;
+    json["schemaVersion"] = 4;
     json["application"]["name"] = "AugmentedRealityMirrorRGB";
     json["application"]["cameraMode"] = "RGB";
 
@@ -140,6 +140,10 @@ ofJson studySession::makeJson(const std::string& endedAt) const {
             measurement.configuration.verticalDividerPosition;
         entry["view"]["horizontalDividerPosition"] =
             measurement.configuration.horizontalDividerPosition;
+        entry["view"]["regionVerticalDividerPosition"] =
+            measurement.configuration.regionVerticalDividerPosition;
+        entry["view"]["regionHorizontalDividerPosition"] =
+            measurement.configuration.regionHorizontalDividerPosition;
         entry["view"]["oppositeCopyRegions"]["topLeft"] =
             measurement.configuration.oppositeCopyRegions[0];
         entry["view"]["oppositeCopyRegions"]["topRight"] =

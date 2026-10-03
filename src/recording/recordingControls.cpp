@@ -168,7 +168,7 @@ bool recordingControls::saveMetadata(
     bool videoCompleted,
     const std::string& videoError) {
     ofJson json;
-    json["schemaVersion"] = 2;
+    json["schemaVersion"] = 3;
     json["videoFile"] = recordingId + ".mov";
     json["videoCompleted"] = videoCompleted;
     if (!videoError.empty()) {
@@ -202,7 +202,13 @@ bool recordingControls::configurationsMatch(
         && std::abs(
             first.verticalDividerPosition - second.verticalDividerPosition) < 0.001f
         && std::abs(
-            first.horizontalDividerPosition - second.horizontalDividerPosition) < 0.001f;
+            first.horizontalDividerPosition - second.horizontalDividerPosition) < 0.001f
+        && std::abs(
+            first.regionVerticalDividerPosition
+                - second.regionVerticalDividerPosition) < 0.001f
+        && std::abs(
+            first.regionHorizontalDividerPosition
+                - second.regionHorizontalDividerPosition) < 0.001f;
 }
 
 ofJson recordingControls::configurationJson(const viewConfiguration& configuration) {
@@ -222,6 +228,10 @@ ofJson recordingControls::configurationJson(const viewConfiguration& configurati
         : configuration.verticalDividerPosition;
     json["verticalDividerPosition"] = configuration.verticalDividerPosition;
     json["horizontalDividerPosition"] = configuration.horizontalDividerPosition;
+    json["regionVerticalDividerPosition"] =
+        configuration.regionVerticalDividerPosition;
+    json["regionHorizontalDividerPosition"] =
+        configuration.regionHorizontalDividerPosition;
     json["oppositeCopyRegions"]["topLeft"] = configuration.oppositeCopyRegions[0];
     json["oppositeCopyRegions"]["topRight"] = configuration.oppositeCopyRegions[1];
     json["oppositeCopyRegions"]["bottomLeft"] = configuration.oppositeCopyRegions[2];

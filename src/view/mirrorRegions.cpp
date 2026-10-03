@@ -18,15 +18,25 @@ void mirrorRegions::draw(
     const ofTexture& texture,
     const ofRectangle& bounds,
     const Selection& mirrored,
+    float verticalDividerPosition,
+    float horizontalDividerPosition,
     bool showOverlay) const {
     if (!texture.isAllocated() || bounds.isEmpty()) {
         return;
     }
 
-    const float destinationWidth = bounds.getWidth() * 0.5f;
-    const float destinationHeight = bounds.getHeight() * 0.5f;
-    const float sourceWidth = texture.getWidth() * 0.5f;
-    const float sourceHeight = texture.getHeight() * 0.5f;
+    const float verticalDivider = ofClamp(verticalDividerPosition, 0.05f, 0.95f);
+    const float horizontalDivider = ofClamp(horizontalDividerPosition, 0.05f, 0.95f);
+    const float destinationLeftWidth = bounds.getWidth() * verticalDivider;
+    const float destinationRightWidth = bounds.getWidth() - destinationLeftWidth;
+    const float destinationTopHeight = bounds.getHeight() * horizontalDivider;
+    const float destinationBottomHeight = bounds.getHeight() - destinationTopHeight;
+    const float sourceLeftWidth = texture.getWidth() * verticalDivider;
+    const float sourceRightWidth = texture.getWidth() - sourceLeftWidth;
+    const float sourceTopHeight = texture.getHeight() * horizontalDivider;
+    const float sourceBottomHeight = texture.getHeight() - sourceTopHeight;
+    const float dividerX = bounds.getX() + destinationLeftWidth;
+    const float dividerY = bounds.getY() + destinationTopHeight;
 
     ofPushStyle();
     ofSetColor(255);
@@ -35,12 +45,20 @@ void mirrorRegions::draw(
         const std::size_t column = index % 2;
         const std::size_t row = index / 2;
         const bool useBaseMirror = !mirrored[index];
-        const std::size_t sourceColumn = useBaseMirror ? 1 - column : column;
-
-        const float destinationX = bounds.getX() + column * destinationWidth;
-        const float destinationY = bounds.getY() + row * destinationHeight;
-        const float sourceX = sourceColumn * sourceWidth;
-        const float sourceY = row * sourceHeight;
+        const float destinationWidth = column == 0
+            ? destinationLeftWidth
+            : destinationRightWidth;
+        const float destinationHeight = row == 0
+            ? destinationTopHeight
+            : destinationBottomHeight;
+        const float destinationX = column == 0 ? bounds.getX() : dividerX;
+        const float destinationY = row == 0 ? bounds.getY() : dividerY;
+        const float sourceWidth = column == 0 ? sourceLeftWidth : sourceRightWidth;
+        const float sourceHeight = row == 0 ? sourceTopHeight : sourceBottomHeight;
+        const float sourceY = row == 0 ? 0.0f : sourceTopHeight;
+        const float sourceX = useBaseMirror
+            ? (column == 0 ? texture.getWidth() - sourceWidth : 0.0f)
+            : (column == 0 ? 0.0f : sourceLeftWidth);
 
         if (useBaseMirror) {
             ofPushMatrix();
@@ -76,14 +94,20 @@ void mirrorRegions::draw(
 
     ofSetLineWidth(1.0f);
     ofSetColor(255, 180);
-    ofDrawLine(bounds.getCenter().x, bounds.getTop(), bounds.getCenter().x, bounds.getBottom());
-    ofDrawLine(bounds.getLeft(), bounds.getCenter().y, bounds.getRight(), bounds.getCenter().y);
+    ofDrawLine(dividerX, bounds.getTop(), dividerX, bounds.getBottom());
+    ofDrawLine(bounds.getLeft(), dividerY, bounds.getRight(), dividerY);
 
     for (std::size_t index = 0; index < regionCount; ++index) {
         const std::size_t column = index % 2;
         const std::size_t row = index / 2;
-        const float x = bounds.getX() + column * destinationWidth;
-        const float y = bounds.getY() + row * destinationHeight;
+        const float destinationWidth = column == 0
+            ? destinationLeftWidth
+            : destinationRightWidth;
+        const float destinationHeight = row == 0
+            ? destinationTopHeight
+            : destinationBottomHeight;
+        const float x = column == 0 ? bounds.getX() : dividerX;
+        const float y = row == 0 ? bounds.getY() : dividerY;
 
         if (mirrored[index]) {
             ofNoFill();

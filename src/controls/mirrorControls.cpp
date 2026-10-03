@@ -2,21 +2,34 @@
 
 mirrorControls::~mirrorControls() {
     clearButton.removeListener(this, &mirrorControls::clearPressed);
-    resetDividersButton.removeListener(this, &mirrorControls::resetDividersPressed);
+    resetSplitDividersButton.removeListener(
+        this,
+        &mirrorControls::resetSplitDividersPressed);
+    resetRegionDividersButton.removeListener(
+        this,
+        &mirrorControls::resetRegionDividersPressed);
 }
 
 void mirrorControls::setup() {
     clearButton.addListener(this, &mirrorControls::clearPressed);
-    resetDividersButton.addListener(this, &mirrorControls::resetDividersPressed);
+    resetSplitDividersButton.addListener(
+        this,
+        &mirrorControls::resetSplitDividersPressed);
+    resetRegionDividersButton.addListener(
+        this,
+        &mirrorControls::resetRegionDividersPressed);
 
     panel.setup("View Controls", "settings.json");
     panel.setPosition(12.0f, 12.0f);
     panel.add(splitScreen.setup("V  Split screen", false));
     panel.add(horizontalDivider.setup("Horizontal divider", false));
     panel.add(mirrorOnFirstSide.setup("Mirror left / top", false));
-    panel.add(verticalDividerPosition.setup("Vertical position", 0.5f, 0.2f, 0.8f));
-    panel.add(horizontalDividerPosition.setup("Horizontal position", 0.5f, 0.2f, 0.8f));
-    panel.add(resetDividersButton.setup("Center both dividers"));
+    panel.add(verticalDividerPosition.setup("Split vertical", 0.5f, 0.2f, 0.8f));
+    panel.add(horizontalDividerPosition.setup("Split horizontal", 0.5f, 0.2f, 0.8f));
+    panel.add(resetSplitDividersButton.setup("Center split dividers"));
+    panel.add(regionVerticalDividerPosition.setup("Quad vertical", 0.5f, 0.2f, 0.8f));
+    panel.add(regionHorizontalDividerPosition.setup("Quad horizontal", 0.5f, 0.2f, 0.8f));
+    panel.add(resetRegionDividersButton.setup("Center quad dividers"));
     panel.add(topLeft.setup("Q  Top left", false));
     panel.add(topRight.setup("W  Top right", false));
     panel.add(bottomLeft.setup("A  Bottom left", false));
@@ -68,6 +81,8 @@ viewConfiguration mirrorControls::configuration() {
     result.mirrorOnFirstSide = mirrorOnFirstSide;
     result.verticalDividerPosition = verticalDividerPosition;
     result.horizontalDividerPosition = horizontalDividerPosition;
+    result.regionVerticalDividerPosition = regionVerticalDividerPosition;
+    result.regionHorizontalDividerPosition = regionHorizontalDividerPosition;
     return result;
 }
 
@@ -75,7 +90,12 @@ void mirrorControls::clearPressed() {
     clear();
 }
 
-void mirrorControls::resetDividersPressed() {
+void mirrorControls::resetSplitDividersPressed() {
     verticalDividerPosition = 0.5f;
     horizontalDividerPosition = 0.5f;
+}
+
+void mirrorControls::resetRegionDividersPressed() {
+    regionVerticalDividerPosition = 0.5f;
+    regionHorizontalDividerPosition = 0.5f;
 }

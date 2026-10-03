@@ -21,4 +21,6 @@ struct viewConfiguration {
     bool mirrorOnFirstSide = false;
     float verticalDividerPosition = 0.5f;
     float horizontalDividerPosition = 0.5f;
+    float regionVerticalDividerPosition = 0.5f;
+    float regionHorizontalDividerPosition = 0.5f;
 };

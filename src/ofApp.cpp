@@ -59,6 +59,8 @@ void ofApp::draw() {
             rgbCamera.getTexture(),
             frameBounds,
             configuration.oppositeCopyRegions,
+            configuration.regionVerticalDividerPosition,
+            configuration.regionHorizontalDividerPosition,
             showInterface);
     }
     viewFrame.end();

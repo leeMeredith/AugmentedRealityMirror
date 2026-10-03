@@ -21,5 +21,7 @@ public:
         const ofTexture& texture,
         const ofRectangle& bounds,
         const Selection& mirrored,
+        float verticalDividerPosition,
+        float horizontalDividerPosition,
         bool showOverlay) const;
 };
