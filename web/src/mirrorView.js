@@ -4,7 +4,7 @@ export class MirrorView {
   #context;
   #video;
   #frame = null;
-  mirrored = false;
+  mirrored = true;
 
   constructor(canvas, video) {
     this.#canvas = canvas;

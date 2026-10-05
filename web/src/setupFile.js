@@ -2,7 +2,7 @@
 export const MAX_SETUP_BYTES = 64 * 1024;
 const format = "arm-rgb-setup";
 
-export function createSetup({ name = "", mirrored = false, cameraLabel = "" }, date = new Date()) {
+export function createSetup({ name = "", mirrored = true, cameraLabel = "" }, date = new Date()) {
   return validateSetup({
     format, schemaVersion: 1, savedAt: date.toISOString(),
     name: name.trim(), camera: { preferredLabel: cameraLabel }, view: { mirrored },

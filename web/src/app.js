@@ -6,9 +6,8 @@ import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename 
 const controls = new Controls();
 const camera = new CaptureRGB(controls.video);
 const view = new MirrorView(controls.canvas, controls.video);
-controls.mirror.checked = view.mirrored;
 // Set by the running JavaScript, so a stale HTML label alone cannot claim this build loaded.
-controls.build.textContent = "Browser build 3";
+controls.build.textContent = "Browser build 4";
 let preferredCameraLabel = "";
 let devices = [];
 let request = 0;
@@ -71,7 +70,7 @@ controls.cameras.addEventListener("change", () => {
   preferredCameraLabel = devices.find(device => device.deviceId === controls.cameras.value)?.label ?? "";
   if (camera.active) controls.cameraStatus("Camera choice changed. Press Use selected camera to switch the live view.");
 });
-controls.mirror.addEventListener("change", () => { view.mirrored = controls.mirror.checked; });
+controls.reverse.addEventListener("click", () => { view.mirrored = !view.mirrored; });
 
 controls.save.addEventListener("click", () => {
   try {
@@ -95,7 +94,6 @@ controls.file.addEventListener("change", async () => {
     const setup = parseSetup(await file.text());
     if (current !== fileRequest) return;
     controls.name.value = setup.name;
-    controls.mirror.checked = setup.view.mirrored;
     view.mirrored = setup.view.mirrored;
     preferredCameraLabel = setup.camera.preferredLabel;
     controls.cameras.value = "";
@@ -114,8 +112,6 @@ camera.onEnded = () => stopCamera("The camera disconnected or stopped. Check its
 navigator.mediaDevices?.addEventListener("devicechange", () => { refreshCameras().catch(() => {}); });
 // Returning from a suspended/back-forward page requires an explicit new Start.
 window.addEventListener("pagehide", () => stopCamera());
-// Some browsers restore form controls on navigation. Keep this control aligned with the rendered view.
-window.addEventListener("pageshow", () => { controls.mirror.checked = view.mirrored; });
 controls.cameraState("off");
 // No camera request at page load. Enumeration may return anonymous names until permission is granted.
 refreshCameras().catch(() => {});

@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { MirrorView } from "../src/mirrorView.js";
 
-test("view starts unflipped, can reverse x once, and Stop clears the frame and loop", t => {
+test("startup reflects the incoming frame, reversing twice restores it, and Stop clears the frame and loop", t => {
   const transforms = [], cancelled = [], drawings = [];
   let nextFrame;
   const originalRequest = globalThis.requestAnimationFrame;
@@ -20,15 +20,15 @@ test("view starts unflipped, can reverse x once, and Stop clears the frame and l
   view.start();
   assert.equal(canvas.width, 1280);
   assert.equal(canvas.height, 720);
-  assert.equal(view.mirrored, false);
-  assert.deepEqual(transforms.at(-1), [1, 0, 0, 1, 0, 0]);
+  assert.equal(view.mirrored, true);
+  assert.deepEqual(transforms.at(-1), [-1, 0, 0, 1, 1280, 0]);
   assert.deepEqual(drawings.at(-1), [video, 0, 0, 1280, 720]);
-  view.mirrored = true;
+  view.mirrored = !view.mirrored;
+  nextFrame();
+  assert.deepEqual(transforms.at(-1), [1, 0, 0, 1, 0, 0]);
+  view.mirrored = !view.mirrored;
   nextFrame();
   assert.deepEqual(transforms.at(-1), [-1, 0, 0, 1, 1280, 0]);
-  view.mirrored = false;
-  nextFrame();
-  assert.deepEqual(transforms.at(-1), [1, 0, 0, 1, 0, 0]);
   view.stop();
   assert.deepEqual(cancelled, [17]);
   assert.deepEqual(drawings.at(-1), ["clear", 0, 0, 1280, 720]);

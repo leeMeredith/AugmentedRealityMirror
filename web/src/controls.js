@@ -5,7 +5,7 @@ export class Controls {
   start = document.querySelector("#start-camera");
   stop = document.querySelector("#stop-camera");
   cameras = document.querySelector("#camera-select");
-  mirror = document.querySelector("#mirror-enabled");
+  reverse = document.querySelector("#reverse-view");
   name = document.querySelector("#setup-name");
   save = document.querySelector("#save-setup");
   load = document.querySelector("#load-setup");
