@@ -1,8 +1,10 @@
-# ARM browser milestone 1
+# ARM browser RGB prototype
 
 A small RGB camera mirror for home use and later testing on managed computers. This lives alongside the openFrameworks RGB application in the same repository. No changes to the desktop application's source are needed to run it.
 
-Implemented: explicit camera start/stop, camera selection, horizontal mirror toggle, and local setup JSON download/import. No account, participant name, or administrator is required. Video recording is outside the browser scope.
+Implemented: explicit camera start/stop, camera selection, horizontal mirror toggle, local setup JSON download/import, and fullscreen with show/hide controls. No account, participant name, or administrator is required. Video recording is outside the browser scope.
+
+Build 5 adds fullscreen while retaining the user-confirmed build 4 camera orientation. Click **Fullscreen** to expand the processed view. Settings initially hide; **Show controls**, **Stop camera**, and the exit button stay available in the top toolbar. **Escape** also exits. If native fullscreen is unavailable, the app uses an expanded layout inside the browser window and explains that limitation. Leaving fullscreen restores the previous panel visibility. The full frame is fitted without stretching or cropping; borders may remain.
 
 ## Run locally
 
@@ -39,6 +41,7 @@ web/
     app.js                   Connects controls, capture, view, and setup files
     captureRGB.js            Camera acquisition, ownership, release, errors
     mirrorView.js            Canvas mirror rendering and draw-loop lifetime
+    fullscreenView.js        Fullscreen/fallback layout, panel visibility, exit/focus
     controls.js              DOM updates and control references
     setupFile.js             Setup schema, validation, filenames, JSON download
   tests/
@@ -68,7 +71,7 @@ There are no runtime libraries, remote fonts, CDNs, analytics, or application ba
 
 The filename begins with the optional setup name, followed by `setup` and a timestamp. With no name, it begins `ARM_setup`. The camera label is a preference, not a stable hardware ID. Browser camera IDs are not exported. An empty label means no saved camera preference.
 
-Build 4 reverses the actual startup image relative to build 3, following the user's report from the verified build 3 page. It starts with a horizontal reflection of the incoming camera frame. **Reverse view** toggles the direction. Physical-camera acceptance of build 4 is still pending. The existing JSON field `view.mirrored` retains its meaning: `false` leaves the incoming camera image unchanged and `true` reflects it horizontally. Loading an older setup preserves that choice; the field's meaning and schema version have not changed.
+Build 4 reversed the actual startup image relative to build 3 and was then confirmed by the user. It starts with a horizontal reflection of the incoming camera frame. **Reverse view** toggles the direction. The existing JSON field `view.mirrored` retains its meaning: `false` leaves the incoming camera image unchanged and `true` reflects it horizontally. Loading an older setup preserves that choice; the field's meaning and schema version have not changed. Fullscreen and panel visibility are temporary presentation choices and are not written into setup files. Entering fullscreen requires a user action each time.
 
 This is a **setup document**, not an openFrameworks study-session document. Desktop sessions, unknown versions, invalid JSON, and oversized files are rejected without partially applying settings. A later import adapter should explicitly map supported desktop settings once the corresponding browser features exist.
 

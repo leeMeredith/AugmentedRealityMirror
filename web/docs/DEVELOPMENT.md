@@ -8,6 +8,7 @@ One camera, one full-frame mirror, and one setup document. `app.js` coordinates 
 | --- | --- | --- |
 | `captureRGB.js` | Live stream, permission request, device enumeration, stop/disconnect handling | Canvas, participant records, DOM controls |
 | `mirrorView.js` | Canvas transformations, frame sizing, animation cleanup | Camera permission, file storage |
+| `fullscreenView.js` | Fullscreen and expanded layout, panel visibility, exit handling and focus | Camera lifetime, transforms, JSON storage |
 | `controls.js` | Accessible page controls and status text | Camera acquisition, JSON validation |
 | `setupFile.js` | Versioned setup format, validation, export filename | Live streams, pain data |
 | `app.js` | User actions and coordination | Pixel processing or format validation |
@@ -16,11 +17,12 @@ Keep these direct dependencies. Do not introduce a plugin system, universal came
 
 ## Next milestones and stopping points
 
-1. **RGB baseline — implemented here; physical-camera acceptance pending.** Verify Start, Stop, selection, mirrored orientation, and JSON save/load on available computers. Record browser/OS versions. Hospital validation can happen later and must remain explicitly unverified until it does.
-2. **Regional mirroring and alignment.** Add quadrants and the existing desktop app's horizontal/vertical adjustments, with reset controls. Introduce a `mirrorRegions` module and explicit view settings at that point. Compare using an asymmetric test image and then a live camera. Stop when one named setup restores the same complete view. Add split-screen comparison after regional behavior is accepted.
-3. **Optional session tracking.** Add `studySession` and a dedicated session panel when pain entries are implemented. Camera use remains available without entering identity or administrator details. Keep setups separate from timestamped sessions. Match the existing study JSON fields where their meaning is shared; write and test explicit mappings for desktop records. Never silently drop unsupported alignment or clinical fields during import. Stop when continuing a participant's history creates a new session without overwriting older entries.
-4. **Shareable browser release.** Choose HTTPS hosting, test a public link in current desktop browsers, and supply a download-free quick start. Include keyboard navigation and touch-sized controls. Add tablet/phone validation as separate recorded results. Do not claim hospital compatibility based on a home-computer test.
-5. **Administrative charts.** Create a separate folder/file import tool for ECharts once the session format is working. Participant camera use should not depend on chart libraries.
+1. **RGB baseline — user confirmed camera orientation and setup loading in build 4.** Record browser/OS versions when doing broader acceptance. Windows and hospital validation remain explicitly unverified.
+2. **Fullscreen — implemented in build 5; user acceptance pending.** Use the current screen. Show/hide settings, keep Stop and Exit accessible, fit the full frame, and handle browser rejection with an in-page expanded layout. Stop when entry, exit, and adjustments work on the user's browser. Do not change capture or setup JSON for this milestone.
+3. **Regional mirroring and alignment.** Add quadrants and the existing desktop app's horizontal/vertical adjustments, with reset controls. Introduce a `mirrorRegions` module and explicit view settings at that point. Compare using an asymmetric test image and then a live camera. Stop when one named setup restores the same complete view. Add split-screen comparison after regional behavior is accepted.
+4. **Optional session tracking.** Add `studySession` and a dedicated session panel when pain entries are implemented. Camera use remains available without entering identity or administrator details. Keep setups separate from timestamped sessions. Match the existing study JSON fields where their meaning is shared; write and test explicit mappings for desktop records. Never silently drop unsupported alignment or clinical fields during import. Stop when continuing a participant's history creates a new session without overwriting older entries.
+5. **Shareable browser release.** Choose HTTPS hosting, test a public link in current desktop browsers, and supply a download-free quick start. Include keyboard navigation and touch-sized controls. Add tablet/phone validation as separate recorded results. Do not claim hospital compatibility based on a home-computer test.
+6. **Administrative charts.** Create a separate folder/file import tool for ECharts once the session format is working. Participant camera use should not depend on chart libraries.
 
 Offline installation/PWA support is a later, separate milestone if users need it. Add versioned caching and update behavior only then. Future depth work remains in the native project until actual hardware requirements justify integration.
 

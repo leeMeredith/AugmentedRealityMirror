@@ -1,13 +1,15 @@
 import { CaptureRGB } from "./captureRGB.js";
 import { MirrorView } from "./mirrorView.js";
 import { Controls } from "./controls.js";
+import { FullscreenView } from "./fullscreenView.js";
 import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename } from "./setupFile.js";
 
 const controls = new Controls();
 const camera = new CaptureRGB(controls.video);
 const view = new MirrorView(controls.canvas, controls.video);
+const fullscreen = new FullscreenView(document.querySelector("#mirror-workspace"));
 // Set by the running JavaScript, so a stale HTML label alone cannot claim this build loaded.
-controls.build.textContent = "Browser build 4";
+controls.build.textContent = "Browser build 5";
 let preferredCameraLabel = "";
 let devices = [];
 let request = 0;
@@ -66,6 +68,7 @@ async function startCamera() {
 
 controls.start.addEventListener("click", startCamera);
 controls.stop.addEventListener("click", () => stopCamera());
+controls.stopView.addEventListener("click", () => stopCamera());
 controls.cameras.addEventListener("change", () => {
   preferredCameraLabel = devices.find(device => device.deviceId === controls.cameras.value)?.label ?? "";
   if (camera.active) controls.cameraStatus("Camera choice changed. Press Use selected camera to switch the live view.");

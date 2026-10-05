@@ -4,6 +4,7 @@ export class Controls {
   canvas = document.querySelector("#mirror-canvas");
   start = document.querySelector("#start-camera");
   stop = document.querySelector("#stop-camera");
+  stopView = document.querySelector("#stop-view");
   cameras = document.querySelector("#camera-select");
   reverse = document.querySelector("#reverse-view");
   name = document.querySelector("#setup-name");
@@ -18,6 +19,7 @@ export class Controls {
     this.start.disabled = pending;
     this.start.textContent = live ? "Use selected camera" : "Start camera";
     this.stop.disabled = !live && !pending;
+    this.stopView.disabled = !live && !pending;
     this.cameras.disabled = pending;
     this.canvas.hidden = !live;
     document.querySelector("#placeholder").hidden = live;

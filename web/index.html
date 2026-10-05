@@ -18,7 +18,15 @@
       <a class="guide-link" href="guide.html">Getting started <span aria-hidden="true">↗</span></a>
     </header>
     <p class="intro">Use your camera as a mirror. Start with a comfortable position and a clear view.</p>
-    <main class="workspace">
+    <main id="mirror-workspace" class="workspace">
+      <div class="view-toolbar" role="group" aria-label="View controls">
+        <div class="button-row">
+          <button id="fullscreen-view" type="button">Fullscreen</button>
+          <button id="toggle-controls" type="button" aria-controls="controls" aria-expanded="true">Hide controls</button>
+          <button id="stop-view" type="button" disabled>Stop camera</button>
+        </div>
+        <p id="fullscreen-status" class="view-status" role="status" hidden></p>
+      </div>
       <section class="preview-panel" aria-labelledby="preview-title">
         <div class="preview-heading"><h2 id="preview-title">Your view</h2><span id="camera-state" class="badge">Camera off</span></div>
         <div class="preview-stage">
