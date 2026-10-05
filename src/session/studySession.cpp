@@ -1,4 +1,5 @@
 #include "studySession.h"
+#include "participantFileName.h"
 #include "view/viewConfigurationJson.h"
 
 bool studySession::loadContinuation(
@@ -142,7 +143,12 @@ bool studySession::finishAndSave(const viewConfiguration& configuration) {
         return false;
     }
 
-    const std::string outputPath = ofFilePath::join(directoryPath, sessionId + ".json");
+    const std::string fileBaseName = participantFileName::makeBaseName(
+        participantId,
+        sessionId);
+    const std::string outputPath = ofFilePath::join(
+        directoryPath,
+        fileBaseName + ".json");
     if (!ofSavePrettyJson(outputPath, makeJson(currentTimestamp()))) {
         error = "Could not save session JSON";
         return false;

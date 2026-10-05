@@ -1,4 +1,5 @@
 #include "recordingControls.h"
+#include "session/participantFileName.h"
 #include "view/viewConfigurationJson.h"
 
 recordingControls::~recordingControls() {
@@ -22,6 +23,7 @@ void recordingControls::setup() {
 }
 
 void recordingControls::update(
+    const std::string& participantId,
     int frameWidth,
     int frameHeight,
     const viewConfiguration& configuration) {
@@ -31,11 +33,19 @@ void recordingControls::update(
     }
 
     if (startRequested) {
-        if (frameWidth <= 0 || frameHeight <= 0) {
+        const std::string cleanParticipantId = ofTrim(participantId);
+        if (cleanParticipantId.empty()) {
+            startRequested = false;
+            statusLabel = "Enter Participant ID first";
+        } else if (frameWidth <= 0 || frameHeight <= 0) {
             statusLabel = "Waiting for camera";
         } else {
             startRequested = false;
-            startRecording(frameWidth, frameHeight, configuration);
+            startRecording(
+                cleanParticipantId,
+                frameWidth,
+                frameHeight,
+                configuration);
         }
     }
 
@@ -92,11 +102,18 @@ void recordingControls::stopPressed() {
 }
 
 bool recordingControls::startRecording(
+    const std::string& participantId,
     int frameWidth,
     int frameHeight,
     const viewConfiguration& configuration) {
     if (recorder.isRecording()) {
         statusLabel = "Already recording";
+        return false;
+    }
+
+    recordingParticipantId = ofTrim(participantId);
+    if (recordingParticipantId.empty()) {
+        statusLabel = "Enter Participant ID first";
         return false;
     }
 
@@ -107,7 +124,9 @@ bool recordingControls::startRecording(
         return false;
     }
 
-    recordingId = newRecordingId();
+    recordingId = participantFileName::makeBaseName(
+        recordingParticipantId,
+        newRecordingId());
     const std::string videoPath = ofFilePath::join(directoryPath, recordingId + ".mov");
     metadataPath = ofFilePath::join(directoryPath, recordingId + ".json");
 
@@ -168,7 +187,9 @@ bool recordingControls::saveMetadata(
     bool videoCompleted,
     const std::string& videoError) {
     ofJson json;
-    json["schemaVersion"] = 3;
+    json["schemaVersion"] = 4;
+    json["recordingId"] = recordingId;
+    json["participantId"] = recordingParticipantId;
     json["videoFile"] = recordingId + ".mov";
     json["videoCompleted"] = videoCompleted;
     if (!videoError.empty()) {

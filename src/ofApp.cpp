@@ -22,6 +22,7 @@ void ofApp::update() {
 
     const auto configuration = controls.configuration();
     recording.update(
+        studyControls.participantIdentifier(),
         rgbCamera.isReady() ? static_cast<int>(rgbCamera.getWidth()) : 0,
         rgbCamera.isReady() ? static_cast<int>(rgbCamera.getHeight()) : 0,
         configuration);

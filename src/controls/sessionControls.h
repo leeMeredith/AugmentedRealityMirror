@@ -5,6 +5,7 @@
 #include "view/viewConfiguration.h"
 
 #include <optional>
+#include <string>
 
 class sessionControls {
 public:
@@ -14,6 +15,7 @@ public:
     void setup();
     void update(const viewConfiguration& configuration);
     void recordPainScore(int selectedPainScore, const viewConfiguration& configuration);
+    std::string participantIdentifier() const;
     std::optional<viewConfiguration> takeLoadedConfiguration();
     void draw();
     void exit(const viewConfiguration& configuration);

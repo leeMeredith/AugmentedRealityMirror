@@ -14,7 +14,11 @@ public:
     ~recordingControls();
 
     void setup();
-    void update(int frameWidth, int frameHeight, const viewConfiguration& configuration);
+    void update(
+        const std::string& participantId,
+        int frameWidth,
+        int frameHeight,
+        const viewConfiguration& configuration);
     void captureFrame(const ofFbo& frame, const viewConfiguration& configuration);
     void draw();
     void exit();
@@ -28,6 +32,7 @@ private:
     void startPressed();
     void stopPressed();
     bool startRecording(
+        const std::string& participantId,
         int frameWidth,
         int frameHeight,
         const viewConfiguration& configuration);
@@ -58,6 +63,7 @@ private:
     int recordingHeight = 0;
     float targetFrameRate = 30.0f;
     std::string recordingId;
+    std::string recordingParticipantId;
     std::string metadataPath;
     std::string startedAt;
 };

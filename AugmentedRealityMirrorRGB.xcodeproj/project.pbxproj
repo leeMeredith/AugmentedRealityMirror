@@ -102,10 +102,18 @@
 			"name": "studySession.h",
 			"sourceTree": "<group>"
 		},
+		"A18000000000000000000001": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "participantFileName.h",
+			"sourceTree": "<group>"
+		},
 		"A13000000000000000000004": {
 			"children": [
 				"A13000000000000000000002",
-				"A13000000000000000000003"
+				"A13000000000000000000003",
+				"A18000000000000000000001"
 			],
 			"isa": "PBXGroup",
 			"name": "session",

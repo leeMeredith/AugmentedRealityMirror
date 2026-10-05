@@ -108,6 +108,10 @@ std::optional<viewConfiguration> sessionControls::takeLoadedConfiguration() {
     return configuration;
 }
 
+std::string sessionControls::participantIdentifier() const {
+    return ofTrim(participantId.get());
+}
+
 void sessionControls::recordPainScore(
     int selectedPainScore,
     const viewConfiguration& configuration) {
