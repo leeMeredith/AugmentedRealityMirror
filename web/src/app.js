@@ -7,6 +7,8 @@ const controls = new Controls();
 const camera = new CaptureRGB(controls.video);
 const view = new MirrorView(controls.canvas, controls.video);
 controls.mirror.checked = view.mirrored;
+// Set by the running JavaScript, so a stale HTML label alone cannot claim this build loaded.
+controls.build.textContent = "Browser build 3";
 let preferredCameraLabel = "";
 let devices = [];
 let request = 0;

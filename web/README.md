@@ -9,10 +9,12 @@ Implemented: explicit camera start/stop, camera selection, horizontal mirror tog
 From this `web` directory, with Python 3 installed:
 
 ```sh
-python3 -m http.server 8000 --bind 127.0.0.1
+python3 serve.py
 ```
 
 Open `http://localhost:8000` yourself. Stop the server with Ctrl+C. Localhost is allowed for camera development; do not open `index.html` by double-clicking it. The application uses JavaScript modules and expects an HTTP server.
+
+The development server always serves this `web` folder and disables caching for HTML, CSS, and all JavaScript modules. The footer shows a build label set by the running JavaScript. If an already-open tab seems stale, reload it; if needed, run `python3 serve.py --port 8001` and use the new printed address to test with a fresh browser origin. Stop the camera in the old tab first. A new port may ask for camera permission again. Loading an older setup can still restore its old orientation, so check a fresh start before loading a file.
 
 No npm installation or build step is needed to run the app. The `package.json` only enables ES modules and the Node test command.
 
@@ -32,6 +34,7 @@ web/
   index.html                 Main interface
   guide.html                 User instructions available without a camera
   styles.css                 Shared, responsive styling
+  serve.py                   Local server with explicit root and caching disabled
   src/
     app.js                   Connects controls, capture, view, and setup files
     captureRGB.js            Camera acquisition, ownership, release, errors

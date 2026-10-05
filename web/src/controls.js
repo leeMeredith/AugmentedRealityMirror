@@ -10,6 +10,7 @@ export class Controls {
   save = document.querySelector("#save-setup");
   load = document.querySelector("#load-setup");
   file = document.querySelector("#setup-file");
+  build = document.querySelector("#build-version");
 
   cameraState(state) {
     const live = state === "live";

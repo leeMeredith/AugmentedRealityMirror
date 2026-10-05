@@ -14,7 +14,7 @@ These cover invalid setup imports, Unicode/unsafe filenames, stopping while perm
 
 Record the operating system, browser/version, camera, date, and result. Test desktop Mac and Windows first. Tablet, phone, and managed hospital environments remain separate targets.
 
-1. Open the local development URL or deployed HTTPS link. Confirm no camera permission prompt appears until Start camera is pressed.
+1. Open the local development URL or deployed HTTPS link. Record the build label in the footer. Confirm no camera permission prompt appears until Start camera is pressed.
 2. Start and allow the camera. Confirm a live view and the browser's camera-use indicator.
 3. Confirm Flip left/right starts unchecked on a fresh page. Raise one hand and compare it on/off. Check horizontal reversal with asymmetric text or an object. Confirm the full image fits without stretching or cropping.
 4. Select a different camera if available and press Use selected camera. Confirm the old camera is released and the new view updates.
