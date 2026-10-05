@@ -1,0 +1,78 @@
+# ARM browser milestone 1
+
+A small RGB camera mirror for home use and later testing on managed computers. This lives alongside the openFrameworks RGB application in the same repository. No changes to the desktop application's source are needed to run it.
+
+Implemented: explicit camera start/stop, camera selection, horizontal mirror toggle, and local setup JSON download/import. No account, participant name, or administrator is required. Video recording is outside the browser scope.
+
+## Run locally
+
+From this `web` directory, with Python 3 installed:
+
+```sh
+python3 -m http.server 8000 --bind 127.0.0.1
+```
+
+Open `http://localhost:8000` yourself. Stop the server with Ctrl+C. Localhost is allowed for camera development; do not open `index.html` by double-clicking it. The application uses JavaScript modules and expects an HTTP server.
+
+No npm installation or build step is needed to run the app. The `package.json` only enables ES modules and the Node test command.
+
+For ordinary users, a maintainer would host the static `web` folder over HTTPS and share a link. Users would not run Python or install development tools. Hosting has not been configured or published by this milestone. Opening a developer machine's HTTP LAN address is not an equivalent camera test: use HTTPS for remote access.
+
+## Guides
+
+- [User guide](guide.html): camera placement, controls, setup files, and troubleshooting. Also linked inside the app.
+- [Development path](docs/DEVELOPMENT.md): file boundaries, next milestones, and stopping points.
+- [Testing](docs/TESTING.md): automated checks and device/browser checklist.
+- [IT notes](docs/IT-NOTES.md): permissions, local processing, and deployment requirements.
+
+## File structure
+
+```text
+web/
+  index.html                 Main interface
+  guide.html                 User instructions available without a camera
+  styles.css                 Shared, responsive styling
+  src/
+    app.js                   Connects controls, capture, view, and setup files
+    captureRGB.js            Camera acquisition, ownership, release, errors
+    mirrorView.js            Canvas mirror rendering and draw-loop lifetime
+    controls.js              DOM updates and control references
+    setupFile.js             Setup schema, validation, filenames, JSON download
+  tests/
+    captureRGB.test.js        Permission/cancellation/disconnection behavior
+    mirrorView.test.js        Mirror transforms and draw-loop cleanup
+    setupFile.test.js         Round trips, invalid files, filename safety
+  docs/
+    DEVELOPMENT.md
+    TESTING.md
+    IT-NOTES.md
+```
+
+There are no runtime libraries, remote fonts, CDNs, analytics, or application backend. Camera frames remain in the video/canvas pipeline; they are not converted to JSON. Setup JSON is downloaded explicitly, not silently saved in browser storage.
+
+## Setup format
+
+```json
+{
+  "format": "arm-rgb-setup",
+  "schemaVersion": 1,
+  "savedAt": "2026-10-05T12:00:00.000Z",
+  "name": "home chair",
+  "camera": { "preferredLabel": "" },
+  "view": { "mirrored": true }
+}
+```
+
+The filename begins with the optional setup name, followed by `setup` and a timestamp. With no name, it begins `ARM_setup`. The camera label is a preference, not a stable hardware ID. Browser camera IDs are not exported. An empty label means no saved camera preference.
+
+This is a **setup document**, not an openFrameworks study-session document. Desktop sessions, unknown versions, invalid JSON, and oversized files are rejected without partially applying settings. A later import adapter should explicitly map supported desktop settings once the corresponding browser features exist.
+
+## Tests
+
+With Node.js 22 or newer, from `web`:
+
+```sh
+node --test tests/*.test.js
+```
+
+These tests require no downloaded dependencies and do not open a real camera. They do not prove hardware compatibility; follow the manual checklist too.
