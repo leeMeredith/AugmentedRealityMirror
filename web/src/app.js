@@ -6,6 +6,7 @@ import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename 
 const controls = new Controls();
 const camera = new CaptureRGB(controls.video);
 const view = new MirrorView(controls.canvas, controls.video);
+controls.mirror.checked = view.mirrored;
 let preferredCameraLabel = "";
 let devices = [];
 let request = 0;
@@ -111,6 +112,8 @@ camera.onEnded = () => stopCamera("The camera disconnected or stopped. Check its
 navigator.mediaDevices?.addEventListener("devicechange", () => { refreshCameras().catch(() => {}); });
 // Returning from a suspended/back-forward page requires an explicit new Start.
 window.addEventListener("pagehide", () => stopCamera());
+// Some browsers restore form controls on navigation. Keep this control aligned with the rendered view.
+window.addEventListener("pageshow", () => { controls.mirror.checked = view.mirrored; });
 controls.cameraState("off");
 // No camera request at page load. Enumeration may return anonymous names until permission is granted.
 refreshCameras().catch(() => {});

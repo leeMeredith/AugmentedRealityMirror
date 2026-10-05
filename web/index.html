@@ -39,8 +39,8 @@
           <select id="camera-select" aria-describedby="camera-hint"><option value="">Default camera</option></select>
           <p id="camera-hint" class="hint">Camera names may appear after you allow access.</p>
           <div class="button-row"><button id="start-camera" class="primary" type="button">Start camera</button><button id="stop-camera" type="button" disabled>Stop</button></div>
-          <label class="check-label" for="mirror-enabled"><input id="mirror-enabled" type="checkbox" checked> Mirror image</label>
-          <p class="hint">Checked: a mirror view. Unchecked: the camera’s original view.</p>
+          <label class="check-label" for="mirror-enabled"><input id="mirror-enabled" type="checkbox" autocomplete="off"> Flip left/right</label>
+          <p class="hint">Starts without an extra flip. Use this if you need to reverse the view.</p>
           <p id="camera-status" class="status" role="status" aria-live="polite">Ready when you are.</p>
         </section>
         <section class="control-section" aria-labelledby="setup-title">

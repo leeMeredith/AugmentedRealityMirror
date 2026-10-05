@@ -16,12 +16,12 @@ Record the operating system, browser/version, camera, date, and result. Test des
 
 1. Open the local development URL or deployed HTTPS link. Confirm no camera permission prompt appears until Start camera is pressed.
 2. Start and allow the camera. Confirm a live view and the browser's camera-use indicator.
-3. Raise one hand and compare Mirror image on/off. Check horizontal reversal with asymmetric text or an object. Confirm the full image fits without stretching or cropping.
+3. Confirm Flip left/right starts unchecked on a fresh page. Raise one hand and compare it on/off. Check horizontal reversal with asymmetric text or an object. Confirm the full image fits without stretching or cropping.
 4. Select a different camera if available and press Use selected camera. Confirm the old camera is released and the new view updates.
 5. Press Stop. Confirm the preview clears and the stream is released (the browser's indicator may take a moment to update).
 6. Start again and leave it running for several minutes. Confirm movement stays live.
-7. Enter an invented setup name, uncheck Mirror image, and save. Confirm the download begins with that name and contains only setup fields.
-8. Reload the page. Confirm the camera is off. Load the saved file; confirm the name and mirror choice restore without starting the camera. Check the selected camera, then start it.
+7. Enter an invented setup name, check Flip left/right, and save. Confirm the download begins with that name and contains only setup fields.
+8. Reload the page. Confirm the camera is off and Flip left/right is unchecked. Load the saved file; confirm the name and checked flip choice restore without starting the camera. Check the selected camera, then start it. Also confirm an older setup with `view.mirrored: false` loads without a flip.
 9. Try invalid JSON, a desktop study-session JSON, and a future-version setup. Confirm an explanation and no change to the current setup.
 10. Deny camera access. Confirm a readable recovery message. Restore permission and retry.
 11. Press Stop while the permission request is pending, then allow the request. Confirm the late stream is released and the preview stays off.

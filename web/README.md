@@ -59,11 +59,13 @@ There are no runtime libraries, remote fonts, CDNs, analytics, or application ba
   "savedAt": "2026-10-05T12:00:00.000Z",
   "name": "home chair",
   "camera": { "preferredLabel": "" },
-  "view": { "mirrored": true }
+  "view": { "mirrored": false }
 }
 ```
 
 The filename begins with the optional setup name, followed by `setup` and a timestamp. With no name, it begins `ARM_setup`. The camera label is a preference, not a stable hardware ID. Browser camera IDs are not exported. An empty label means no saved camera preference.
+
+A fresh page starts with **Flip left/right** off, matching the orientation confirmed during user testing. The existing JSON field `view.mirrored` still means an additional horizontal flip: `false` leaves the incoming camera image unchanged and `true` reverses it. Loading an older setup preserves that choice; the field's meaning and schema version have not changed.
 
 This is a **setup document**, not an openFrameworks study-session document. Desktop sessions, unknown versions, invalid JSON, and oversized files are rejected without partially applying settings. A later import adapter should explicitly map supported desktop settings once the corresponding browser features exist.
 

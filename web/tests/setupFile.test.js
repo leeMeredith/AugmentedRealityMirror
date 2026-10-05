@@ -8,7 +8,7 @@ test("named settings round trip without requiring participant or administrator f
   assert.deepEqual(parseSetup(JSON.stringify(setup)), setup);
   assert.equal(setup.name, "home chair");
   assert.equal(setupFilename(setup), "home_chair_setup_2026-10-05T12-34-56-789Z.json");
-  assert.equal(createSetup({}).view.mirrored, true);
+  assert.equal(createSetup({}).view.mirrored, false);
 });
 test("invalid, unrelated and future files are rejected rather than partially restored", () => {
   assert.throws(() => parseSetup("{"), /valid JSON/);
@@ -21,7 +21,13 @@ test("invalid, unrelated and future files are rejected rather than partially res
 });
 test("unknown fields are not mixed into the live settings", () => {
   const setup = createSetup({}, date);
-  assert.deepEqual(parseSetup(JSON.stringify({ ...setup, administratorId: "ignored", view: { mirrored: true, arbitrary: 1 } })), setup);
+  assert.deepEqual(parseSetup(JSON.stringify({ ...setup, administratorId: "ignored", view: { mirrored: false, arbitrary: 1 } })), setup);
+});
+test("existing setups retain both saved flip choices independently of the startup default", () => {
+  for (const mirrored of [true, false]) {
+    const oldSetup = { format: "arm-rgb-setup", schemaVersion: 1, savedAt: date.toISOString(), name: "old setup", camera: { preferredLabel: "" }, view: { mirrored } };
+    assert.equal(parseSetup(JSON.stringify(oldSetup)).view.mirrored, mirrored);
+  }
 });
 test("oversized imports are rejected", () => {
   assert.throws(() => parseSetup(" ".repeat(MAX_SETUP_BYTES + 1)), /too large/);
