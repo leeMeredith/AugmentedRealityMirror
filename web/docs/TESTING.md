@@ -18,6 +18,7 @@ The integration test uses headless Chromium and a synthetic camera. Playwright i
 npm install --no-save --package-lock=false playwright
 npx playwright install chromium
 node tests/fullscreen.browser.mjs
+node tests/regions.browser.mjs
 ```
 
 Set `ARM_TEST_URL` to test a different local address. Existing test environments can supply `ARM_PLAYWRIGHT_MODULE` (a module path) and `ARM_CHROME_EXECUTABLE` instead of installing another copy. `ARM_SCREENSHOT_DIR` optionally saves review images outside source. These checks exercise native fullscreen, Escape, browser-driven exit, rejected/unavailable fullscreen, control visibility, Stop, focus restoration, and narrow-screen layout.
@@ -51,6 +52,14 @@ Record the operating system, browser/version, camera, date, and result. Test des
 6. Test a browser or policy that denies fullscreen. Confirm the expanded in-page view works, explains the limitation, and exits with Escape or Exit expanded view.
 7. Test keyboard navigation and 200% zoom, including a narrow or short window. Controls and exits must remain reachable. A second monitor is optional, not a requirement for this milestone.
 
+## Quadrants (build 6)
+
+1. Start with the confirmed camera orientation. Choose a receiving quadrant by its screen position. Check each toggle separately, then both together; confirm sources come from the opposite column, row or diagonal respectively.
+2. Move both sliders in both directions. Confirm only the selected quadrant changes, dividing lines stay fixed and uncovered areas become dark.
+3. Configure two different quadrants, switch between them, and reset one. Confirm the other keeps its settings.
+4. Save a named setup, reload the page, then load it. Confirm all four quadrants restore and capture still requires Start. Import a schema 1 setup and confirm it clears quadrant adjustments while retaining its original mirror direction.
+5. Repeat adjustments with Fullscreen and Show controls. Check live movement, slider keyboard access, stop and exit. Confirm posture alignment with a real person; automated pixels do not establish that.
+
 ## Record actual results
 
 Only record tests that were actually performed. Suggested columns:
@@ -63,3 +72,5 @@ Only record tests that were actually performed. Suggested columns:
 Hospital restrictions, physical Windows cameras, and mobile devices are not assumed to work because the local Mac or a synthetic headless test passes.
 
 Build 5 verification on 2026-10-05: all 13 Node 24.12.0 unit checks passed. All 9 fullscreen browser checks passed in headless Chrome 154.0.8037.98 with synthetic video, including native and fallback exits, unchanged orientation, capture release, and narrow-screen controls. Desktop and narrow screenshots were inspected. Physical-camera fullscreen acceptance remains pending with the user.
+
+Build 6 verification on 2026-10-09: all 14 Node unit checks passed. Headless Chrome 155.0.8059.39 passed 96 asymmetric-image pixel cases covering every quadrant, both base orientations, both toggles and positive/negative offsets; it also passed independent controls/reset, named schema 2 downloads/imports, invalid import preservation, schema 1 migration, keyboard sliders, fullscreen editing, narrow layout and capture release. All 9 existing fullscreen checks passed. Fullscreen and narrow screenshots were inspected. Only synthetic camera data was used; physical-camera alignment remains for user acceptance.

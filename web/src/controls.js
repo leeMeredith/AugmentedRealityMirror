@@ -1,4 +1,5 @@
 // DOM details only. The application decides when to start a camera or change settings.
+import { REGION_IDS, REGION_LABELS } from "./mirrorRegions.js";
 export class Controls {
   video = document.querySelector("#camera-video");
   canvas = document.querySelector("#mirror-canvas");
@@ -12,6 +13,27 @@ export class Controls {
   load = document.querySelector("#load-setup");
   file = document.querySelector("#setup-file");
   build = document.querySelector("#build-version");
+  quadrants = [...document.querySelectorAll("[data-region]")];
+  mirrorX = document.querySelector("#region-mirror-x");
+  mirrorY = document.querySelector("#region-mirror-y");
+  offsetX = document.querySelector("#region-offset-x");
+  offsetY = document.querySelector("#region-offset-y");
+  resetRegion = document.querySelector("#reset-region");
+
+  regionState(id, region) {
+    this.quadrants.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.region === id)));
+    const label = REGION_LABELS[REGION_IDS.indexOf(id)];
+    document.querySelector("#selected-region").textContent = label;
+    this.mirrorX.checked = region.mirrorX;
+    this.mirrorY.checked = region.mirrorY;
+    for (const [axis, slider] of [["X", this.offsetX], ["Y", this.offsetY]]) {
+      const value = region[`offset${axis}`];
+      slider.value = value;
+      const text = value === 0 ? "Centered" : `${Math.abs(value)}% ${axis === "X" ? (value < 0 ? "left" : "right") : (value < 0 ? "up" : "down")}`;
+      document.querySelector(`#region-offset-${axis.toLowerCase()}-value`).textContent = text;
+      slider.setAttribute("aria-valuetext", text);
+    }
+  }
 
   cameraState(state) {
     const live = state === "live";

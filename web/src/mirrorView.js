@@ -1,10 +1,12 @@
-// Owns only the canvas and its draw loop. Always draws the full frame, without cropping.
+import { defaultRegions, drawRegions, hasRegionAdjustments } from "./mirrorRegions.js";
+// Owns the canvas and draw loop; regional composition lives in mirrorRegions.
 export class MirrorView {
   #canvas;
   #context;
   #video;
   #frame = null;
   mirrored = true;
+  regions = defaultRegions();
 
   constructor(canvas, video) {
     this.#canvas = canvas;
@@ -21,8 +23,12 @@ export class MirrorView {
           this.#canvas.width = width;
           this.#canvas.height = height;
         }
-        this.#context.setTransform(this.mirrored ? -1 : 1, 0, 0, 1, this.mirrored ? width : 0, 0);
-        this.#context.drawImage(this.#video, 0, 0, width, height);
+        if (hasRegionAdjustments(this.regions)) {
+          drawRegions(this.#context, this.#video, width, height, this.mirrored, this.regions);
+        } else {
+          this.#context.setTransform(this.mirrored ? -1 : 1, 0, 0, 1, this.mirrored ? width : 0, 0);
+          this.#context.drawImage(this.#video, 0, 0, width, height);
+        }
       }
       this.#frame = requestAnimationFrame(draw);
     };

@@ -40,7 +40,7 @@
         </div>
         <p class="preview-note">The image stays on this device. There is no video recording.</p>
       </section>
-      <aside id="controls" class="controls" aria-label="Camera and setup controls" tabindex="-1">
+      <aside id="controls" class="controls" aria-label="Camera, quadrant and setup controls" tabindex="-1">
         <section class="control-section" aria-labelledby="camera-title">
           <p class="step">01 / Camera</p><h2 id="camera-title">Settle into your view</h2>
           <label for="camera-select">Camera</label>
@@ -48,17 +48,41 @@
           <p id="camera-hint" class="hint">Camera names may appear after you allow access.</p>
           <div class="button-row"><button id="start-camera" class="primary" type="button">Start camera</button><button id="stop-camera" type="button" disabled>Stop</button></div>
           <button id="reverse-view" class="reverse-view" type="button">Reverse view</button>
-          <p class="hint">Raise a hand to check your view. Use this button if you need the opposite direction.</p>
+          <p class="hint">Raise a hand to check your view. This reverses the whole camera image before quadrant adjustments.</p>
           <p id="camera-status" class="status" role="status" aria-live="polite">Ready when you are.</p>
         </section>
+        <section class="control-section" aria-labelledby="regions-title">
+          <p class="step">02 / Quadrants</p><h2 id="regions-title">Adjust part of your view</h2>
+          <p class="hint">Choose the receiving quadrant as you see it on screen. The center dividing lines stay fixed.</p>
+          <div class="quadrant-picker" role="group" aria-label="Receiving quadrant">
+            <button type="button" data-region="topLeft" aria-pressed="true">Top left</button>
+            <button type="button" data-region="topRight" aria-pressed="false">Top right</button>
+            <button type="button" data-region="bottomLeft" aria-pressed="false">Bottom left</button>
+            <button type="button" data-region="bottomRight" aria-pressed="false">Bottom right</button>
+          </div>
+          <fieldset class="region-settings">
+            <legend id="selected-region">Top left</legend>
+            <label class="toggle-label"><input id="region-mirror-x" type="checkbox"> Left/right mirror</label>
+            <label class="toggle-label"><input id="region-mirror-y" type="checkbox"> Top/bottom mirror</label>
+            <p class="hint">Left/right copies the reflected opposite side. Top/bottom copies the reflected opposite row. Both use the diagonal quadrant; both off keep the normal image.</p>
+            <label for="region-offset-x">Horizontal position</label>
+            <input id="region-offset-x" type="range" min="-50" max="50" step="1" value="0" aria-describedby="region-position-hint">
+            <output id="region-offset-x-value" for="region-offset-x">Centered</output>
+            <label for="region-offset-y">Vertical position</label>
+            <input id="region-offset-y" type="range" min="-50" max="50" step="1" value="0" aria-describedby="region-position-hint">
+            <output id="region-offset-y-value" for="region-offset-y">Centered</output>
+            <p id="region-position-hint" class="hint">Move the image inside this quadrant. Uncovered edges stay dark. Positions are percentages of its width or height.</p>
+            <button id="reset-region" type="button">Reset quadrant</button>
+          </fieldset>
+        </section>
         <section class="control-section" aria-labelledby="setup-title">
-          <p class="step">02 / Your setup</p><h2 id="setup-title">Keep your starting point</h2>
+          <p class="step">03 / Your setup</p><h2 id="setup-title">Keep your starting point</h2>
           <label for="setup-name">Setup name <span class="optional">(optional)</span></label>
           <input id="setup-name" type="text" maxlength="80" autocomplete="off" placeholder="For example, home chair">
           <p class="hint">This name starts your downloaded filename. No name is needed to use the mirror.</p>
           <div class="button-row"><button id="save-setup" type="button">Save setup</button><button id="load-setup" type="button">Load setup</button></div>
           <input id="setup-file" type="file" accept=".json,application/json" hidden>
-          <p id="setup-status" class="status" role="status" aria-live="polite">Saves your mirror choice and preferred camera to a JSON file.</p>
+          <p id="setup-status" class="status" role="status" aria-live="polite">Saves your mirror direction, all quadrant settings and preferred camera to a JSON file.</p>
         </section>
       </aside>
     </main>

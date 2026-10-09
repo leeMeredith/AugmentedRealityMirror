@@ -2,9 +2,11 @@
 
 A small RGB camera mirror for home use and later testing on managed computers. This lives alongside the openFrameworks RGB application in the same repository. No changes to the desktop application's source are needed to run it.
 
-Implemented: explicit camera start/stop, camera selection, horizontal mirror toggle, local setup JSON download/import, and fullscreen with show/hide controls. No account, participant name, or administrator is required. Video recording is outside the browser scope.
+Implemented: explicit camera start/stop, camera selection, horizontal mirror toggle, independent quadrant mirroring/alignment, local setup JSON download/import, and fullscreen with show/hide controls. No account, participant name, or administrator is required. Video recording is outside the browser scope.
 
-Build 5 adds fullscreen while retaining the user-confirmed build 4 camera orientation. Click **Fullscreen** to expand the processed view. Settings initially hide; **Show controls**, **Stop camera**, and the exit button stay available in the top toolbar. **Escape** also exits. If native fullscreen is unavailable, the app uses an expanded layout inside the browser window and explains that limitation. Leaving fullscreen restores the previous panel visibility. The full frame is fitted without stretching or cropping; borders may remain.
+Build 6 adds two mirror toggles and two position sliders per quadrant, retaining the confirmed starting camera orientation. Choose a receiving quadrant by its position on screen. Left/right copies and reflects the opposite column; top/bottom copies and reflects the opposite row. Both on use the diagonal quadrant. Both off show that quadrant's normal image. Sliders move the image inside its fixed quadrant by up to 50% of its width/height in either direction. Clipped edges cannot cover neighbors; uncovered areas stay dark. **Reset quadrant** clears only that quadrant's toggles and positions.
+
+Click **Fullscreen**, then **Show controls** to align the image alongside the settings panel. **Stop camera** and the exit button stay available in the top toolbar. **Escape** also exits. If native fullscreen is unavailable, the app uses an expanded layout inside the browser window. Leaving fullscreen restores the previous panel visibility. The overall canvas fits without stretching; individual quadrant adjustments can clip their source images.
 
 ## Run locally
 
@@ -41,6 +43,7 @@ web/
     app.js                   Connects controls, capture, view, and setup files
     captureRGB.js            Camera acquisition, ownership, release, errors
     mirrorView.js            Canvas mirror rendering and draw-loop lifetime
+    mirrorRegions.js         Quadrant defaults, validation, reflection and clipping
     fullscreenView.js        Fullscreen/fallback layout, panel visibility, exit/focus
     controls.js              DOM updates and control references
     setupFile.js             Setup schema, validation, filenames, JSON download
@@ -48,6 +51,8 @@ web/
     captureRGB.test.js        Permission/cancellation/disconnection behavior
     mirrorView.test.js        Mirror transforms and draw-loop cleanup
     setupFile.test.js         Round trips, invalid files, filename safety
+    regions.browser.mjs      Synthetic pixel and quadrant-control integration checks
+    fullscreen.browser.mjs   Native/fallback fullscreen integration checks
   docs/
     DEVELOPMENT.md
     TESTING.md
@@ -61,17 +66,27 @@ There are no runtime libraries, remote fonts, CDNs, analytics, or application ba
 ```json
 {
   "format": "arm-rgb-setup",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "savedAt": "2026-10-05T12:00:00.000Z",
   "name": "home chair",
   "camera": { "preferredLabel": "" },
-  "view": { "mirrored": true }
+  "view": {
+    "mirrored": true,
+    "regions": {
+      "topLeft": { "mirrorX": true, "mirrorY": false, "offsetX": 0, "offsetY": 0 },
+      "topRight": { "mirrorX": false, "mirrorY": false, "offsetX": 0, "offsetY": 0 },
+      "bottomLeft": { "mirrorX": false, "mirrorY": false, "offsetX": 0, "offsetY": 0 },
+      "bottomRight": { "mirrorX": false, "mirrorY": false, "offsetX": 0, "offsetY": 0 }
+    }
+  }
 }
 ```
 
 The filename begins with the optional setup name, followed by `setup` and a timestamp. With no name, it begins `ARM_setup`. The camera label is a preference, not a stable hardware ID. Browser camera IDs are not exported. An empty label means no saved camera preference.
 
-Build 4 reversed the actual startup image relative to build 3 and was then confirmed by the user. It starts with a horizontal reflection of the incoming camera frame. **Reverse view** toggles the direction. The existing JSON field `view.mirrored` retains its meaning: `false` leaves the incoming camera image unchanged and `true` reflects it horizontally. Loading an older setup preserves that choice; the field's meaning and schema version have not changed. Fullscreen and panel visibility are temporary presentation choices and are not written into setup files. Entering fullscreen requires a user action each time.
+The confirmed starting view reflects the incoming camera frame horizontally. **Reverse view** changes this base orientation before quadrant processing. `view.mirrored` retains its original meaning. Each quadrant copies from the original oriented frame, never from another processed quadrant. Positive offsets move right/down; negative offsets move left/up. Offsets are percentages of quadrant size, so resizing the view preserves relative alignment.
+
+Schema 2 saves all four quadrants. Schema 1 files still load with their original orientation and all quadrant adjustments reset. New files require build 6 or later; earlier builds reject schema 2 rather than silently losing adjustments. Import never modifies the original file. Fullscreen, panel visibility and the currently selected editing quadrant are temporary and not saved.
 
 This is a **setup document**, not an openFrameworks study-session document. Desktop sessions, unknown versions, invalid JSON, and oversized files are rejected without partially applying settings. A later import adapter should explicitly map supported desktop settings once the corresponding browser features exist.
 

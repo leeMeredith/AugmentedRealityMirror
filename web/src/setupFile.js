@@ -1,11 +1,12 @@
 // A small, versioned setup document. It is not a study session or pain record.
+import { defaultRegions, validateRegions } from "./mirrorRegions.js";
 export const MAX_SETUP_BYTES = 64 * 1024;
 const format = "arm-rgb-setup";
 
-export function createSetup({ name = "", mirrored = true, cameraLabel = "" }, date = new Date()) {
+export function createSetup({ name = "", mirrored = true, cameraLabel = "", regions = defaultRegions() }, date = new Date()) {
   return validateSetup({
-    format, schemaVersion: 1, savedAt: date.toISOString(),
-    name: name.trim(), camera: { preferredLabel: cameraLabel }, view: { mirrored },
+    format, schemaVersion: 2, savedAt: date.toISOString(),
+    name: name.trim(), camera: { preferredLabel: cameraLabel }, view: { mirrored, regions },
   });
 }
 
@@ -23,7 +24,7 @@ function validateSetup(json) {
   if (!json || json.format !== format) {
     throw new Error("Choose an ARM browser setup file. Desktop study sessions are not supported in this first browser version.");
   }
-  if (json.schemaVersion !== 1) {
+  if (json.schemaVersion !== 1 && json.schemaVersion !== 2) {
     throw new Error("This setup uses a different version. Open it with the version of ARM that saved it.");
   }
   if (typeof json.name !== "string" || json.name.length > 80
@@ -34,9 +35,9 @@ function validateSetup(json) {
   }
   // Copy known fields, rather than mixing an imported object into live application state.
   return {
-    format, schemaVersion: 1, savedAt: json.savedAt, name: json.name,
+    format, schemaVersion: 2, savedAt: json.savedAt, name: json.name,
     camera: { preferredLabel: json.camera.preferredLabel },
-    view: { mirrored: json.view.mirrored },
+    view: { mirrored: json.view.mirrored, regions: json.schemaVersion === 1 ? defaultRegions() : validateRegions(json.view.regions) },
   };
 }
 

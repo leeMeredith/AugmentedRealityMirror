@@ -14,7 +14,7 @@
     <a href="index.html">← Back to the mirror</a>
     <p class="eyebrow">Augmented Reality Mirror</p>
     <h1>Getting started</h1>
-    <p>This browser version shows a camera mirror, offers fullscreen, and lets you save and reload the mirror choice and camera preference. Regional mirroring and pain entries are planned next.</p>
+    <p>This browser version offers a camera mirror, fullscreen and independent quadrant adjustments. You can save and reload your view and camera preference. Pain entries are a later milestone.</p>
     <section><h2>Start with a comfortable view</h2>
       <ol>
         <li>Place your computer or camera on a stable surface, with enough light to see yourself. Adjust the physical camera to include the area you want to view.</li>
@@ -30,9 +30,21 @@
       <p>If your browser cannot enter fullscreen, the view expands inside the browser window instead. Use <strong>Exit expanded view</strong> or Escape to return. The whole camera frame is fitted without stretching or cropping, so borders may remain. Fullscreen does not increase camera resolution or reveal more of the scene.</p>
       <p>Fullscreen always starts with a button press; loading a setup will not enter it automatically.</p>
     </section>
+    <section><h2>Adjust one quadrant</h2>
+      <p>Start the camera, choose <strong>Fullscreen</strong>, then <strong>Show controls</strong>. Scroll the settings panel to <strong>Quadrants</strong>. The four buttons refer to positions on the screen. Select the receiving quadrant you want to change.</p>
+      <ul>
+        <li><strong>Left/right mirror</strong> copies and reflects the opposite side into the selected quadrant.</li>
+        <li><strong>Top/bottom mirror</strong> copies and reflects the opposite row. Both toggles on use the diagonal quadrant; both off show the normal image.</li>
+        <li><strong>Horizontal position</strong> and <strong>Vertical position</strong> move the image within the selected quadrant. The dividing lines stay fixed. Uncovered edges stay dark, and the image cannot cover another quadrant.</li>
+        <li><strong>Reset quadrant</strong> turns off both toggles and centers both sliders for just that quadrant.</li>
+      </ul>
+      <p>Each quadrant remembers its own adjustments when you select another. Slider values are percentages of quadrant width or height; positive values move right or down. You can also focus a slider and use the arrow keys. The camera section's <strong>Reverse view</strong> changes the whole starting image before these adjustments.</p>
+      <p>All sources come from the original camera image, so editing one quadrant never changes another quadrant's source. Check your posture and physical camera position each time; saved settings cannot move the camera for you.</p>
+    </section>
     <section><h2>Save your setup for another day</h2>
       <p>A setup name is optional. If you enter one, it begins the downloaded filename. Choose <strong>Save setup</strong>, then keep the JSON file in a folder you can find again. Your browser may save it to Downloads or ask where to put it.</p>
-      <p>Next time, choose <strong>Load setup</strong> and select that file. This restores your mirror choice and preferred camera name. It does not start or switch the camera automatically. Confirm the camera choice and press Start camera or Use selected camera.</p>
+      <p>Next time, choose <strong>Load setup</strong> and select that file. This restores your mirror direction, all four quadrant settings and preferred camera name. It does not start or switch the camera automatically. Confirm the camera choice and press Start camera or Use selected camera.</p>
+      <p>Setups from earlier builds still load with their original direction and no quadrant adjustments. New quadrant setups need build 6 or later.</p>
       <p>A setup cannot move the physical camera or restore your posture. Check your position each time. Camera names can change or be shared by two devices, so always check the preview.</p>
       <p>Only setups saved by this browser version are supported here. Desktop ARM study-session files will be rejected with an explanation.</p>
     </section>

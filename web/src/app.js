@@ -2,6 +2,7 @@ import { CaptureRGB } from "./captureRGB.js";
 import { MirrorView } from "./mirrorView.js";
 import { Controls } from "./controls.js";
 import { FullscreenView } from "./fullscreenView.js";
+import { defaultRegion } from "./mirrorRegions.js";
 import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename } from "./setupFile.js";
 
 const controls = new Controls();
@@ -9,7 +10,27 @@ const camera = new CaptureRGB(controls.video);
 const view = new MirrorView(controls.canvas, controls.video);
 const fullscreen = new FullscreenView(document.querySelector("#mirror-workspace"));
 // Set by the running JavaScript, so a stale HTML label alone cannot claim this build loaded.
-controls.build.textContent = "Browser build 5";
+controls.build.textContent = "Browser build 6";
+let selectedRegion = "topLeft";
+const refreshRegion = () => controls.regionState(selectedRegion, view.regions[selectedRegion]);
+controls.quadrants.forEach(button => button.addEventListener("click", () => {
+  selectedRegion = button.dataset.region;
+  refreshRegion();
+}));
+for (const [element, property, boolean] of [
+  [controls.mirrorX, "mirrorX", true], [controls.mirrorY, "mirrorY", true],
+  [controls.offsetX, "offsetX", false], [controls.offsetY, "offsetY", false],
+]) {
+  element.addEventListener("input", () => {
+    view.regions[selectedRegion][property] = boolean ? element.checked : Number(element.value);
+    refreshRegion();
+  });
+}
+controls.resetRegion.addEventListener("click", () => {
+  view.regions[selectedRegion] = defaultRegion();
+  refreshRegion();
+});
+refreshRegion();
 let preferredCameraLabel = "";
 let devices = [];
 let request = 0;
@@ -80,7 +101,7 @@ controls.save.addEventListener("click", () => {
     const cameraLabel = controls.cameras.value
       ? devices.find(device => device.deviceId === controls.cameras.value)?.label ?? ""
       : preferredCameraLabel;
-    const setup = createSetup({ name: controls.name.value, mirrored: view.mirrored, cameraLabel });
+    const setup = createSetup({ name: controls.name.value, mirrored: view.mirrored, cameraLabel, regions: view.regions });
     downloadSetup(setup);
     controls.setupStatus(`Download requested: ${setupFilename(setup)}. Check your browser's downloads or save prompt.`);
   } catch (error) { controls.setupStatus(error.message, true); }
@@ -98,11 +119,13 @@ controls.file.addEventListener("change", async () => {
     if (current !== fileRequest) return;
     controls.name.value = setup.name;
     view.mirrored = setup.view.mirrored;
+    view.regions = setup.view.regions;
+    refreshRegion();
     preferredCameraLabel = setup.camera.preferredLabel;
     controls.cameras.value = "";
     try { await refreshCameras(); } catch { /* The user can still load mirror settings without camera permission. */ }
     if (current !== fileRequest) return;
-    controls.setupStatus("Setup loaded. Mirror choice restored. Camera preference is a hint; confirm the camera selection before use.");
+    controls.setupStatus("Setup loaded. Mirror direction and all quadrant settings restored. Confirm the camera selection before use.");
     controls.cameraStatus(camera.active
       ? "Setup loaded; the current camera is still running. Press Use selected camera if you want to switch."
       : "Setup loaded. Press Start camera when you are ready.");

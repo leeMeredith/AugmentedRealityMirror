@@ -7,7 +7,7 @@ ARM's first browser milestone is a static HTML/CSS/JavaScript application. It re
 - Host all files under `web` at one HTTPS origin, preserving relative paths and JavaScript MIME types. Only the static application and guide are fetched.
 - The application contains no analytics, remote fonts, CDNs, upload endpoint, WebSocket connection, or application API. Its Content Security Policy sets `connect-src 'none'`.
 - Camera frames are rendered locally to a canvas. This milestone does not record video.
-- A setup JSON download includes an optional user-entered label, a camera label preference, mirror choice, and timestamp. Imported files are processed locally, with a 64 KiB size limit and format validation.
+- A setup JSON download includes an optional user-entered label, a camera label preference, mirror choice, four quadrant mirror/position settings, and timestamp. Imported files are processed locally, with a 64 KiB size limit and format validation.
 - There is no automatic localStorage/IndexedDB storage or service worker. Setup persistence requires an explicit downloaded file. This milestone does not promise offline loading.
 - The host may still log standard page requests, including IP addresses. Browser extensions, managed-device software, and cloud-sync folders are outside this app's control.
 
