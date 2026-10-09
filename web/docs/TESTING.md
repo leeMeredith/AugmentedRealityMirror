@@ -29,7 +29,7 @@ Record the operating system, browser/version, camera, date, and result. Test des
 
 1. Open the local development URL or deployed HTTPS link. Record the build label in the footer. Confirm no camera permission prompt appears until Start camera is pressed.
 2. Start and allow the camera. Confirm a live view and the browser's camera-use indicator.
-3. On a fresh page, raise one hand and compare the initial view with Reverse view pressed once, then twice. Build 5 retains the confirmed build 4 starting direction. Check horizontal reversal with asymmetric text or an object. Confirm the full image fits without stretching or cropping.
+3. On a fresh page, raise one hand and compare the initial view with Reverse view pressed once, then twice. Build 7 retains the confirmed build 4 starting direction. Check horizontal reversal with asymmetric text or an object. Confirm the full image fits without stretching or cropping.
 4. Select a different camera if available and press Use selected camera. Confirm the old camera is released and the new view updates.
 5. Press Stop. Confirm the preview clears and the stream is released (the browser's indicator may take a moment to update).
 6. Start again and leave it running for several minutes. Confirm movement stays live.
@@ -45,20 +45,21 @@ Record the operating system, browser/version, camera, date, and result. Test des
 ## Fullscreen (build 5)
 
 1. Start the camera and enter Fullscreen on the current screen. Confirm the settings panel hides, the full image fits, and movement stays live with the same direction.
-2. Show controls, reverse the view, then hide controls. Confirm the toolbar always provides Show controls, Exit, and Stop camera. On a narrow window, the controls may cover part of the view and should scroll independently.
+2. Show controls, reverse the view, then hide controls. Confirm the toolbar always provides Show controls, Exit, and Stop camera. On a narrow window, the controls must sit below the video and scroll independently without moving or covering it.
 3. Exit using the button and repeat using Escape. Confirm normal layout and previous panel visibility return, with the camera still running. Repeat with controls hidden before entering fullscreen.
 4. Hide controls and stop the camera from the top toolbar. Confirm the image clears and capture ends. Show controls to start again.
 5. Load and save settings while fullscreen. Confirm settings are preserved even if the browser exits fullscreen for a file dialog. Loading a setup must never automatically enter fullscreen.
 6. Test a browser or policy that denies fullscreen. Confirm the expanded in-page view works, explains the limitation, and exits with Escape or Exit expanded view.
 7. Test keyboard navigation and 200% zoom, including a narrow or short window. Controls and exits must remain reachable. A second monitor is optional, not a requirement for this milestone.
 
-## Quadrants (build 6)
+## Shared center and scrolling (build 7)
 
-1. Start with the confirmed camera orientation. Choose a receiving quadrant by its screen position. Check each toggle separately, then both together; confirm sources come from the opposite column, row or diagonal respectively.
-2. Move both sliders in both directions. Confirm only the selected quadrant changes, dividing lines stay fixed and uncovered areas become dark.
-3. Configure two different quadrants, switch between them, and reset one. Confirm the other keeps its settings.
-4. Save a named setup, reload the page, then load it. Confirm all four quadrants restore and capture still requires Start. Import a schema 1 setup and confirm it clears quadrant adjustments while retaining its original mirror direction.
-5. Repeat adjustments with Fullscreen and Show controls. Check live movement, slider keyboard access, stop and exit. Confirm posture alignment with a real person; automated pixels do not establish that.
+1. Check each quadrant's left/right mirror independently. People stay upright; there is no top/bottom control.
+2. Move each shared slider toward both ends. All pane boundaries move together and remain joined without gaps. Unequal mirrored panes can crop/enlarge without stretching. With all mirrors off, the original image remains unchanged.
+3. Change the selected quadrant and confirm the shared slider positions remain unchanged. Reset alignment; both return to 50% and mirror choices remain intact.
+4. Scroll from Camera through Setup while watching the video. Confirm it stays visible and stationary. Repeat in fullscreen, a narrow portrait window and a short landscape window. Controls must never overlap the video.
+5. Save a named setup, reload and import it. Confirm shared center and all mirror choices return without automatically starting capture. Import schema 2: camera direction and left/right choices stay, old vertical flips/offsets are removed, alignment centers and a message explains this. Invalid imports must preserve the current setup.
+6. Check keyboard slider controls, fullscreen exits and Stop. Complete a real-camera alignment check before accepting this milestone.
 
 ## Record actual results
 
@@ -74,3 +75,5 @@ Hospital restrictions, physical Windows cameras, and mobile devices are not assu
 Build 5 verification on 2026-10-05: all 13 Node 24.12.0 unit checks passed. All 9 fullscreen browser checks passed in headless Chrome 154.0.8037.98 with synthetic video, including native and fallback exits, unchanged orientation, capture release, and narrow-screen controls. Desktop and narrow screenshots were inspected. Physical-camera fullscreen acceptance remains pending with the user.
 
 Build 6 verification on 2026-10-09: all 14 Node unit checks passed. Headless Chrome 155.0.8059.39 passed 96 asymmetric-image pixel cases covering every quadrant, both base orientations, both toggles and positive/negative offsets; it also passed independent controls/reset, named schema 2 downloads/imports, invalid import preservation, schema 1 migration, keyboard sliders, fullscreen editing, narrow layout and capture release. All 9 existing fullscreen checks passed. Fullscreen and narrow screenshots were inspected. Only synthetic camera data was used; physical-camera alignment remains for user acceptance.
+
+Build 7 verification on 2026-10-09: all 16 unit checks passed. Headless Chrome 155.0.8059.39 passed 320 synthetic pixel cases for gap-free coverage, upright images and independent mirroring at centered/extreme boundaries with odd/even dimensions. Shared controls, global reset, schema 3 persistence, explicit schema 2 migration, invalid imports, stationary visible video while settings scroll, narrow/short layouts, keyboard sliders and capture stop passed. All 9 fullscreen checks passed. Desktop and narrow screenshots were inspected. Real-camera alignment remains pending.

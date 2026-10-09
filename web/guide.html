@@ -25,26 +25,27 @@
       </ol>
     </section>
     <section><h2>Use a larger view</h2>
-      <p>Choose <strong>Fullscreen</strong> in the top toolbar. It works on your current screen; a second monitor is not required. The settings panel hides so the image has more room. Use <strong>Show controls</strong> to adjust your view, and <strong>Hide controls</strong> when finished. On a narrow screen the controls open over part of the image.</p>
+      <p>Choose <strong>Fullscreen</strong> in the top toolbar. It works on your current screen; a second monitor is not required. The settings panel hides so the image has more room. Use <strong>Show controls</strong> to adjust your view, and <strong>Hide controls</strong> when finished. The settings panel scrolls independently while the video stays visible. On a narrow screen the video stays above the controls, in both normal and fullscreen views.</p>
       <p>The toolbar stays visible, including <strong>Stop camera</strong>. Press <strong>Escape</strong> or the exit button to return to the normal page. Leaving fullscreen does not stop the camera or change your orientation or setup. The previous panel visibility is restored.</p>
       <p>If your browser cannot enter fullscreen, the view expands inside the browser window instead. Use <strong>Exit expanded view</strong> or Escape to return. The whole camera frame is fitted without stretching or cropping, so borders may remain. Fullscreen does not increase camera resolution or reveal more of the scene.</p>
       <p>Fullscreen always starts with a button press; loading a setup will not enter it automatically.</p>
     </section>
-    <section><h2>Adjust one quadrant</h2>
-      <p>Start the camera, choose <strong>Fullscreen</strong>, then <strong>Show controls</strong>. Scroll the settings panel to <strong>Quadrants</strong>. The four buttons refer to positions on the screen. Select the receiving quadrant you want to change.</p>
+    <section><h2>Choose mirroring and align the panes</h2>
+      <p>Scroll the settings panel to <strong>Quadrants</strong>. The camera stays on screen while the controls scroll. Select a receiving quadrant by its position on the screen. Turn on <strong>Left/right mirror</strong> to copy the reflected opposite side in the same row; turn it off for the normal image. Each quadrant remembers its choice. There is no top/bottom flip.</p>
+      <p>The two sliders under <strong>Shared alignment</strong> affect all four panes, regardless of which quadrant is selected:</p>
       <ul>
-        <li><strong>Left/right mirror</strong> copies and reflects the opposite side into the selected quadrant.</li>
-        <li><strong>Top/bottom mirror</strong> copies and reflects the opposite row. Both toggles on use the diagonal quadrant; both off show the normal image.</li>
-        <li><strong>Horizontal position</strong> and <strong>Vertical position</strong> move the image within the selected quadrant. The dividing lines stay fixed. Uncovered edges stay dark, and the image cannot cover another quadrant.</li>
-        <li><strong>Reset quadrant</strong> turns off both toggles and centers both sliders for just that quadrant.</li>
+        <li><strong>Horizontal mirror center</strong> moves the vertical dividing line left/right.</li>
+        <li><strong>Vertical mirror center</strong> moves the horizontal dividing line up/down.</li>
+        <li><strong>Reset alignment</strong> returns both lines to 50%, without changing any left/right mirror choices.</li>
       </ul>
-      <p>Each quadrant remembers its own adjustments when you select another. Slider values are percentages of quadrant width or height; positive values move right or down. You can also focus a slider and use the arrow keys. The camera section's <strong>Reverse view</strong> changes the whole starting image before these adjustments.</p>
-      <p>All sources come from the original camera image, so editing one quadrant never changes another quadrant's source. Check your posture and physical camera position each time; saved settings cannot move the camera for you.</p>
+      <p>Values are percentages from the left or top of the full image. The range is 10–90% so every pane retains some space. Panes remain joined with no gaps. To fill an unequal pane, the mirrored image may enlarge or crop while keeping body proportions and staying upright. Borders around the entire video can still appear to fit your screen.</p>
+      <p>You can focus a slider and use arrow keys. With all mirror toggles off, moving the boundaries does not change the normal camera image. Turn on a quadrant's mirror choice to see its boundary move. <strong>Reverse view</strong> changes the base camera direction before quadrant processing.</p>
+      <p>Sources always come from the original camera image. Check posture and physical camera position each time; saved settings cannot move the camera for you.</p>
     </section>
     <section><h2>Save your setup for another day</h2>
       <p>A setup name is optional. If you enter one, it begins the downloaded filename. Choose <strong>Save setup</strong>, then keep the JSON file in a folder you can find again. Your browser may save it to Downloads or ask where to put it.</p>
-      <p>Next time, choose <strong>Load setup</strong> and select that file. This restores your mirror direction, all four quadrant settings and preferred camera name. It does not start or switch the camera automatically. Confirm the camera choice and press Start camera or Use selected camera.</p>
-      <p>Setups from earlier builds still load with their original direction and no quadrant adjustments. New quadrant setups need build 6 or later.</p>
+      <p>Next time, choose <strong>Load setup</strong> and select that file. This restores your mirror direction, all four left/right choices, the shared mirror center and preferred camera name. It does not start or switch the camera automatically. Confirm the camera choice and press Start camera or Use selected camera.</p>
+      <p>Older setups keep their camera direction and any left/right choices. Earlier top/bottom flips and individual offsets are removed, and shared alignment starts centered. An import message explains this. New setups need build 7 or later.</p>
       <p>A setup cannot move the physical camera or restore your posture. Check your position each time. Camera names can change or be shared by two devices, so always check the preview.</p>
       <p>Only setups saved by this browser version are supported here. Desktop ARM study-session files will be rejected with an explanation.</p>
     </section>
@@ -59,7 +60,7 @@
       </ul>
     </section>
     <section><h2>Where information goes</h2>
-      <p>The camera image is processed on this device. This version has no video recording, accounts, analytics, or upload service. Saving creates a local JSON download containing the setup name, camera preference, mirror choice, and save date. Loading reads the file on your device.</p>
+      <p>The camera image is processed on this device. This version has no video recording, accounts, analytics, or upload service. Saving creates a local JSON download containing the setup name, camera preference, mirror choice, quadrant choices, shared alignment, and save date. Loading reads the file on your device.</p>
       <p>A hosting provider may log ordinary website requests, such as your IP address. The app does not send it camera images or setup files. A file saved to a cloud-synced folder may be synced by that folder's service.</p>
     </section>
     <section><h2>About this version</h2><p>ARM is an experimental visual-feedback tool. These instructions explain its controls; they are not a treatment plan or a promise of pain relief.</p></section>

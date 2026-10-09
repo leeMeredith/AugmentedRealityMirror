@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="src/app.js"></script>
 </head>
-<body>
+<body class="mirror-app">
   <a class="skip-link" href="#controls">Skip to controls</a>
   <div class="page">
     <header class="masthead">
@@ -53,7 +53,7 @@
         </section>
         <section class="control-section" aria-labelledby="regions-title">
           <p class="step">02 / Quadrants</p><h2 id="regions-title">Adjust part of your view</h2>
-          <p class="hint">Choose the receiving quadrant as you see it on screen. The center dividing lines stay fixed.</p>
+          <p class="hint">Choose the receiving quadrant as you see it on screen. Each quadrant keeps its own left/right choice.</p>
           <div class="quadrant-picker" role="group" aria-label="Receiving quadrant">
             <button type="button" data-region="topLeft" aria-pressed="true">Top left</button>
             <button type="button" data-region="topRight" aria-pressed="false">Top right</button>
@@ -63,16 +63,18 @@
           <fieldset class="region-settings">
             <legend id="selected-region">Top left</legend>
             <label class="toggle-label"><input id="region-mirror-x" type="checkbox"> Left/right mirror</label>
-            <label class="toggle-label"><input id="region-mirror-y" type="checkbox"> Top/bottom mirror</label>
-            <p class="hint">Left/right copies the reflected opposite side. Top/bottom copies the reflected opposite row. Both use the diagonal quadrant; both off keep the normal image.</p>
-            <label for="region-offset-x">Horizontal position</label>
-            <input id="region-offset-x" type="range" min="-50" max="50" step="1" value="0" aria-describedby="region-position-hint">
-            <output id="region-offset-x-value" for="region-offset-x">Centered</output>
-            <label for="region-offset-y">Vertical position</label>
-            <input id="region-offset-y" type="range" min="-50" max="50" step="1" value="0" aria-describedby="region-position-hint">
-            <output id="region-offset-y-value" for="region-offset-y">Centered</output>
-            <p id="region-position-hint" class="hint">Move the image inside this quadrant. Uncovered edges stay dark. Positions are percentages of its width or height.</p>
-            <button id="reset-region" type="button">Reset quadrant</button>
+            <p class="hint">Copies the reflected opposite side into this quadrant. Turn it off to show the normal image. People stay upright.</p>
+          </fieldset>
+          <fieldset class="region-settings">
+            <legend>Shared alignment · all four panes</legend>
+            <label for="center-x">Horizontal mirror center</label>
+            <input id="center-x" type="range" min="10" max="90" step="1" value="50" aria-describedby="alignment-hint">
+            <output id="center-x-value" for="center-x">Centered (50%)</output>
+            <label for="center-y">Vertical mirror center</label>
+            <input id="center-y" type="range" min="10" max="90" step="1" value="50" aria-describedby="alignment-hint">
+            <output id="center-y-value" for="center-y">Centered (50%)</output>
+            <p id="alignment-hint" class="hint">Move where the four panes meet. Panes stay joined without gaps. Images may crop or enlarge to fill them without stretching.</p>
+            <button id="reset-alignment" type="button">Reset alignment</button>
           </fieldset>
         </section>
         <section class="control-section" aria-labelledby="setup-title">
@@ -82,7 +84,7 @@
           <p class="hint">This name starts your downloaded filename. No name is needed to use the mirror.</p>
           <div class="button-row"><button id="save-setup" type="button">Save setup</button><button id="load-setup" type="button">Load setup</button></div>
           <input id="setup-file" type="file" accept=".json,application/json" hidden>
-          <p id="setup-status" class="status" role="status" aria-live="polite">Saves your mirror direction, all quadrant settings and preferred camera to a JSON file.</p>
+          <p id="setup-status" class="status" role="status" aria-live="polite">Saves your mirror direction, quadrant mirror choices, shared alignment and preferred camera to a JSON file.</p>
         </section>
       </aside>
     </main>

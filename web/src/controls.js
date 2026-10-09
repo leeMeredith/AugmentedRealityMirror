@@ -15,22 +15,23 @@ export class Controls {
   build = document.querySelector("#build-version");
   quadrants = [...document.querySelectorAll("[data-region]")];
   mirrorX = document.querySelector("#region-mirror-x");
-  mirrorY = document.querySelector("#region-mirror-y");
-  offsetX = document.querySelector("#region-offset-x");
-  offsetY = document.querySelector("#region-offset-y");
-  resetRegion = document.querySelector("#reset-region");
+  centerX = document.querySelector("#center-x");
+  centerY = document.querySelector("#center-y");
+  resetAlignment = document.querySelector("#reset-alignment");
 
   regionState(id, region) {
     this.quadrants.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.region === id)));
     const label = REGION_LABELS[REGION_IDS.indexOf(id)];
     document.querySelector("#selected-region").textContent = label;
     this.mirrorX.checked = region.mirrorX;
-    this.mirrorY.checked = region.mirrorY;
-    for (const [axis, slider] of [["X", this.offsetX], ["Y", this.offsetY]]) {
-      const value = region[`offset${axis}`];
+  }
+
+  alignmentState(center) {
+    for (const [axis, slider] of [["x", this.centerX], ["y", this.centerY]]) {
+      const value = center[axis];
       slider.value = value;
-      const text = value === 0 ? "Centered" : `${Math.abs(value)}% ${axis === "X" ? (value < 0 ? "left" : "right") : (value < 0 ? "up" : "down")}`;
-      document.querySelector(`#region-offset-${axis.toLowerCase()}-value`).textContent = text;
+      const text = value === 50 ? "Centered (50%)" : `${value}% from ${axis === "x" ? "left" : "top"}`;
+      document.querySelector(`#center-${axis}-value`).textContent = text;
       slider.setAttribute("aria-valuetext", text);
     }
   }

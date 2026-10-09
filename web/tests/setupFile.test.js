@@ -16,7 +16,7 @@ test("invalid, unrelated and future files are rejected rather than partially res
   assert.throws(() => parseSetup('{"session":{"participantId":"Example"}}'), /Desktop study sessions/);
   assert.throws(() => parseSetup("null"), /browser setup/);
   const setup = createSetup({}, date);
-  assert.throws(() => parseSetup(JSON.stringify({ ...setup, schemaVersion: 3 })), /different version/);
+  assert.throws(() => parseSetup(JSON.stringify({ ...setup, schemaVersion: 4 })), /different version/);
   assert.throws(() => parseSetup(JSON.stringify({ ...setup, view: { mirrored: "false" } })), /valid settings/);
   assert.throws(() => parseSetup(JSON.stringify({ ...setup, savedAt: "nonsense" })), /valid settings/);
 });
@@ -31,20 +31,33 @@ test("existing setups retain both saved flip choices independently of the startu
     assert.deepEqual(parseSetup(JSON.stringify(oldSetup)).view.regions, defaultRegions());
   }
 });
-test("all four quadrant settings round trip independently and malformed regions are rejected", () => {
+test("schema 3 preserves shared alignment and independent mirror choices", () => {
   const regions = defaultRegions();
-  regions.topLeft = { mirrorX: true, mirrorY: false, offsetX: -17, offsetY: 8 };
-  regions.bottomRight = { mirrorX: true, mirrorY: true, offsetX: 50, offsetY: -50 };
-  const setup = createSetup({ regions }, date);
-  assert.equal(setup.schemaVersion, 2);
-  assert.deepEqual(parseSetup(JSON.stringify(setup)).view.regions, regions);
-  for (const bad of [undefined, {}, { ...regions, topLeft: { ...regions.topLeft, mirrorX: 1 } },
-    { ...regions, topLeft: { ...regions.topLeft, offsetY: 51 } },
-    { ...regions, topLeft: { ...regions.topLeft, offsetX: "10" } }]) {
-    assert.throws(() => parseSetup(JSON.stringify({ ...setup, view: { ...setup.view, regions: bad } })), /invalid quadrant/);
+  regions.topLeft.mirrorX = true;
+  regions.bottomRight.mirrorX = true;
+  const setup = createSetup({ regions, center: { x: 32, y: 68 } }, date);
+  assert.equal(setup.schemaVersion, 3);
+  assert.deepEqual(parseSetup(JSON.stringify(setup)), setup);
+  regions.topLeft.mirrorX = false;
+  assert.equal(setup.view.regions.topLeft.mirrorX, true);
+  for (const center of [undefined, {x: 0, y: 50}, {x: 50, y: 91}, {x: "50", y: 50}]) {
+    assert.throws(() => parseSetup(JSON.stringify({ ...setup, view: { ...setup.view, center } })), /invalid alignment/);
   }
-  regions.topLeft.offsetX = 0;
-  assert.equal(setup.view.regions.topLeft.offsetX, -17);
+  assert.throws(() => parseSetup(JSON.stringify({ ...setup, view: {...setup.view, regions: {} } })), /invalid quadrant/);
+});
+test("schema 2 migration explicitly removes upside-down flips and individual offsets", () => {
+  const old = createSetup({ mirrored: false }, date);
+  old.schemaVersion = 2;
+  old.view.regions = Object.fromEntries(Object.keys(old.view.regions).map(id => [id, { mirrorX: id === "topLeft", mirrorY: true, offsetX: 17, offsetY: -23 }]));
+  delete old.view.center;
+  const migrated = parseSetup(JSON.stringify(old));
+  assert.equal(migrated.view.mirrored, false);
+  assert.deepEqual(migrated.view.center, { x: 50, y: 50 });
+  assert.deepEqual(migrated.view.regions.topLeft, { mirrorX: true });
+  assert.match(migrated.importNotice, /Top\/bottom flips and individual offsets removed/);
+  assert.equal(JSON.stringify(migrated).includes("importNotice"), false);
+  old.view.regions.topLeft.offsetX = 51;
+  assert.throws(() => parseSetup(JSON.stringify(old)), /invalid quadrant/);
 });
 test("oversized imports are rejected", () => {
   assert.throws(() => parseSetup(" ".repeat(MAX_SETUP_BYTES + 1)), /too large/);

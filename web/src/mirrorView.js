@@ -1,4 +1,4 @@
-import { defaultRegions, drawRegions, hasRegionAdjustments } from "./mirrorRegions.js";
+import { defaultCenter, defaultRegions, drawRegions, hasRegionAdjustments } from "./mirrorRegions.js";
 // Owns the canvas and draw loop; regional composition lives in mirrorRegions.
 export class MirrorView {
   #canvas;
@@ -7,6 +7,7 @@ export class MirrorView {
   #frame = null;
   mirrored = true;
   regions = defaultRegions();
+  center = defaultCenter();
 
   constructor(canvas, video) {
     this.#canvas = canvas;
@@ -24,7 +25,7 @@ export class MirrorView {
           this.#canvas.height = height;
         }
         if (hasRegionAdjustments(this.regions)) {
-          drawRegions(this.#context, this.#video, width, height, this.mirrored, this.regions);
+          drawRegions(this.#context, this.#video, width, height, this.mirrored, this.regions, this.center);
         } else {
           this.#context.setTransform(this.mirrored ? -1 : 1, 0, 0, 1, this.mirrored ? width : 0, 0);
           this.#context.drawImage(this.#video, 0, 0, width, height);

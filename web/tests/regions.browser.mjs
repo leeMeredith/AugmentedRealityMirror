@@ -1,4 +1,4 @@
-// Optional headless checks; uses synthetic video, never a physical camera.
+// Optional headless integration checks. Only synthetic images/camera are used.
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 const { chromium } = await import(process.env.ARM_PLAYWRIGHT_MODULE || "playwright");
@@ -11,120 +11,128 @@ try {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(process.env.ARM_TEST_URL || "http://localhost:8001");
-  assert.equal(await page.locator("#build-version").textContent(), "Browser build 6");
+  assert.equal(await page.locator("#build-version").textContent(), "Browser build 7");
   const pixels = await page.evaluate(async () => {
     const { drawRegions, defaultRegions, REGION_IDS } = await import("./src/mirrorRegions.js");
     const source = document.createElement("canvas"), target = document.createElement("canvas");
-    source.width = target.width = 80; source.height = target.height = 60;
     const input = source.getContext("2d"), output = target.getContext("2d");
-    output.imageSmoothingEnabled = false;
-    const image = input.createImageData(80, 60);
-    for (let y = 0; y < 60; y++) for (let x = 0; x < 80; x++) {
-      image.data.set([x * 3, y * 4, (x + y) % 256, 255], (y * 80 + x) * 4);
-    }
-    input.putImageData(image, 0, 0);
     let cases = 0;
-    for (const mirrored of [false, true]) for (let selected = 0; selected < 4; selected++) {
-      for (const mirrorX of [false, true]) for (const mirrorY of [false, true]) {
-        for (const [offsetX, offsetY] of [[0, 0], [25, -50], [-50, 50]]) {
-          const regions = defaultRegions();
-          regions[REGION_IDS[selected]] = { mirrorX, mirrorY, offsetX, offsetY };
-          drawRegions(output, source, 80, 60, mirrored, regions);
-          const actual = output.getImageData(0, 0, 80, 60).data;
-          for (let y = 0; y < 60; y++) for (let x = 0; x < 80; x++) {
-            const region = Math.floor(y / 30) * 2 + Math.floor(x / 40);
-            let sx = x, sy = y, blank = false;
-            if (region === selected) {
-              sx -= offsetX * 40 / 100; sy -= offsetY * 30 / 100;
-              blank = sx < (selected % 2) * 40 || sx >= (selected % 2 + 1) * 40
-                || sy < Math.floor(selected / 2) * 30 || sy >= (Math.floor(selected / 2) + 1) * 30;
-              if (mirrorX) sx = 79 - sx;
-              if (mirrorY) sy = 59 - sy;
+    for (const [width,height] of [[80,60],[81,61]]) {
+      source.width = target.width = width; source.height = target.height = height;
+      const image = input.createImageData(width,height);
+      for(let y=0;y<height;y++) for(let x=0;x<width;x++) image.data.set([30+x*2,40+y*2,123,255],(y*width+x)*4);
+      input.putImageData(image,0,0);
+      for (const center of [{x:50,y:50},{x:10,y:10},{x:90,y:90},{x:33,y:71},{x:90,y:10}]) {
+        const splitX=Math.round(width*center.x/100),splitY=Math.round(height*center.y/100);
+        for(const mirrored of [false,true]) for(let mask=0;mask<16;mask++) {
+          const regions=defaultRegions();
+          REGION_IDS.forEach((id,i)=>{regions[id].mirrorX=!!(mask&(1<<i));});
+          output.clearRect(0,0,width,height);
+          drawRegions(output,source,width,height,mirrored,regions,center);
+          const actual=output.getImageData(0,0,width,height).data;
+          for(let y=0;y<height;y++) for(let x=0;x<width;x++) {
+            const i=(y*width+x)*4, region=(y<splitY?0:2)+(x<splitX?0:1);
+            if(actual[i+3]!==255 || actual[i+2]!==123) return {error:"gap",center,mirrored,mask,x,y,pixel:[...actual.slice(i,i+4)]};
+            if(!regions[REGION_IDS[region]].mirrorX) {
+              const expected=[30+(mirrored?width-1-x:x)*2,40+y*2,123,255];
+              if(expected.some((v,c)=>v!==actual[i+c])) return {error:"normal pane changed",center,mirrored,mask,x,y};
             }
-            if (mirrored) sx = 79 - sx;
-            const expected = blank ? [20, 47, 44, 255] : [sx * 3, sy * 4, (sx + sy) % 256, 255];
-            const index = (y * 80 + x) * 4;
-            if (expected.some((value, channel) => value !== actual[index + channel])) {
-              return { error: { mirrored, selected, mirrorX, mirrorY, offsetX, offsetY, x, y, expected, actual: [...actual.slice(index, index + 4)] } };
+            // The vertical gradient must never run backward within a pane.
+            if(y+1<height && y+1!==splitY && actual[i+1]>actual[i+width*4+1]) return {error:"upside down",center,mask,x,y};
+            // The horizontal gradient verifies each quadrant's independent mirror choice.
+            if(x+1<width && x+1!==splitX) {
+              const flipped=mirrored!==regions[REGION_IDS[region]].mirrorX;
+              if(flipped ? actual[i]<actual[i+4] : actual[i]>actual[i+4]) return {error:"wrong horizontal direction",center,mask,x,y};
             }
           }
           cases++;
         }
       }
     }
-    return { cases };
+    return {cases};
   });
-  assert.deepEqual(pixels, { cases: 96 });
-  console.log("PASS 96 pixel cases: both camera orientations, every quadrant/toggle combination, offsets, clipping and unchanged neighbors");
-
+  assert.deepEqual(pixels,{cases:320});
+  console.log("PASS 320 pixel cases: gap-free panes, upright images, independent horizontal choices, both camera orientations and odd dimensions");
+  assert.equal(await page.locator("#region-mirror-y").count(),0);
   await page.locator("#start-camera").click();
-  await page.waitForFunction(() => document.querySelector("#camera-state").textContent === "Camera on");
-  await page.evaluate(() => { window.originalTrack = document.querySelector("#camera-video").srcObject.getVideoTracks()[0]; });
+  await page.waitForFunction(()=>document.querySelector("#camera-state").textContent==="Camera on");
+  await page.evaluate(()=>{window.originalTrack=document.querySelector("#camera-video").srcObject.getVideoTracks()[0];});
   await page.locator("#region-mirror-x").check();
-  await page.locator("#region-offset-x").fill("25");
+  await page.locator("#center-x").fill("32");
+  await page.locator("#center-y").fill("68");
   await page.locator("[data-region=bottomRight]").click();
-  assert.equal(await page.locator("#region-mirror-x").isChecked(), false);
-  assert.equal(await page.locator("#region-offset-x").inputValue(), "0");
-  await page.locator("#region-mirror-y").check();
-  await page.locator("#region-offset-y").fill("-30");
-  await page.locator("[data-region=topLeft]").click();
-  assert.equal(await page.locator("#region-mirror-x").isChecked(), true);
-  assert.equal(await page.locator("#region-offset-x").inputValue(), "25");
+  assert.equal(await page.locator("#center-x").inputValue(),"32");
+  assert.equal(await page.locator("#center-y").inputValue(),"68");
+  assert.equal(await page.locator("#region-mirror-x").isChecked(),false);
+  await page.locator("#region-mirror-x").check();
   await page.locator("#setup-name").fill("Example chair");
-  const downloadPromise = page.waitForEvent("download");
+  const downloadPromise=page.waitForEvent("download");
   await page.locator("#save-setup").click();
-  const download = await downloadPromise;
-  const saved = JSON.parse(await readFile(await download.path(), "utf8"));
-  assert.match(download.suggestedFilename(), /^Example_chair_setup_/);
-  assert.equal(saved.schemaVersion, 2);
-  assert.deepEqual(saved.view.regions.topLeft, { mirrorX: true, mirrorY: false, offsetX: 25, offsetY: 0 });
-  assert.deepEqual(saved.view.regions.bottomRight, { mirrorX: false, mirrorY: true, offsetX: 0, offsetY: -30 });
-  await page.locator("#reset-region").click();
-  assert.equal(await page.locator("#region-mirror-x").isChecked(), false);
-  assert.equal(await page.locator("#region-offset-x").inputValue(), "0");
-  await page.locator("[data-region=bottomRight]").click();
-  assert.equal(await page.locator("#region-offset-y").inputValue(), "-30");
-  const load = async data => {
-    await page.locator("#setup-status").evaluate(element => { element.textContent = ""; });
-    await page.locator("#setup-file").setInputFiles({ name: "setup.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(data)) });
-    await page.waitForFunction(() => document.querySelector("#setup-status").textContent !== "");
+  const download=await downloadPromise;
+  const saved=JSON.parse(await readFile(await download.path(),"utf8"));
+  assert.match(download.suggestedFilename(),/^Example_chair_setup_/);
+  assert.equal(saved.schemaVersion,3);
+  assert.deepEqual(saved.view.center,{x:32,y:68});
+  assert.deepEqual(saved.view.regions.topLeft,{mirrorX:true});
+  assert.deepEqual(saved.view.regions.bottomRight,{mirrorX:true});
+  await page.locator("#reset-alignment").click();
+  assert.equal(await page.locator("#center-x").inputValue(),"50");
+  assert.equal(await page.locator("#center-y").inputValue(),"50");
+  assert.equal(await page.locator("#region-mirror-x").isChecked(),true);
+  const load=async data=>{
+    await page.locator("#setup-status").evaluate(el=>{el.textContent="";});
+    await page.locator("#setup-file").setInputFiles({name:"setup.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(data))});
+    await page.waitForFunction(()=>document.querySelector("#setup-status").textContent!=="");
   };
   await load(saved);
-  await page.locator("[data-region=topLeft]").click();
-  assert.equal(await page.locator("#region-offset-x").inputValue(), "25");
-  const bad = structuredClone(saved);
-  bad.view.regions.topLeft.offsetX = 500;
+  assert.equal(await page.locator("#center-x").inputValue(),"32");
+  const bad=structuredClone(saved);bad.view.center.y=200;
   await load(bad);
-  assert.match(await page.locator("#setup-status").textContent(), /invalid quadrant/);
-  assert.equal(await page.locator("#region-offset-x").inputValue(), "25");
-  console.log("PASS Independent quadrant controls, reset, named JSON round trip and invalid import preservation");
+  assert.match(await page.locator("#setup-status").textContent(),/invalid alignment/);
+  assert.equal(await page.locator("#center-y").inputValue(),"68");
+  const old=structuredClone(saved);old.schemaVersion=2;delete old.view.center;
+  for(const region of Object.values(old.view.regions)) Object.assign(region,{mirrorY:true,offsetX:12,offsetY:-20});
+  await load(old);
+  assert.match(await page.locator("#setup-status").textContent(),/Top\/bottom flips and individual offsets removed/);
+  assert.equal(await page.locator("#center-y").inputValue(),"50");
+  assert.equal(await page.locator("#region-mirror-x").isChecked(),true);
+  console.log("PASS Shared sliders, independent toggles, global reset, schema 3 round trip, invalid-file preservation and explicit legacy migration");
 
-  await page.locator("#fullscreen-view").click();
-  await page.waitForFunction(() => !!document.fullscreenElement);
-  await page.locator("#toggle-controls").click();
-  await page.locator("#region-offset-x").fill("-10");
-  assert.equal(await page.evaluate(() => window.originalTrack === document.querySelector("#camera-video").srcObject.getVideoTracks()[0] && window.originalTrack.readyState === "live"), true);
-  if (process.env.ARM_SCREENSHOT_DIR) await page.screenshot({ path: `${process.env.ARM_SCREENSHOT_DIR}/regions-fullscreen.png` });
-  await page.keyboard.press("Escape");
-  await page.waitForFunction(() => !document.fullscreenElement);
-  await load({ ...saved, schemaVersion: 1, view: { mirrored: false } });
-  for (const id of ["topLeft", "topRight", "bottomLeft", "bottomRight"]) {
-    await page.locator(`[data-region=${id}]`).click();
-    assert.equal(await page.locator("#region-mirror-x").isChecked(), false);
-    assert.equal(await page.locator("#region-mirror-y").isChecked(), false);
-    assert.equal(await page.locator("#region-offset-x").inputValue(), "0");
-    assert.equal(await page.locator("#region-offset-y").inputValue(), "0");
+  async function checkLayout(label) {
+    await page.locator("#toggle-controls").focus();
+    await page.locator("#controls").evaluate(el=>{el.scrollTop=0;});
+    const before=await page.locator("#mirror-canvas").boundingBox();
+    await page.locator("#save-setup").focus();
+    const result=await page.evaluate(()=>{
+      const panel=document.querySelector("#controls"),v=document.querySelector("#mirror-canvas").getBoundingClientRect(),c=panel.getBoundingClientRect();
+      return {scrolled:panel.scrollTop>0,visible:v.width>0&&v.height>0&&v.top>=0&&v.bottom<=innerHeight&&v.left>=0&&v.right<=innerWidth,
+        separate:c.left>=v.right || c.top>=v.bottom,overflow:document.documentElement.scrollWidth>innerWidth};
+    });
+    assert.deepEqual(result,{scrolled:true,visible:true,separate:true,overflow:false},label);
+    assert.deepEqual(await page.locator("#mirror-canvas").boundingBox(),before,label);
+    if(process.env.ARM_SCREENSHOT_DIR) await page.screenshot({path:`${process.env.ARM_SCREENSHOT_DIR}/${label}.png`});
   }
-  await page.waitForFunction(() => document.querySelector("#mirror-canvas").getContext("2d").getTransform().a === 1);
-  console.log("PASS Fullscreen adjustments preserve capture; version 1 imports clear regions and retain original orientation");
-  await page.setViewportSize({ width: 390, height: 600 });
-  await page.locator("#region-offset-y").focus();
-  await page.keyboard.press("ArrowRight");
-  assert.equal(await page.locator("#region-offset-y").inputValue(), "1");
-  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-  if (process.env.ARM_SCREENSHOT_DIR) await page.screenshot({ path: `${process.env.ARM_SCREENSHOT_DIR}/regions-narrow.png` });
+  await checkLayout("desktop");
+  await page.locator("#fullscreen-view").click();
+  await page.waitForFunction(()=>!!document.fullscreenElement);
+  await page.locator("#toggle-controls").click();
+  await checkLayout("fullscreen");
+  await page.keyboard.press("Escape");
+  await page.waitForFunction(()=>!document.fullscreenElement);
+  for(const [width,height] of [[390,600],[780,400]]) {
+    await page.setViewportSize({width,height});
+    await checkLayout(`small-${width}`);
+  }
+  await page.setViewportSize({width:390,height:600});
+  await page.evaluate(()=>Object.defineProperty(document,"fullscreenEnabled",{value:false}));
+  await page.locator("#fullscreen-view").click();
+  await page.locator("#toggle-controls").click();
+  await checkLayout("small-expanded");
+  await page.locator("#center-y").focus();await page.keyboard.press("ArrowRight");
+  assert.equal(await page.locator("#center-y").inputValue(),"51");
+  assert.equal(await page.evaluate(()=>window.originalTrack.readyState),"live");
   await page.locator("#stop-view").click();
-  assert.equal(await page.evaluate(() => window.originalTrack.readyState), "ended");
-  assert.deepEqual(errors, []);
-  console.log(`PASS Narrow layout, keyboard slider and capture stop; Chrome ${browser.version()}`);
-} finally { await browser.close(); }
+  assert.equal(await page.evaluate(()=>window.originalTrack.readyState),"ended");
+  assert.deepEqual(errors,[]);
+  console.log(`PASS Stationary visible video and separate scrolling controls at desktop, fullscreen, narrow and short sizes; keyboard and camera stop. Chrome ${browser.version()}`);
+} finally {await browser.close();}
