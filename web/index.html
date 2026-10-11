@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>ARM · Camera mirror</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="src/app.js"></script>
+</head>
+<body class="mirror-app">
+  <a class="skip-link" href="#controls">Skip to controls</a>
+  <div class="page">
+    <header class="masthead">
+      <div><p class="eyebrow">Augmented Reality Mirror</p><h1>A place to start.</h1></div>
+      <a class="guide-link" href="guide.html">Getting started <span aria-hidden="true">↗</span></a>
+    </header>
+    <p class="intro">Use your camera as a mirror. Start with a comfortable position and a clear view.</p>
+    <main id="mirror-workspace" class="workspace">
+      <div class="view-toolbar" role="group" aria-label="View controls">
+        <div class="button-row">
+          <button id="fullscreen-view" type="button">Fullscreen</button>
+          <button id="toggle-controls" type="button" aria-controls="controls" aria-expanded="true">Hide controls</button>
+          <button id="stop-view" type="button" disabled>Stop camera</button>
+        </div>
+        <p id="fullscreen-status" class="view-status" role="status" hidden></p>
+      </div>
+      <section class="preview-panel" aria-labelledby="preview-title">
+        <div class="preview-heading"><h2 id="preview-title">Your view</h2><span id="camera-state" class="badge">Camera off</span></div>
+        <div class="preview-stage">
+          <video id="camera-video" muted playsinline hidden aria-hidden="true"></video>
+          <canvas id="mirror-canvas" width="640" height="480" aria-label="Live camera view" hidden></canvas>
+          <div id="placeholder" class="placeholder">
+            <span class="camera-mark" aria-hidden="true">◉</span>
+            <h3>Your camera is off</h3>
+            <p>Choose <strong>Start camera</strong> when you are ready.<br>Your browser will ask for permission.</p>
+          </div>
+        </div>
+        <p class="preview-note">The image stays on this device. There is no video recording.</p>
+      </section>
+      <aside id="controls" class="controls" aria-label="Camera, quadrant and setup controls" tabindex="-1">
+        <section class="control-section" aria-labelledby="camera-title">
+          <p class="step">01 / Camera</p><h2 id="camera-title">Settle into your view</h2>
+          <label for="camera-select">Camera</label>
+          <select id="camera-select" aria-describedby="camera-hint"><option value="">Default camera</option></select>
+          <p id="camera-hint" class="hint">Camera names may appear after you allow access.</p>
+          <div class="button-row"><button id="start-camera" class="primary" type="button">Start camera</button><button id="stop-camera" type="button" disabled>Stop</button></div>
+          <button id="reverse-view" class="reverse-view" type="button">Reverse view</button>
+          <p class="hint">Raise a hand to check your view. This reverses the whole camera image before quadrant adjustments.</p>
+          <p id="camera-status" class="status" role="status" aria-live="polite">Ready when you are.</p>
+        </section>
+        <section class="control-section" aria-labelledby="regions-title">
+          <p class="step">02 / Quadrants</p><h2 id="regions-title">Adjust part of your view</h2>
+          <p class="hint">Choose the receiving quadrant as you see it on screen. Each quadrant keeps its own left/right choice.</p>
+          <div class="quadrant-picker" role="group" aria-label="Receiving quadrant">
+            <button type="button" data-region="topLeft" aria-pressed="true">Top left</button>
+            <button type="button" data-region="topRight" aria-pressed="false">Top right</button>
+            <button type="button" data-region="bottomLeft" aria-pressed="false">Bottom left</button>
+            <button type="button" data-region="bottomRight" aria-pressed="false">Bottom right</button>
+          </div>
+          <fieldset class="region-settings">
+            <legend id="selected-region">Top left</legend>
+            <label class="toggle-label"><input id="region-mirror-x" type="checkbox"> Left/right mirror</label>
+            <p class="hint">Copies the reflected opposite side into this quadrant. Turn it off to show the normal image. People stay upright.</p>
+          </fieldset>
+          <fieldset class="region-settings">
+            <legend>Shared alignment · all four panes</legend>
+            <label for="center-x">Horizontal mirror center</label>
+            <input id="center-x" type="range" min="10" max="90" step="1" value="50" aria-describedby="alignment-hint">
+            <output id="center-x-value" for="center-x">Centered (50%)</output>
+            <label for="center-y">Vertical mirror center</label>
+            <input id="center-y" type="range" min="10" max="90" step="1" value="50" aria-describedby="alignment-hint">
+            <output id="center-y-value" for="center-y">Centered (50%)</output>
+            <p id="alignment-hint" class="hint">Move where the four panes meet. The dividers reveal the full camera images without moving or resizing them. Panes stay joined without gaps.</p>
+            <button id="reset-alignment" type="button">Reset alignment</button>
+          </fieldset>
+        </section>
+        <section class="control-section" aria-labelledby="setup-title">
+          <p class="step">03 / Your setup</p><h2 id="setup-title">Keep your starting point</h2>
+          <label for="setup-name">Setup name <span class="optional">(optional)</span></label>
+          <input id="setup-name" type="text" maxlength="80" autocomplete="off" placeholder="For example, home chair">
+          <p class="hint">This name starts your downloaded filename. No name is needed to use the mirror.</p>
+          <div class="button-row"><button id="save-setup" type="button">Save setup</button><button id="load-setup" type="button">Load setup</button></div>
+          <input id="setup-file" type="file" accept=".json,application/json" hidden>
+          <p id="setup-status" class="status" role="status" aria-live="polite">Saves your mirror direction, quadrant mirror choices, shared alignment and preferred camera to a JSON file.</p>
+        </section>
+      </aside>
+    </main>
+    <footer><p>RGB camera and saved setup · <span id="build-version">Browser code has not loaded</span></p><p>An experimental visual-feedback tool. It does not establish pain relief or provide a treatment plan.</p></footer>
+    <noscript><p class="status error">JavaScript must be enabled to use the camera mirror.</p></noscript>
+  </div>
+</body>
+</html>

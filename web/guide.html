@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Getting started · ARM</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page guide">
+    <a href="index.html">← Back to the mirror</a>
+    <p class="eyebrow">Augmented Reality Mirror</p>
+    <h1>Getting started</h1>
+    <p>This browser version offers a camera mirror, fullscreen and independent quadrant adjustments. You can save and reload your view and camera preference. Pain entries are a later milestone.</p>
+    <section><h2>Start with a comfortable view</h2>
+      <ol>
+        <li>Place your computer or camera on a stable surface, with enough light to see yourself. Adjust the physical camera to include the area you want to view.</li>
+        <li>Choose <strong>Start camera</strong> and allow the browser to use the camera. Microphone access is not requested.</li>
+        <li>If the wrong camera opens, choose another in the Camera list and press <strong>Use selected camera</strong>.</li>
+        <li>Raise a hand to check the starting view. If you need the opposite direction, press <strong>Reverse view</strong>. Pressing it again returns to the previous direction. A loaded setup restores its saved choice.</li>
+        <li>Choose <strong>Stop</strong> when finished. Closing or leaving this page also releases this page's camera stream.</li>
+      </ol>
+    </section>
+    <section><h2>Use a larger view</h2>
+      <p>Choose <strong>Fullscreen</strong> in the top toolbar. It works on your current screen; a second monitor is not required. The settings panel hides so the image has more room. Use <strong>Show controls</strong> to adjust your view, and <strong>Hide controls</strong> when finished. The settings panel scrolls independently while the video stays visible. On a narrow screen the video stays above the controls, in both normal and fullscreen views.</p>
+      <p>The toolbar stays visible, including <strong>Stop camera</strong>. Press <strong>Escape</strong> or the exit button to return to the normal page. Leaving fullscreen does not stop the camera or change your orientation or setup. The previous panel visibility is restored.</p>
+      <p>If your browser cannot enter fullscreen, the view expands inside the browser window instead. Use <strong>Exit expanded view</strong> or Escape to return. The whole camera frame is fitted without stretching or cropping, so borders may remain. Fullscreen does not increase camera resolution or reveal more of the scene.</p>
+      <p>Fullscreen always starts with a button press; loading a setup will not enter it automatically.</p>
+    </section>
+    <section><h2>Choose mirroring and align the panes</h2>
+      <p>Scroll the settings panel to <strong>Quadrants</strong>. The camera stays on screen while the controls scroll. Select a receiving quadrant by its position on the screen. Turn on <strong>Left/right mirror</strong> to copy the reflected opposite side in the same row; turn it off for the normal image. Each quadrant remembers its choice. There is no top/bottom flip.</p>
+      <p>The two sliders under <strong>Shared alignment</strong> affect all four panes, regardless of which quadrant is selected:</p>
+      <ul>
+        <li><strong>Horizontal mirror center</strong> moves the vertical dividing line left/right.</li>
+        <li><strong>Vertical mirror center</strong> moves the horizontal dividing line up/down.</li>
+        <li><strong>Reset alignment</strong> returns both lines to 50%, without changing any left/right mirror choices.</li>
+      </ul>
+      <p>Values are percentages from the left or top of the full image. The range is 10–90% so every pane retains some space. Panes remain joined with no gaps. The dividers reveal more or less of complete camera images. Moving them never enlarges, shrinks or moves those underlying images. A person remains the same size even when the panes are unequal. Borders around the entire video can still appear to fit your screen.</p>
+      <p>You can focus a slider and use arrow keys. With all mirror toggles off, moving the boundaries does not change the normal camera image. Turn on a quadrant's mirror choice to see its reveal boundary move. The reflection stays centered on the full image; the dividing line only controls which version is visible. <strong>Reverse view</strong> changes the base camera direction before quadrant processing.</p>
+      <p>Sources always come from the original camera image. Check posture and physical camera position each time; saved settings cannot move the camera for you.</p>
+    </section>
+    <section><h2>Save your setup for another day</h2>
+      <p>A setup name is optional. If you enter one, it begins the downloaded filename. Choose <strong>Save setup</strong>, then keep the JSON file in a folder you can find again. Your browser may save it to Downloads or ask where to put it.</p>
+      <p>Next time, choose <strong>Load setup</strong> and select that file. This restores your mirror direction, all four left/right choices, the shared mirror center and preferred camera name. It does not start or switch the camera automatically. Confirm the camera choice and press Start camera or Use selected camera.</p>
+      <p>Older setups keep their camera direction and any left/right choices. Earlier top/bottom flips and individual offsets are removed, and shared alignment starts centered. An import message explains this. Build 7 setups retain their divider positions and mirror choices in build 8, with the corrected fixed-size image behavior. Use build 8 or later for this rendering.</p>
+      <p>A setup cannot move the physical camera or restore your posture. Check your position each time. Camera names can change or be shared by two devices, so always check the preview.</p>
+      <p>Only setups saved by this browser version are supported here. Desktop ARM study-session files will be rejected with an explanation.</p>
+    </section>
+    <section><h2>If the camera does not open</h2>
+      <ul>
+        <li><strong>Permission denied:</strong> check the site's camera permission in your browser and the browser's permission in your computer's privacy settings. Then press Start camera again.</li>
+        <li><strong>Camera busy:</strong> close other applications using the camera and try again.</li>
+        <li><strong>Camera missing:</strong> check its connection, choose Default camera, and retry.</li>
+        <li><strong>Restricted computer:</strong> an administrator may need to allow the site or camera. This app cannot bypass those restrictions.</li>
+        <li><strong>Still waiting:</strong> look for a browser permission prompt. You can press Stop even while that prompt is open; a late permission response will not start the preview.</li>
+        <li><strong>Changes do not appear:</strong> stop the camera and reload the page. The build label at the bottom helps identify which version is running. When checking startup orientation, start before loading a setup, since the setup restores its own flip choice.</li>
+      </ul>
+    </section>
+    <section><h2>Where information goes</h2>
+      <p>The camera image is processed on this device. This version has no video recording, accounts, analytics, or upload service. Saving creates a local JSON download containing the setup name, camera preference, mirror choice, quadrant choices, shared alignment, and save date. Loading reads the file on your device.</p>
+      <p>A hosting provider may log ordinary website requests, such as your IP address. The app does not send it camera images or setup files. A file saved to a cloud-synced folder may be synced by that folder's service.</p>
+    </section>
+    <section><h2>About this version</h2><p>ARM is an experimental visual-feedback tool. These instructions explain its controls; they are not a treatment plan or a promise of pain relief.</p></section>
+  </main>
+</body>
+</html>
