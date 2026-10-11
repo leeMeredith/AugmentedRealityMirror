@@ -2,6 +2,14 @@
 
 ARM's first browser milestone is a static HTML/CSS/JavaScript application. It requests video from a camera after an explicit Start action. It never requests a microphone. No account, browser extension, installer, or application server is required for a hosted user.
 
+## Published site
+
+- Project information: https://leemeredith.github.io/AugmentedRealityMirror/
+- Browser application: https://leemeredith.github.io/AugmentedRealityMirror/web/
+- User guide: https://leemeredith.github.io/AugmentedRealityMirror/web/guide.html
+
+GitHub Pages publishes from the root of `master`. Keep the `/web/` path in links intended to open the camera application. Pushes to `master` trigger the Pages build; check the repository's Actions results and the live build label before announcing an update.
+
 ## Network and data
 
 - Host all files under `web` at one HTTPS origin, preserving relative paths and JavaScript MIME types. Only the static application and guide are fetched.

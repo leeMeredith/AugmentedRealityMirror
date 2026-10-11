@@ -2,7 +2,7 @@
 
 Augmented Reality Mirror is a project by Lee Meredith exploring digital mirror images and visual feedback for people with limb loss and phantom limb pain. It began as a Kinect and openFrameworks prototype and now also includes a browser-based RGB camera version.
 
-[Watch the original demonstration](https://vimeo.com/49252026) · [Browser application and instructions](web/README.md) · [Original project README](docs/history/README.original.md)
+[Open ARM in your browser](https://leemeredith.github.io/AugmentedRealityMirror/web/) · [Watch the original demonstration](https://vimeo.com/49252026) · [Browser application and instructions](web/README.md) · [Original project README](docs/history/README.original.md)
 
 ## Original work
 
@@ -33,7 +33,15 @@ There are two applications in the current checkout:
 
 The browser version is **Build 8**. Each selected region reveals a normal or horizontally reflected full camera image. Moving the dividers changes which image is visible without enlarging or shifting the underlying images. Saved setups preserve the camera direction, quadrant choices and shared divider positions.
 
-### Try the browser version locally
+### Open the browser version
+
+[**Open ARM camera mirror**](https://leemeredith.github.io/AugmentedRealityMirror/web/)
+
+No download, installation or GitHub account is needed. Open the link, press **Start camera**, and allow camera access. Use **Fullscreen** for a larger view and **Show controls** to adjust it. The [online user guide](https://leemeredith.github.io/AugmentedRealityMirror/web/guide.html) explains the controls and saved setups.
+
+The [project website](https://leemeredith.github.io/AugmentedRealityMirror/) presents the project's background and history. It and the browser app are published through GitHub Pages from `master`.
+
+### Run locally for development
 
 From the repository's `web` folder:
 
@@ -41,7 +49,7 @@ From the repository's `web` folder:
 python3 serve.py
 ```
 
-Then open `http://localhost:8000`, press **Start camera**, and allow camera access. The [browser README](web/README.md) has the full instructions. A hosted browser link is the next publishing step; GitHub Pages has not yet been enabled.
+Then open `http://localhost:8000`, press **Start camera**, and allow camera access. The [browser README](web/README.md) has the full instructions.
 
 For the native RGB project, use openFrameworks **0.12.1** with **ofxGui**, as listed in [`addons.make`](addons.make). Its source and Xcode project remain alongside the browser version.
 

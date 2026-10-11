@@ -10,7 +10,13 @@ Each quadrant masks either the full base camera image or its full horizontal ref
 
 The controls scroll independently while the camera remains visible, in normal and fullscreen views. On narrow screens the camera sits above the scrolling controls rather than behind them. **Fullscreen** initially hides settings; **Show controls**, **Stop camera**, and Exit stay available. Escape exits, and an in-page expanded view is used if native fullscreen is unavailable.
 
-## Run locally
+## Open the hosted app
+
+[**Open ARM camera mirror**](https://leemeredith.github.io/AugmentedRealityMirror/web/) · [Online user guide](https://leemeredith.github.io/AugmentedRealityMirror/web/guide.html)
+
+Open the link, press **Start camera**, and allow camera access. No installation or GitHub account is required. The live app is Build 8. Camera frames are processed on the visitor's device.
+
+## Run locally for development
 
 From this `web` directory, with Python 3 installed:
 
@@ -24,7 +30,7 @@ The development server always serves this `web` folder and disables caching for 
 
 No npm installation or build step is needed to run the app. The `package.json` only enables ES modules and the Node test command.
 
-For ordinary users, a maintainer would host the static `web` folder over HTTPS and share a link. Users would not run Python or install development tools. Hosting has not been configured or published by this milestone. Opening a developer machine's HTTP LAN address is not an equivalent camera test: use HTTPS for remote access.
+GitHub Pages now serves the app over HTTPS at the link above, using the repository root on `master`. The root address shows project information; `/web/` opens the app. Ordinary users do not run Python or install development tools. Opening a developer machine's HTTP LAN address is not an equivalent camera test: use HTTPS for remote access.
 
 ## Guides
 
