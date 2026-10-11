@@ -16,7 +16,7 @@ try {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(url);
-  assert.equal(await page.locator("#build-version").textContent(), "Browser build 7");
+  assert.equal(await page.locator("#build-version").textContent(), "Browser build 8");
   await page.locator("#start-camera").click();
   await page.waitForFunction(() => document.querySelector("#camera-state").textContent === "Camera on");
   await page.evaluate(() => { window.originalTrack = document.querySelector("#camera-video").srcObject.getVideoTracks()[0]; });

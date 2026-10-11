@@ -11,7 +11,7 @@ try {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(process.env.ARM_TEST_URL || "http://localhost:8001");
-  assert.equal(await page.locator("#build-version").textContent(), "Browser build 7");
+  assert.equal(await page.locator("#build-version").textContent(), "Browser build 8");
   const pixels = await page.evaluate(async () => {
     const { drawRegions, defaultRegions, REGION_IDS } = await import("./src/mirrorRegions.js");
     const source = document.createElement("canvas"), target = document.createElement("canvas");
@@ -22,7 +22,8 @@ try {
       const image = input.createImageData(width,height);
       for(let y=0;y<height;y++) for(let x=0;x<width;x++) image.data.set([30+x*2,40+y*2,123,255],(y*width+x)*4);
       input.putImageData(image,0,0);
-      for (const center of [{x:50,y:50},{x:10,y:10},{x:90,y:90},{x:33,y:71},{x:90,y:10}]) {
+      for (const cx of [10,20,33,50,71,80,90]) for (const cy of [10,20,33,50,71,80,90]) {
+        const center = { x: cx, y: cy };
         const splitX=Math.round(width*center.x/100),splitY=Math.round(height*center.y/100);
         for(const mirrored of [false,true]) for(let mask=0;mask<16;mask++) {
           const regions=defaultRegions();
@@ -33,17 +34,11 @@ try {
           for(let y=0;y<height;y++) for(let x=0;x<width;x++) {
             const i=(y*width+x)*4, region=(y<splitY?0:2)+(x<splitX?0:1);
             if(actual[i+3]!==255 || actual[i+2]!==123) return {error:"gap",center,mirrored,mask,x,y,pixel:[...actual.slice(i,i+4)]};
-            if(!regions[REGION_IDS[region]].mirrorX) {
-              const expected=[30+(mirrored?width-1-x:x)*2,40+y*2,123,255];
-              if(expected.some((v,c)=>v!==actual[i+c])) return {error:"normal pane changed",center,mirrored,mask,x,y};
-            }
-            // The vertical gradient must never run backward within a pane.
-            if(y+1<height && y+1!==splitY && actual[i+1]>actual[i+width*4+1]) return {error:"upside down",center,mask,x,y};
-            // The horizontal gradient verifies each quadrant's independent mirror choice.
-            if(x+1<width && x+1!==splitX) {
-              const flipped=mirrored!==regions[REGION_IDS[region]].mirrorX;
-              if(flipped ? actual[i]<actual[i+4] : actual[i]>actual[i+4]) return {error:"wrong horizontal direction",center,mask,x,y};
-            }
+            // Every pixel must remain at its original full-frame coordinate, or its
+            // exact horizontal reflection. This catches zoom and translation as well as gaps.
+            const flipped=mirrored!==regions[REGION_IDS[region]].mirrorX;
+            const expected=[30+(flipped?width-1-x:x)*2,40+y*2,123,255];
+            if(expected.some((v,c)=>v!==actual[i+c])) return {error:"image moved or resized",center,mirrored,mask,x,y};
           }
           cases++;
         }
@@ -51,8 +46,8 @@ try {
     }
     return {cases};
   });
-  assert.deepEqual(pixels,{cases:320});
-  console.log("PASS 320 pixel cases: gap-free panes, upright images, independent horizontal choices, both camera orientations and odd dimensions");
+  assert.deepEqual(pixels,{cases:3136});
+  console.log("PASS 3136 pixel cases: fixed full-image scale/position, no gaps, independent choices, both camera orientations and odd dimensions");
   assert.equal(await page.locator("#region-mirror-y").count(),0);
   await page.locator("#start-camera").click();
   await page.waitForFunction(()=>document.querySelector("#camera-state").textContent==="Camera on");

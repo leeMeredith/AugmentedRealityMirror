@@ -10,7 +10,7 @@ const camera = new CaptureRGB(controls.video);
 const view = new MirrorView(controls.canvas, controls.video);
 const fullscreen = new FullscreenView(document.querySelector("#mirror-workspace"));
 // Set by the running JavaScript, so a stale HTML label alone cannot claim this build loaded.
-controls.build.textContent = "Browser build 7";
+controls.build.textContent = "Browser build 8";
 let selectedRegion = "topLeft";
 const refreshRegion = () => controls.regionState(selectedRegion, view.regions[selectedRegion]);
 controls.quadrants.forEach(button => button.addEventListener("click", () => {

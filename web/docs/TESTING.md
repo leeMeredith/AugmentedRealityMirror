@@ -29,7 +29,7 @@ Record the operating system, browser/version, camera, date, and result. Test des
 
 1. Open the local development URL or deployed HTTPS link. Record the build label in the footer. Confirm no camera permission prompt appears until Start camera is pressed.
 2. Start and allow the camera. Confirm a live view and the browser's camera-use indicator.
-3. On a fresh page, raise one hand and compare the initial view with Reverse view pressed once, then twice. Build 7 retains the confirmed build 4 starting direction. Check horizontal reversal with asymmetric text or an object. Confirm the full image fits without stretching or cropping.
+3. On a fresh page, raise one hand and compare the initial view with Reverse view pressed once, then twice. Build 8 retains the confirmed build 4 starting direction. Check horizontal reversal with asymmetric text or an object. Confirm the full image fits without stretching or cropping.
 4. Select a different camera if available and press Use selected camera. Confirm the old camera is released and the new view updates.
 5. Press Stop. Confirm the preview clears and the stream is released (the browser's indicator may take a moment to update).
 6. Start again and leave it running for several minutes. Confirm movement stays live.
@@ -52,10 +52,10 @@ Record the operating system, browser/version, camera, date, and result. Test des
 6. Test a browser or policy that denies fullscreen. Confirm the expanded in-page view works, explains the limitation, and exits with Escape or Exit expanded view.
 7. Test keyboard navigation and 200% zoom, including a narrow or short window. Controls and exits must remain reachable. A second monitor is optional, not a requirement for this milestone.
 
-## Shared center and scrolling (build 7)
+## Shared dividers and scrolling (build 8)
 
 1. Check each quadrant's left/right mirror independently. People stay upright; there is no top/bottom control.
-2. Move each shared slider toward both ends. All pane boundaries move together and remain joined without gaps. Unequal mirrored panes can crop/enlarge without stretching. With all mirrors off, the original image remains unchanged.
+2. Move each shared slider toward both ends. All pane boundaries move together and remain joined without gaps. Use an asymmetric grid or stationary object: its size and position must remain unchanged within either underlying image as the boundaries move. Unequal panes must never zoom their images. With all mirrors off, the original image remains unchanged.
 3. Change the selected quadrant and confirm the shared slider positions remain unchanged. Reset alignment; both return to 50% and mirror choices remain intact.
 4. Scroll from Camera through Setup while watching the video. Confirm it stays visible and stationary. Repeat in fullscreen, a narrow portrait window and a short landscape window. Controls must never overlap the video.
 5. Save a named setup, reload and import it. Confirm shared center and all mirror choices return without automatically starting capture. Import schema 2: camera direction and left/right choices stay, old vertical flips/offsets are removed, alignment centers and a message explains this. Invalid imports must preserve the current setup.
@@ -77,3 +77,7 @@ Build 5 verification on 2026-10-05: all 13 Node 24.12.0 unit checks passed. All 
 Build 6 verification on 2026-10-09: all 14 Node unit checks passed. Headless Chrome 155.0.8059.39 passed 96 asymmetric-image pixel cases covering every quadrant, both base orientations, both toggles and positive/negative offsets; it also passed independent controls/reset, named schema 2 downloads/imports, invalid import preservation, schema 1 migration, keyboard sliders, fullscreen editing, narrow layout and capture release. All 9 existing fullscreen checks passed. Fullscreen and narrow screenshots were inspected. Only synthetic camera data was used; physical-camera alignment remains for user acceptance.
 
 Build 7 verification on 2026-10-09: all 16 unit checks passed. Headless Chrome 155.0.8059.39 passed 320 synthetic pixel cases for gap-free coverage, upright images and independent mirroring at centered/extreme boundaries with odd/even dimensions. Shared controls, global reset, schema 3 persistence, explicit schema 2 migration, invalid imports, stationary visible video while settings scroll, narrow/short layouts, keyboard sliders and capture stop passed. All 9 fullscreen checks passed. Desktop and narrow screenshots were inspected. Real-camera alignment remains pending.
+
+Build 8 corrects a limitation of the earlier tests: checking coverage and upright images did not detect pane-specific enlargement. The pixel regression now checks exact source coordinates in every quadrant for both camera orientations and all 16 mirror selections across 49 divider positions, with odd/even frames (3,136 cases).
+
+Build 8 verification on 2026-10-11: all 16 unit checks passed. Headless Chrome 155.0.8059.39 passed all 3,136 exact-coordinate pixel cases and the shared-control, JSON migration, layout/scrolling, keyboard and capture-stop integration checks. All 9 fullscreen checks passed. The desktop screenshot was inspected. Tests used synthetic video only; live-camera acceptance remains pending.
