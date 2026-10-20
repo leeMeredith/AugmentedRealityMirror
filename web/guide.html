@@ -30,6 +30,12 @@
       <p>If your browser cannot enter fullscreen, the view expands inside the browser window instead. Use <strong>Exit expanded view</strong> or Escape to return. The whole camera frame is fitted without stretching or cropping, so borders may remain. Fullscreen does not increase camera resolution or reveal more of the scene.</p>
       <p>Fullscreen always starts with a button press; loading a setup will not enter it automatically.</p>
     </section>
+    <section><h2>Use a separate camera window</h2>
+      <p>Choose <strong>Open camera window</strong> to put the live mirrored view in its own window. The main window switches to the Session tab. Use <strong>View settings</strong> for camera/quadrant adjustments and <strong>Session</strong> for participant details, pain scores and downloads. The participant name stays above both tabs.</p>
+      <p>Arrange the windows side by side on one screen or move the camera window to another monitor. Both windows share one camera and session. Number-key pain scoring works in either window; the camera window also provides Stop camera, End session and Fullscreen. Downloads are requested by the main window, so check its Downloads/save prompt after a final score.</p>
+      <p><strong>Return to main window</strong> in the camera window, or <strong>Return camera here</strong> in the main window, brings the view back. Closing the camera window does the same and leaves the session available. <strong>Keep the main window open</strong>: it owns the camera and session records. Closing it closes the camera window too and can lose undownloaded records.</p>
+      <p>If the browser blocks the new window, allow pop-ups for this site or keep using the embedded view. Your browser may open it as a tab; you can move it to a separate window using your browser's controls. Open this view with the app's button rather than bookmarking the camera-only page, which has no independent camera or session.</p>
+    </section>
     <section><h2>Choose the side you want to show a mirrored limb</h2>
       <p>Use the side with the limb you want to copy as the source. Show its reflection on the side with the missing or affected limb.</p>
       <ul>
@@ -42,7 +48,7 @@
       <p>Check that the original limb remains visible and its mirrored copy appears where intended. <strong>Reset alignment only centers the dividing lines; turn off a quadrant's mirror toggle to undo its mirror choice.</strong></p>
     </section>
     <section><h2>Choose mirroring and align the panes</h2>
-      <p>Scroll the settings panel to <strong>Quadrants</strong>. The camera stays on screen while the controls scroll. Select a receiving quadrant by its position on the screen. Turn on <strong>Left/right mirror</strong> to copy the reflected opposite side in the same row; turn it off for the normal image. Each quadrant remembers its choice. There is no top/bottom flip.</p>
+      <p>Choose the <strong>View settings</strong> tab and scroll its panel to <strong>Quadrants</strong>. The camera stays on screen while the controls scroll. Select a receiving quadrant by its position on the screen. Turn on <strong>Left/right mirror</strong> to copy the reflected opposite side in the same row; turn it off for the normal image. Each quadrant remembers its choice. There is no top/bottom flip.</p>
       <p>The two sliders under <strong>Shared alignment</strong> affect all four panes, regardless of which quadrant is selected:</p>
       <ul>
         <li><strong>Horizontal mirror center</strong> moves the vertical dividing line left/right.</li>
@@ -54,18 +60,18 @@
       <p>Sources always come from the original camera image. Check posture and physical camera position each time; saved settings cannot move the camera for you.</p>
     </section>
     <section><h2>Save your setup for another day</h2>
-      <p>A setup name is optional. If you enter one, it begins the downloaded filename. Choose <strong>Save setup</strong>, then keep the JSON file in a folder you can find again. Your browser may save it to Downloads or ask where to put it.</p>
-      <p>Next time, choose <strong>Load setup</strong> and select that file. This restores your mirror direction, all four left/right choices, the shared mirror center and preferred camera name. It does not start or switch the camera automatically. Confirm the camera choice and press Start camera or Use selected camera.</p>
-      <p>Older setups keep their camera direction and any left/right choices. Earlier top/bottom flips and individual offsets are removed, and shared alignment starts centered. An import message explains this. Build 7 setups retain their divider positions and mirror choices in build 8, with the corrected fixed-size image behavior. Use build 8 or later for this rendering.</p>
+      <p>The shared <strong>Participant name</strong> above the tabs is optional and is saved in both camera-setup and session JSON files. If entered, it begins both filenames. Without a participant name, filenames begin with the UTC date and time. The optional <strong>Setup label</strong> describes the view and is saved separately; it is not the participant name. Choose <strong>Save setup</strong>, then keep the JSON file in a folder you can find again. Your browser may save it to Downloads or ask where to put it.</p>
+      <p>Next time, choose <strong>Load setup</strong> and select that file. This restores your mirror direction, all four left/right choices, the shared mirror center, participant name and preferred camera name. It does not start or switch the camera automatically. Confirm the camera choice and press Start camera or Use selected camera.</p>
+      <p>Older setups keep their camera direction and any left/right choices. Earlier top/bottom flips and individual offsets are removed, and shared alignment starts centered. An import message explains this. Older setup labels are kept as labels, not treated as participant names. New camera setups use version 4 and need build 10 or later. Loading a different name during an active or completed session keeps that session's name and explains why. Choose New session before loading another participant's setup.</p>
       <p>A setup cannot move the physical camera or restore your posture. Check your position each time. Camera names can change or be shared by two devices, so always check the preview.</p>
       <p>Only setups saved by this browser version are supported here. Desktop ARM study-session files will be rejected with an explanation.</p>
     </section>
     <section><h2>Record an optional pain session</h2>
-      <p>You can use the camera without a session. To record one, scroll the controls to <strong>Optional session</strong>. A family member, clinician or the person using ARM can operate these controls.</p>
+      <p>You can use the camera without a session. To record one, choose the <strong>Session</strong> tab. A family member, clinician or the person using ARM can operate these controls.</p>
       <ol>
-        <li>Enter a participant name or label if wanted. It begins the session filename; without a name, the file begins with the session date and time.</li>
+        <li>Enter a participant name or label in the shared field above the tabs if wanted. Both JSON files include that name and begin their filenames with it; without a name they begin with the date and time.</li>
         <li>Select all limb-loss locations that apply, using the person's own right and left. For bilateral limb loss, select both sides. Add a level or description if useful. These selections do not change the mirror quadrants.</li>
-        <li>Choose the <strong>pain before use</strong> score, then press <strong>Start session</strong>. Participant details are fixed until the session is complete.</li>
+        <li>Choose the <strong>pain before use</strong> score, then press <strong>Start session</strong>. Participant details are fixed for that record, and the limb form collapses to a summary so scoring stays easy to reach. Choose New session afterward to edit details again.</li>
         <li>During use, select a score whenever you want to record one. A single selection records the score immediately with its time and the current mirror settings.</li>
         <li>Press <strong>End session</strong>, then choose the final score. That selection ends the record and requests a JSON download. <strong>Continue session</strong> returns to during-use scoring if you are not finished.</li>
       </ol>

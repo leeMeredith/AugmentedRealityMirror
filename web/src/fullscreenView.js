@@ -91,6 +91,8 @@ export class FullscreenView {
     this.#restore();
   }
 
+  showControls() { this.#hideControls(false); }
+
   #hideControls(hidden) {
     this.#hidden = hidden;
     this.#panel.hidden = hidden;

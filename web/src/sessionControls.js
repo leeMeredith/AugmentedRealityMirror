@@ -24,7 +24,7 @@ export class SessionControls {
     this.#root = root;
     this.#viewSettings = viewSettings;
     const find = selector => root.querySelector(selector);
-    this.#name = find("#participant-name");
+    this.#name = document.querySelector("#participant-name");
     this.#details = find("#participant-details");
     this.#start = find("#start-session");
     this.#end = find("#end-session");
@@ -55,6 +55,7 @@ export class SessionControls {
       this.#refresh();
       // Leave name/text inputs before making number keys available.
       this.#start.blur();
+      this.#root.scrollTop = 0;
     }));
     const end = () => {
       if (!this.#session.active || this.#ending) return;
@@ -77,14 +78,7 @@ export class SessionControls {
       this.#message("Ready for a new session. Check the participant details and choose a starting score.");
       this.#refresh();
     });
-    document.addEventListener("keydown", event => {
-      if (event.repeat || event.isComposing || event.ctrlKey || event.altKey || event.metaKey
-        || !/^[0-9]$/.test(event.key)
-        || event.target.closest?.("input, select, textarea, [contenteditable]:not([contenteditable='false'])")) return;
-      if (this.#session.record?.status === "completed") return;
-      event.preventDefault();
-      this.#score(event.key === "0" ? 10 : Number(event.key));
-    });
+    this.attachKeyboard(document);
     window.addEventListener("beforeunload", event => {
       if (!this.#session.active) return;
       event.preventDefault();
@@ -92,6 +86,22 @@ export class SessionControls {
     });
     this.#refresh();
   }
+
+  get canChangeParticipantName() { return this.#session.record === null; }
+
+  attachKeyboard(target) {
+    target.addEventListener("keydown", this.#key);
+    return () => target.removeEventListener("keydown", this.#key);
+  }
+
+  #key = event => {
+      if (event.repeat || event.isComposing || event.ctrlKey || event.altKey || event.metaKey
+        || !/^[0-9]$/.test(event.key)
+        || event.target.closest?.("input, select, textarea, [contenteditable]:not([contenteditable='false'])")) return;
+      if (this.#session.record?.status === "completed") return;
+      event.preventDefault();
+      this.#score(event.key === "0" ? 10 : Number(event.key));
+  };
 
   #act(action) {
     try { action(); }
@@ -132,6 +142,12 @@ export class SessionControls {
     const active = this.#session.active;
     const completed = record?.status === "completed";
     this.#details.disabled = active || completed;
+    this.#details.hidden = Boolean(record);
+    const limbSummary = this.#root.querySelector("#limb-summary");
+    limbSummary.hidden = !record;
+    if (record) limbSummary.textContent = "Limb loss: " + (record.limbLoss.map(({side, limb, level}) =>
+      `${side} ${limb}${level ? ` (${level})` : ""}`).join(", ") || "not specified") + ". Details are fixed for this session.";
+    this.#name.disabled = active || completed;
     this.#start.disabled = active || completed || this.#beforeScore === null;
     this.#end.disabled = !active || this.#ending;
     this.#endView.disabled = !active || this.#ending;

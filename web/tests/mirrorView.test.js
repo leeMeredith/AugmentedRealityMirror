@@ -33,3 +33,20 @@ test("startup reflects the incoming frame, reversing twice restores it, and Stop
   assert.deepEqual(cancelled, [17]);
   assert.deepEqual(drawings.at(-1), ["clear", 0, 0, 1280, 720]);
 });
+
+test("moving the canvas transfers animation scheduling without restarting capture or leaving a second loop", () => {
+  const cancelled = [], scheduled = [], drawings = [];
+  const scheduler = name => ({requestAnimationFrame: () => {scheduled.push(name);return name;},cancelAnimationFrame: id => cancelled.push(id)});
+  const first = scheduler("main"), second = scheduler("camera");
+  const context = {setTransform() {},fillRect() {},drawImage: video => drawings.push(video)};
+  const canvas = {width:80,height:60,ownerDocument:{defaultView:first},getContext:()=>context};
+  const video = {videoWidth:80,videoHeight:60,readyState:4};
+  const view = new MirrorView(canvas,video);
+  view.start();
+  view.moveCanvas({append: moved => {assert.equal(moved,canvas);canvas.ownerDocument={defaultView:second};}});
+  assert.deepEqual(scheduled,["main","camera"]);
+  assert.deepEqual(cancelled,["main"]);
+  assert.deepEqual(drawings,[video,video]);
+  view.stop();
+  assert.deepEqual(cancelled,["main","camera"]);
+});

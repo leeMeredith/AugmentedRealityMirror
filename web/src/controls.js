@@ -3,6 +3,7 @@ import { REGION_IDS, REGION_LABELS } from "./mirrorRegions.js";
 export class Controls {
   video = document.querySelector("#camera-video");
   canvas = document.querySelector("#mirror-canvas");
+  preview = document.querySelector(".preview-panel");
   start = document.querySelector("#start-camera");
   stop = document.querySelector("#stop-camera");
   stopView = document.querySelector("#stop-view");
@@ -45,8 +46,8 @@ export class Controls {
     this.stopView.disabled = !live && !pending;
     this.cameras.disabled = pending;
     this.canvas.hidden = !live;
-    document.querySelector("#placeholder").hidden = live;
-    const badge = document.querySelector("#camera-state");
+    this.preview.querySelector("#placeholder").hidden = live;
+    const badge = this.preview.querySelector("#camera-state");
     badge.textContent = live ? "Camera on" : pending ? "Waiting for camera" : "Camera off";
     badge.dataset.live = String(live);
   }

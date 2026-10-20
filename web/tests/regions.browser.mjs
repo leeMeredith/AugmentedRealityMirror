@@ -11,7 +11,7 @@ try {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(process.env.ARM_TEST_URL || "http://localhost:8001");
-  assert.equal(await page.locator("#build-version").textContent(), "Browser build 9");
+  assert.equal(await page.locator("#build-version").textContent(), "Browser build 10");
   const pixels = await page.evaluate(async () => {
     const { drawRegions, defaultRegions, REGION_IDS } = await import("./src/mirrorRegions.js");
     const source = document.createElement("canvas"), target = document.createElement("canvas");
@@ -61,12 +61,13 @@ try {
   assert.equal(await page.locator("#region-mirror-x").isChecked(),false);
   await page.locator("#region-mirror-x").check();
   await page.locator("#setup-name").fill("Example chair");
+  await page.locator("#participant-name").fill("Example Participant");
   const downloadPromise=page.waitForEvent("download");
   await page.locator("#save-setup").click();
   const download=await downloadPromise;
   const saved=JSON.parse(await readFile(await download.path(),"utf8"));
-  assert.match(download.suggestedFilename(),/^Example_chair_setup_/);
-  assert.equal(saved.schemaVersion,3);
+  assert.match(download.suggestedFilename(),/^Example_Participant_/);
+  assert.equal(saved.schemaVersion,4);
   assert.deepEqual(saved.view.center,{x:32,y:68});
   assert.deepEqual(saved.view.regions.topLeft,{mirrorX:true});
   assert.deepEqual(saved.view.regions.bottomRight,{mirrorX:true});
@@ -91,15 +92,15 @@ try {
   assert.match(await page.locator("#setup-status").textContent(),/Top\/bottom flips and individual offsets removed/);
   assert.equal(await page.locator("#center-y").inputValue(),"50");
   assert.equal(await page.locator("#region-mirror-x").isChecked(),true);
-  console.log("PASS Shared sliders, independent toggles, global reset, schema 3 round trip, invalid-file preservation and explicit legacy migration");
+  console.log("PASS Shared sliders, independent toggles, global reset, schema 4 round trip, invalid-file preservation and explicit legacy migration");
 
   async function checkLayout(label) {
     await page.locator("#toggle-controls").focus();
-    await page.locator("#controls").evaluate(el=>{el.scrollTop=0;});
+    await page.locator("#view-controls").evaluate(el=>{el.scrollTop=0;});
     const before=await page.locator("#mirror-canvas").boundingBox();
     await page.locator("#save-setup").focus();
     const result=await page.evaluate(()=>{
-      const panel=document.querySelector("#controls"),v=document.querySelector("#mirror-canvas").getBoundingClientRect(),c=panel.getBoundingClientRect();
+      const panel=document.querySelector("#view-controls"),v=document.querySelector("#mirror-canvas").getBoundingClientRect(),c=panel.getBoundingClientRect();
       return {scrolled:panel.scrollTop>0,visible:v.width>0&&v.height>0&&v.top>=0&&v.bottom<=innerHeight&&v.left>=0&&v.right<=innerWidth,
         separate:c.left>=v.right || c.top>=v.bottom,overflow:document.documentElement.scrollWidth>innerWidth};
     });

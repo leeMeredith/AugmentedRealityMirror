@@ -20,6 +20,7 @@ npx playwright install chromium
 node tests/fullscreen.browser.mjs
 node tests/regions.browser.mjs
 node tests/session.browser.mjs
+node tests/windows.browser.mjs
 ```
 
 Set `ARM_TEST_URL` to test a different local address. Existing test environments can supply `ARM_PLAYWRIGHT_MODULE` (a module path) and `ARM_CHROME_EXECUTABLE` instead of installing another copy. `ARM_SCREENSHOT_DIR` optionally saves review images outside source. These checks exercise native fullscreen, Escape, browser-driven exit, rejected/unavailable fullscreen, control visibility, Stop, focus restoration, and narrow-screen layout.
@@ -98,3 +99,15 @@ Hosted Build 8 verification on 2026-10-11: the HTTPS GitHub Pages application at
 Build 9 staging verification on 2026-10-20: all 22 Node unit checks passed. Chrome 155.0.8059.85 with synthetic video and invented participants passed the full session flow, key mapping/guards, progress and final downloads, multiple limb locations, anonymous filenames, zero pain, new IDs, end cancellation, camera/session independence and setup/session separation. All 3,136 rendering pixel cases and all 9 fullscreen checks passed. The narrow session screenshot was inspected. Real-camera session acceptance remains pending.
 
 Release check: publish only application sources/docs/tests, never generated participant records. If the hosted page has a script error or loses/mislabels scores, revert the Build 9 commit to restore the previous static application, retaining already downloaded session JSON separately. Verify the Pages deployment and a synthetic baseline/during/final download after publishing.
+
+## Separate camera window / shared name (build 10)
+
+1. Enter an invented participant name above the tabs. Save a camera setup and complete a session. Both JSON records must include the same participantName, with that prefix in both filenames. With no name, both files must have empty participantName and date/time filenames.
+2. Load a schema 4 setup before starting: the name should fill in. Try a different name while a session is active/completed: the session name must stay and the setup status explain it. New session unlocks the field. Earlier setup labels must not become participant names automatically.
+3. Open camera window. Verify the original stream remains live and capture is not requested twice. With the main window in the background, confirm the camera view still updates and pain keys record once. Test popup fullscreen/Escape and final score/download from the popup.
+4. Return the view, close the camera window during an active session, and reopen it. Confirm the same capture and record remain. Closing the controller should close the child. A camera page opened directly must explain how to open it from the controller and never acquire a stream.
+5. Test blocked pop-ups, small screens, View/Session tab keyboard navigation and opening the camera window from fullscreen. The fallback embedded view should remain available and the session controls must not disappear.
+
+Use only invented participant data in automated checks. Real-camera and multiple-monitor acceptance remain user checks.
+
+Build 10 staging verification on 2026-10-20: all 24 Node unit checks passed. Chrome 155.0.8059.85 with synthetic video/invented participants passed the new two-window suite, including one-stream/canvas identity, visible rendering with the controller in the background, camera-window scoring and final download, fullscreen/Escape, active-session close/reopen, return, parent-close cleanup, blocked pop-ups and standalone recovery. Shared-name downloads, schema 4 setup imports, legacy label handling and current-session name protection passed. The existing session suite, 3,136 exact-coordinate rendering cases and all 9 fullscreen checks passed with the new tabs. Camera-window and narrow controller screenshots were inspected. Real-camera and physical window/monitor arrangement remain user acceptance checks.

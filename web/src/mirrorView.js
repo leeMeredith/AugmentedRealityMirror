@@ -5,6 +5,8 @@ export class MirrorView {
   #context;
   #video;
   #frame = null;
+  #scheduler;
+  #running = false;
   mirrored = true;
   regions = defaultRegions();
   center = defaultCenter();
@@ -13,11 +15,16 @@ export class MirrorView {
     this.#canvas = canvas;
     this.#context = canvas.getContext("2d", { alpha: false });
     this.#video = video;
+    this.#scheduler = canvas.ownerDocument?.defaultView ?? globalThis;
   }
 
   start() {
     this.stop();
-    const draw = () => {
+    this.#running = true;
+    this.#draw();
+  }
+
+  #draw = () => {
       const { videoWidth: width, videoHeight: height, readyState } = this.#video;
       if (width && height && readyState >= 2) {
         if (this.#canvas.width !== width || this.#canvas.height !== height) {
@@ -31,13 +38,20 @@ export class MirrorView {
           this.#context.drawImage(this.#video, 0, 0, width, height);
         }
       }
-      this.#frame = requestAnimationFrame(draw);
-    };
-    draw();
+    if (this.#running) this.#frame = this.#scheduler.requestAnimationFrame(this.#draw);
+  };
+
+  moveCanvas(container) {
+    if (this.#frame !== null) this.#scheduler.cancelAnimationFrame(this.#frame);
+    this.#frame = null;
+    container.append(this.#canvas);
+    this.#scheduler = this.#canvas.ownerDocument?.defaultView ?? globalThis;
+    if (this.#running) this.#draw();
   }
 
   stop() {
-    if (this.#frame !== null) cancelAnimationFrame(this.#frame);
+    this.#running = false;
+    if (this.#frame !== null) this.#scheduler.cancelAnimationFrame(this.#frame);
     this.#frame = null;
     this.#context.setTransform(1, 0, 0, 1, 0, 0);
     this.#context.fillStyle = "#142f2c";

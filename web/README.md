@@ -14,7 +14,15 @@ The controls scroll independently while the camera remains visible, in normal an
 
 [**Open ARM camera mirror**](https://leemeredith.github.io/AugmentedRealityMirror/web/) · [Online user guide](https://leemeredith.github.io/AugmentedRealityMirror/web/guide.html)
 
-Open the link, press **Start camera**, and allow camera access. No installation or GitHub account is required. The live app is Build 9. Camera frames are processed on the visitor's device.
+Open the link, press **Start camera**, and allow camera access. No installation or GitHub account is required. The live app is Build 10. Camera frames are processed on the visitor's device.
+
+## Separate camera window and shared participant name
+
+Build 10 adds View settings / Session tabs and an Open camera window button. The same canvas moves to a same-origin camera page, sharing the original stream rather than opening a second camera. Its animation scheduler follows the destination window so the live view can update with the controller in the background. Return/close restores the canvas to the controller without restarting capture. The camera window supports fullscreen, Stop, End session, status and number-key scoring; the main window owns records and requests downloads. Keep the main window open.
+
+Both panels share one participant-name field, fixed during an active or completed session. Setup and session JSON contain `participantName`; both filenames begin with that name when supplied, otherwise with a UTC timestamp. Loading a camera setup fills the name only before a session starts. A conflicting name is kept out of active/completed records with an explanation. New session unlocks the field. The old setup `name` remains an optional view label and never becomes a participant identity automatically.
+
+If pop-ups are blocked, the embedded view remains usable. A browser may choose a tab instead of a window. A second monitor is optional.
 
 ## Optional participant and pain sessions
 
@@ -52,6 +60,7 @@ GitHub Pages now serves the app over HTTPS at the link above, using the reposito
 ```text
 web/
   index.html                 Main interface
+  camera.html                Camera-only window, opened from the controller
   guide.html                 User instructions available without a camera
   styles.css                 Shared, responsive styling
   serve.py                   Local server with explicit root and caching disabled
@@ -61,6 +70,9 @@ web/
     mirrorView.js            Canvas mirror rendering and draw-loop lifetime
     mirrorRegions.js         Shared masks, quadrant validation and full-frame reflection
     fullscreenView.js        Fullscreen/fallback layout, panel visibility, exit/focus
+    cameraWindow.js          Canvas/window lifecycle and shared camera/session actions
+    cameraWindowPage.js      Camera-window fullscreen and connection recovery
+    controlTabs.js           View/Session panel selection and keyboard tab navigation
     controls.js              DOM updates and control references
     setupFile.js             Setup schema, validation, filenames, JSON download
     studySession.js          Session state, measurements, snapshots and dated JSON files
@@ -87,9 +99,10 @@ There are no runtime libraries, remote fonts, CDNs, analytics, or application ba
 ```json
 {
   "format": "arm-rgb-setup",
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "savedAt": "2026-10-09T12:00:00.000Z",
   "name": "home chair",
+  "participantName": "Example Person",
   "camera": {
     "preferredLabel": ""
   },
@@ -117,11 +130,11 @@ There are no runtime libraries, remote fonts, CDNs, analytics, or application ba
 }
 ```
 
-The filename begins with the optional setup name, followed by `setup` and a timestamp. With no name, it begins `ARM_setup`. The camera label is a preference, not a stable hardware ID. Browser camera IDs are not exported. An empty label means no saved camera preference.
+The filename begins with `participantName` when provided, followed by UTC date/time and `_setup.json`. An unnamed file begins with the date/time. The `name` field remains a descriptive setup label; it does not name the participant. The camera label is a preference, not a stable hardware ID. Browser camera IDs are not exported. An empty label means no saved camera preference.
 
-The confirmed starting view reflects the incoming camera frame horizontally. **Reverse view** changes this base orientation before quadrant processing. `view.mirrored` retains its original meaning. Each quadrant reads the original frame, never another processed quadrant. `view.center.x/y` are percentages measured from the left/top of the full image. Their rounded pixel boundaries are shared by neighboring masks to prevent seams. Schema 3 fields are unchanged: saved divider positions and left/right choices still load, now using fixed-scale rendering instead of build 7's pane-fitting behavior.
+The confirmed starting view reflects the incoming camera frame horizontally. **Reverse view** changes this base orientation before quadrant processing. `view.mirrored` retains its original meaning. Each quadrant reads the original frame, never another processed quadrant. `view.center.x/y` are percentages measured from the left/top of the full image. Their rounded pixel boundaries are shared by neighboring masks to prevent seams. Schema 4 adds participantName without changing divider or mirror meanings. Version 3 setups still load with their view settings and a blank participant name.
 
-Schema 3 stores the shared center and four independent `mirrorX` choices. Schema 1 imports retain camera direction with neutral quadrants and centered alignment. Schema 2 imports retain camera direction and left/right choices, explicitly discard retired vertical flips and per-pane offsets, and center the shared alignment. A visible import notice explains the conversion. Original files are never modified. Older app builds reject schema 3. Fullscreen, panel visibility and the selected editing quadrant are not saved.
+Schema 4 stores the shared center, four independent `mirrorX` choices and participantName. Schema 1 imports retain camera direction with neutral quadrants and centered alignment. Schema 2 imports retain camera direction and left/right choices, explicitly discard retired vertical flips and per-pane offsets, and center the shared alignment. A visible import notice explains the conversion. Original files are never modified. Builds before 10 reject schema 4. Fullscreen, panel visibility and the selected editing quadrant are not saved.
 
 This is a **setup document**, not an openFrameworks study-session document. Desktop sessions, unknown versions, invalid JSON, and oversized files are rejected without partially applying settings. A later import adapter should explicitly map supported desktop settings once the corresponding browser features exist.
 

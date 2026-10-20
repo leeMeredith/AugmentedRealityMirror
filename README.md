@@ -28,10 +28,10 @@ There are two applications in the current checkout:
 
 | Location | Application |
 | --- | --- |
-| [`web/`](web/) | Browser version: camera start/stop, full-image mirror masks, shared dividers, fullscreen, independently scrolling controls, and JSON setup import/export. Optional participant, limb-loss and timestamped pain-session JSON. No video recording. |
+| [`web/`](web/) | Browser version: camera start/stop, full-image mirror masks, shared dividers, fullscreen, View/Session tabs, a separate camera window, and JSON setup import/export. Optional participant, limb-loss and timestamped pain-session JSON. No video recording. |
 | [`src/`](src/) and `AugmentedRealityMirrorRGB.xcodeproj` | Native openFrameworks RGB rebuild: regional mirroring, split-screen comparison, JSON study-session controls and recording code. |
 
-The browser version is **Build 9**. Each selected region reveals a normal or horizontally reflected full camera image. Moving the dividers changes which image is visible without enlarging or shifting the underlying images. Saved setups preserve the camera direction, quadrant choices and shared divider positions.
+The browser version is **Build 10**. Each selected region reveals a normal or horizontally reflected full camera image. Moving the dividers changes which image is visible without enlarging or shifting the underlying images. Saved setups preserve the camera direction, quadrant choices, shared divider positions and participant name. Setup and session downloads share that name. Use Open camera window to separate the view from the Session controls; both windows use one camera and session.
 
 ### Open the browser version
 

@@ -114,3 +114,27 @@ body.view-expanded { overflow: hidden; }
 .pain-scores [aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: white; }
 .session-actions { margin-top: 14px; }
 .pain-history { padding-left: 20px; font-size: .8rem; }
+
+/* The shared name and tabs remain visible; only the selected panel scrolls. */
+.controls { display: flex; flex-direction: column; overflow: hidden; }
+.controls-header { flex: none; padding: 10px 16px; border-bottom: 1px solid var(--line); }
+.controls-header label { margin-bottom: 3px; font-size: .8rem; }
+.controls-header input { min-height: 36px; padding: 5px 10px; }
+.control-tabs { display: flex; gap: 6px; margin-top: 8px; }
+.control-tabs button { flex: 1; padding: 6px; min-height: 36px; }
+.control-tabs [aria-selected="true"] { background: var(--teal); color: white; border-color: var(--teal); }
+.control-page { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.workspace.camera-detached { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+.workspace.camera-detached .controls { grid-column: 1 / -1; grid-row: 2; }
+.camera-window-app { height: 100vh; height: 100dvh; overflow: hidden; padding: 10px; }
+#camera-window-root { height: 100%; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 10px; background: var(--paper); }
+#camera-window-root:fullscreen { padding: 10px; }
+#camera-window-root .preview-panel { min-height: 0; }
+@media (max-width: 560px) {
+ .controls-header { padding: 6px 10px; }
+ .controls-header input { min-height: 32px; }
+ .control-tabs { margin-top: 4px; }
+ .control-tabs button { min-height: 32px; }
+}
+
+.camera-detached #fullscreen-view, .camera-detached #toggle-controls { display: none; }

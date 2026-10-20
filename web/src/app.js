@@ -1,3 +1,5 @@
+import { CameraWindow } from "./cameraWindow.js";
+import { ControlTabs } from "./controlTabs.js";
 import { CaptureRGB } from "./captureRGB.js";
 import { MirrorView } from "./mirrorView.js";
 import { Controls } from "./controls.js";
@@ -9,9 +11,11 @@ import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename 
 const controls = new Controls();
 const camera = new CaptureRGB(controls.video);
 const view = new MirrorView(controls.canvas, controls.video);
+const tabs = new ControlTabs(document.querySelector("#control-tabs"));
+const participantName = document.querySelector("#participant-name");
 const fullscreen = new FullscreenView(document.querySelector("#mirror-workspace"));
 // Set by the running JavaScript, so a stale HTML label alone cannot claim this build loaded.
-controls.build.textContent = "Browser build 9";
+controls.build.textContent = "Browser build 10";
 let selectedRegion = "topLeft";
 const refreshRegion = () => controls.regionState(selectedRegion, view.regions[selectedRegion]);
 controls.quadrants.forEach(button => button.addEventListener("click", () => {
@@ -103,7 +107,7 @@ controls.save.addEventListener("click", () => {
     const cameraLabel = controls.cameras.value
       ? devices.find(device => device.deviceId === controls.cameras.value)?.label ?? ""
       : preferredCameraLabel;
-    const setup = createSetup({ name: controls.name.value, mirrored: view.mirrored, cameraLabel, regions: view.regions, center: view.center });
+    const setup = createSetup({ name: controls.name.value, participantName: participantName.value, mirrored: view.mirrored, cameraLabel, regions: view.regions, center: view.center });
     downloadSetup(setup);
     controls.setupStatus(`Download requested: ${setupFilename(setup)}. Check your browser's downloads or save prompt.`);
   } catch (error) { controls.setupStatus(error.message, true); }
@@ -119,6 +123,8 @@ controls.file.addEventListener("change", async () => {
     if (file.size > MAX_SETUP_BYTES) throw new Error("This file is too large for a setup. Choose an ARM browser setup JSON file.");
     const setup = parseSetup(await file.text());
     if (current !== fileRequest) return;
+    const nameKept = !sessionControls.canChangeParticipantName && participantName.value.trim() !== setup.participantName;
+    if (sessionControls.canChangeParticipantName) participantName.value = setup.participantName;
     controls.name.value = setup.name;
     view.mirrored = setup.view.mirrored;
     view.regions = setup.view.regions;
@@ -129,7 +135,8 @@ controls.file.addEventListener("change", async () => {
     controls.cameras.value = "";
     try { await refreshCameras(); } catch { /* The user can still load mirror settings without camera permission. */ }
     if (current !== fileRequest) return;
-    controls.setupStatus(setup.importNotice || "Setup loaded. Mirror direction, quadrant choices and shared alignment restored. Confirm the camera selection before use.");
+    controls.setupStatus((setup.importNotice || "Setup loaded. Mirror choices and shared alignment restored.")
+      + (nameKept ? " Current session name kept. Choose New session before loading a different participant." : " Participant name restored. Confirm the camera selection before use."));
     controls.cameraStatus(camera.active
       ? "Setup loaded; the current camera is still running. Press Use selected camera if you want to switch."
       : "Setup loaded. Press Start camera when you are ready.");
@@ -150,3 +157,5 @@ const sessionControls = new SessionControls(document.querySelector("#study-sessi
   ...createSetup({ mirrored: view.mirrored, regions: view.regions, center: view.center }).view,
   camera: { preferredLabel: camera.device.label || preferredCameraLabel },
 }));
+
+const cameraWindow = new CameraWindow({view, controls, sessions: sessionControls, tabs, fullscreen});

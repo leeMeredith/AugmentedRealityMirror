@@ -21,11 +21,14 @@
     <main id="mirror-workspace" class="workspace">
       <div class="view-toolbar" role="group" aria-label="View controls">
         <div class="button-row">
+          <button id="open-camera-window" type="button">Open camera window</button>
+          <button id="return-camera-window" type="button" hidden>Return camera here</button>
           <button id="fullscreen-view" type="button">Fullscreen</button>
           <button id="toggle-controls" type="button" aria-controls="controls" aria-expanded="true">Hide controls</button>
           <button id="stop-view" type="button" disabled>Stop camera</button>
           <button id="end-session-view" type="button" disabled>End session</button>
         </div>
+        <p id="camera-window-notice" class="view-status" role="status" hidden></p>
         <p id="session-summary" class="view-status" role="status">Optional pain session: choose a starting score in the controls.</p>
         <p id="fullscreen-status" class="view-status" role="status" hidden></p>
       </div>
@@ -43,6 +46,15 @@
         <p class="preview-note">The image stays on this device. There is no video recording.</p>
       </section>
       <aside id="controls" class="controls" aria-label="Camera, quadrant, setup and pain session controls" tabindex="-1">
+        <div class="controls-header">
+          <label for="participant-name">Participant name (optional)</label>
+          <input id="participant-name" type="text" maxlength="80" autocomplete="off" placeholder="Name used in both JSON files">
+          <div id="control-tabs" class="control-tabs" role="tablist" aria-label="Controls">
+            <button id="view-tab" type="button" role="tab" aria-controls="view-controls" aria-selected="true">View settings</button>
+            <button id="session-tab" type="button" role="tab" aria-controls="study-session" aria-selected="false" tabindex="-1">Session</button>
+          </div>
+        </div>
+        <div id="view-controls" class="control-page" role="tabpanel" aria-labelledby="view-tab">
         <section class="control-section" aria-labelledby="camera-title">
           <p class="step">01 / Camera</p><h2 id="camera-title">Settle into your view</h2>
           <label for="camera-select">Camera</label>
@@ -81,21 +93,20 @@
         </section>
         <section class="control-section" aria-labelledby="setup-title">
           <p class="step">03 / Your setup</p><h2 id="setup-title">Keep your starting point</h2>
-          <label for="setup-name">Setup name <span class="optional">(optional)</span></label>
+          <label for="setup-name">Setup label <span class="optional">(optional)</span></label>
           <input id="setup-name" type="text" maxlength="80" autocomplete="off" placeholder="For example, home chair">
-          <p class="hint">This name starts your downloaded filename. No name is needed to use the mirror.</p>
+          <p class="hint">The label describes this view. The shared participant name above is saved in both JSON files and starts their filenames; unnamed files start with the date/time.</p>
           <div class="button-row"><button id="save-setup" type="button">Save setup</button><button id="load-setup" type="button">Load setup</button></div>
           <input id="setup-file" type="file" accept=".json,application/json" hidden>
           <p id="setup-status" class="status" role="status" aria-live="polite">Saves your mirror direction, quadrant mirror choices, shared alignment and preferred camera to a JSON file.</p>
         </section>
-        <section id="study-session" class="control-section" aria-labelledby="session-title">
+        </div>
+        <section id="study-session" class="control-section control-page" role="tabpanel" aria-labelledby="session-tab" hidden>
           <p class="step">04 / Optional session</p><h2 id="session-title">Participant and pain scores</h2>
           <p class="hint">Camera use does not require a session. Session records stay in this tab until you download them; no information is uploaded.</p>
           <fieldset id="participant-details" class="region-settings">
             <legend>Participant details</legend>
-            <label for="participant-name">Participant name (optional)</label>
-            <input id="participant-name" type="text" maxlength="80" autocomplete="off" placeholder="Name or participant label">
-            <p class="hint">The name begins the session filename. Leave it blank for a date/time filename. Check these details before starting; they stay fixed for the session.</p>
+            <p class="hint">The shared participant name above is used for this session and the camera setup file. Leave it blank for date/time filenames. Details stay fixed for the session; choose New session to edit them afterward.</p>
             <p id="limb-loss-hint" class="hint">Select all limb-loss locations that apply, using the person's own right and left. Select both sides for bilateral limb loss. Descriptions are optional. These choices do not change the mirror quadrants.</p>
               <div class="limb-row">
                 <label class="toggle-label"><input id="loss-right-arm" data-side="right" data-limb="arm" type="checkbox"> Right arm</label>
@@ -118,6 +129,7 @@
                 <input id="loss-left-leg-level" type="text" maxlength="80" placeholder="Level or description (optional)" autocomplete="off">
               </div>
           </fieldset>
+          <p id="limb-summary" class="hint" hidden></p>
           <h3 id="pain-phase">Pain before use</h3>
           <p id="pain-key-hint" class="hint">Choose 0–10. Keys 1–9 record scores 1–9; the 0 key means 10. For a pain score of zero, choose No pain (0). Shortcuts pause while typing or adjusting form fields.</p>
           <div id="pain-scores" class="pain-scores" role="group" aria-labelledby="pain-phase" aria-describedby="pain-key-hint"></div>

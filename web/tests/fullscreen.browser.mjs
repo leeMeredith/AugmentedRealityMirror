@@ -16,7 +16,7 @@ try {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(url);
-  assert.equal(await page.locator("#build-version").textContent(), "Browser build 9");
+  assert.equal(await page.locator("#build-version").textContent(), "Browser build 10");
   await page.locator("#start-camera").click();
   await page.waitForFunction(() => document.querySelector("#camera-state").textContent === "Camera on");
   await page.evaluate(() => { window.originalTrack = document.querySelector("#camera-video").srcObject.getVideoTracks()[0]; });
@@ -102,7 +102,7 @@ try {
     const fit = await fallback.locator("#controls").evaluate(element => {
       const rect = element.getBoundingClientRect();
       const toolbar = document.querySelector(".view-toolbar").getBoundingClientRect();
-      return rect.left >= 0 && rect.right <= innerWidth && rect.top >= toolbar.bottom && rect.bottom <= innerHeight && element.scrollHeight > element.clientHeight;
+      return rect.left >= 0 && rect.right <= innerWidth && rect.top >= toolbar.bottom && rect.bottom <= innerHeight && document.querySelector("#view-controls").scrollHeight > document.querySelector("#view-controls").clientHeight;
     });
     assert.equal(fit, true);
     assert.equal(await fallback.locator("#fullscreen-view").isVisible(), true);

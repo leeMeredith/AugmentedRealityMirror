@@ -1,6 +1,6 @@
 # Browser session JSON, version 1
 
-Build 9 exports `arm-rgb-study-session` records separately from `arm-rgb-setup` camera setups. There is no session import/resume or chart renderer in this milestone. Original downloaded files remain on the user's device. A session does not start or stop the camera.
+Build 9 and later export `arm-rgb-study-session` records separately from `arm-rgb-setup` camera setups. There is no session import/resume or chart renderer in this milestone. Original downloaded files remain on the user's device. A session does not start or stop the camera.
 
 ## Record fields
 
@@ -18,7 +18,7 @@ Build 9 exports `arm-rgb-study-session` records separately from `arm-rgb-setup` 
 | `endViewSettings` | Same fields at the final score, or `null` during use |
 | `painEntries` | Ordered flat measurement rows, described below |
 
-Limb-loss locations use the person's anatomical side; they never automatically toggle screen quadrants. Unselected locations are omitted. Participant details stay fixed during a session; New session allows editing them again while preserving the previous form values for convenience.
+Limb-loss locations use the person's anatomical side; they never automatically toggle screen quadrants. Unselected locations are omitted. Participant details stay fixed during a session; New session allows editing them again while preserving the previous form values for convenience. In build 10 the participant-name field is shared with camera setups (setup schema 4). A camera setup cannot rename an active/completed session; loading a conflicting name keeps the session identity and shows an explanation. Both download types use the same participantName prefix, or a UTC timestamp with no name. The optional setup label is a different field.
 
 ## Pain measurement rows
 
@@ -48,3 +48,5 @@ Named filenames start with a sanitized participant name, followed by the session
 End session requests the download after the final score. Save session JSON can request the same completed record again or an unfinished progress snapshot. A download request is not confirmation that a user accepted a save dialog. Check the browser's Downloads before closing or starting a new session.
 
 Records live only in the current tab. The app does not automatically save them in localStorage, IndexedDB or a server. A navigation/reload warning is requested while a session is active; browser behavior varies. Closing, reloading or a crash can lose undownloaded measurements. No video or audio is included in these records, and generated participant JSON must not be committed to the source repository.
+
+The separate camera window holds no session model: key presses and End session act on the controller's session. Closing/returning that window preserves records and moves the same canvas back. Keep the controller open until downloads have been checked.

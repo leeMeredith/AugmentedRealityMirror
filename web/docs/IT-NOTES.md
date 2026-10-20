@@ -17,6 +17,7 @@ GitHub Pages publishes from the root of `master`. Keep the `/web/` path in links
 - Camera frames are rendered locally to a canvas. This milestone does not record video.
 - A setup JSON download includes an optional user-entered label, a camera label preference, mirror choice, four horizontal mirror choices and shared center settings, and timestamp. Imported files are processed locally, with a 64 KiB size limit and format validation.
 - Session JSON downloads can include an optional participant name, limb-loss locations/descriptions, timestamps, pain scores and mirror settings. Records stay in memory until explicitly downloaded. A filename can contain the name entered by the user. There is no upload or remote participant database. See [session format](SESSION-FORMAT.md).
+- A user-opened, same-origin camera window shares the controller's existing canvas/stream. The controller retains session records and handles downloads. Camera-window pop-ups can be blocked by browser policy; the embedded layout remains available. No identity or records are sent to another origin.
 - There is no automatic localStorage/IndexedDB storage or service worker. Setup persistence requires an explicit downloaded file. This milestone does not promise offline loading.
 - The host may still log standard page requests, including IP addresses. Browser extensions, managed-device software, and cloud-sync folders are outside this app's control.
 
