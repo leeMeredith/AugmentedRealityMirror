@@ -1,6 +1,7 @@
 import { CaptureRGB } from "./captureRGB.js";
 import { MirrorView } from "./mirrorView.js";
 import { Controls } from "./controls.js";
+import { SessionControls } from "./sessionControls.js";
 import { FullscreenView } from "./fullscreenView.js";
 import { defaultCenter } from "./mirrorRegions.js";
 import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename } from "./setupFile.js";
@@ -10,7 +11,7 @@ const camera = new CaptureRGB(controls.video);
 const view = new MirrorView(controls.canvas, controls.video);
 const fullscreen = new FullscreenView(document.querySelector("#mirror-workspace"));
 // Set by the running JavaScript, so a stale HTML label alone cannot claim this build loaded.
-controls.build.textContent = "Browser build 8";
+controls.build.textContent = "Browser build 9";
 let selectedRegion = "topLeft";
 const refreshRegion = () => controls.regionState(selectedRegion, view.regions[selectedRegion]);
 controls.quadrants.forEach(button => button.addEventListener("click", () => {
@@ -144,3 +145,8 @@ window.addEventListener("pagehide", () => stopCamera());
 controls.cameraState("off");
 // No camera request at page load. Enumeration may return anonymous names until permission is granted.
 refreshCameras().catch(() => {});
+
+const sessionControls = new SessionControls(document.querySelector("#study-session"), () => ({
+  ...createSetup({ mirrored: view.mirrored, regions: view.regions, center: view.center }).view,
+  camera: { preferredLabel: camera.device.label || preferredCameraLabel },
+}));

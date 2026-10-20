@@ -28,10 +28,10 @@ There are two applications in the current checkout:
 
 | Location | Application |
 | --- | --- |
-| [`web/`](web/) | Browser version: camera start/stop, full-image mirror masks, shared dividers, fullscreen, independently scrolling controls, and JSON setup import/export. No video recording or pain-entry interface in this version. |
+| [`web/`](web/) | Browser version: camera start/stop, full-image mirror masks, shared dividers, fullscreen, independently scrolling controls, and JSON setup import/export. Optional participant, limb-loss and timestamped pain-session JSON. No video recording. |
 | [`src/`](src/) and `AugmentedRealityMirrorRGB.xcodeproj` | Native openFrameworks RGB rebuild: regional mirroring, split-screen comparison, JSON study-session controls and recording code. |
 
-The browser version is **Build 8**. Each selected region reveals a normal or horizontally reflected full camera image. Moving the dividers changes which image is visible without enlarging or shifting the underlying images. Saved setups preserve the camera direction, quadrant choices and shared divider positions.
+The browser version is **Build 9**. Each selected region reveals a normal or horizontally reflected full camera image. Moving the dividers changes which image is visible without enlarging or shifting the underlying images. Saved setups preserve the camera direction, quadrant choices and shared divider positions.
 
 ### Open the browser version
 
@@ -57,6 +57,7 @@ For the native RGB project, use openFrameworks **0.12.1** with **ofxGui**, as li
 
 - [Browser user guide](web/guide.html)
 - [Bounded development path](web/docs/DEVELOPMENT.md)
+- [Browser session JSON and ECharts import fields](web/docs/SESSION-FORMAT.md)
 - [Testing and verification record](web/docs/TESTING.md)
 - [Browser data handling and deployment notes](web/docs/IT-NOTES.md)
 - [Original README, preserved verbatim](docs/history/README.original.md)
@@ -66,6 +67,6 @@ The Git history retains the earlier Kinect work. The historical snapshot above i
 
 ## Data and licensing
 
-The browser processes camera images locally and saves setups only when requested. Use invented participant information when developing or demonstrating the native study-session features, and keep personal records out of the repository.
+The browser processes camera images locally. Setups and optional participant/pain-session records are downloaded only when requested. Use invented participant information when developing or demonstrating the native study-session features, and keep personal records out of the repository.
 
 A project license has not yet been selected. Dependency and media attribution requirements still apply.

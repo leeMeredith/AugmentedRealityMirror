@@ -24,7 +24,9 @@
           <button id="fullscreen-view" type="button">Fullscreen</button>
           <button id="toggle-controls" type="button" aria-controls="controls" aria-expanded="true">Hide controls</button>
           <button id="stop-view" type="button" disabled>Stop camera</button>
+          <button id="end-session-view" type="button" disabled>End session</button>
         </div>
+        <p id="session-summary" class="view-status" role="status">Optional pain session: choose a starting score in the controls.</p>
         <p id="fullscreen-status" class="view-status" role="status" hidden></p>
       </div>
       <section class="preview-panel" aria-labelledby="preview-title">
@@ -40,7 +42,7 @@
         </div>
         <p class="preview-note">The image stays on this device. There is no video recording.</p>
       </section>
-      <aside id="controls" class="controls" aria-label="Camera, quadrant and setup controls" tabindex="-1">
+      <aside id="controls" class="controls" aria-label="Camera, quadrant, setup and pain session controls" tabindex="-1">
         <section class="control-section" aria-labelledby="camera-title">
           <p class="step">01 / Camera</p><h2 id="camera-title">Settle into your view</h2>
           <label for="camera-select">Camera</label>
@@ -85,6 +87,50 @@
           <div class="button-row"><button id="save-setup" type="button">Save setup</button><button id="load-setup" type="button">Load setup</button></div>
           <input id="setup-file" type="file" accept=".json,application/json" hidden>
           <p id="setup-status" class="status" role="status" aria-live="polite">Saves your mirror direction, quadrant mirror choices, shared alignment and preferred camera to a JSON file.</p>
+        </section>
+        <section id="study-session" class="control-section" aria-labelledby="session-title">
+          <p class="step">04 / Optional session</p><h2 id="session-title">Participant and pain scores</h2>
+          <p class="hint">Camera use does not require a session. Session records stay in this tab until you download them; no information is uploaded.</p>
+          <fieldset id="participant-details" class="region-settings">
+            <legend>Participant details</legend>
+            <label for="participant-name">Participant name (optional)</label>
+            <input id="participant-name" type="text" maxlength="80" autocomplete="off" placeholder="Name or participant label">
+            <p class="hint">The name begins the session filename. Leave it blank for a date/time filename. Check these details before starting; they stay fixed for the session.</p>
+            <p id="limb-loss-hint" class="hint">Select all limb-loss locations that apply, using the person's own right and left. Select both sides for bilateral limb loss. Descriptions are optional. These choices do not change the mirror quadrants.</p>
+              <div class="limb-row">
+                <label class="toggle-label"><input id="loss-right-arm" data-side="right" data-limb="arm" type="checkbox"> Right arm</label>
+                <label class="visually-hidden" for="loss-right-arm-level">Right arm level or description (optional)</label>
+                <input id="loss-right-arm-level" type="text" maxlength="80" placeholder="Level or description (optional)" autocomplete="off">
+              </div>
+              <div class="limb-row">
+                <label class="toggle-label"><input id="loss-left-arm" data-side="left" data-limb="arm" type="checkbox"> Left arm</label>
+                <label class="visually-hidden" for="loss-left-arm-level">Left arm level or description (optional)</label>
+                <input id="loss-left-arm-level" type="text" maxlength="80" placeholder="Level or description (optional)" autocomplete="off">
+              </div>
+              <div class="limb-row">
+                <label class="toggle-label"><input id="loss-right-leg" data-side="right" data-limb="leg" type="checkbox"> Right leg</label>
+                <label class="visually-hidden" for="loss-right-leg-level">Right leg level or description (optional)</label>
+                <input id="loss-right-leg-level" type="text" maxlength="80" placeholder="Level or description (optional)" autocomplete="off">
+              </div>
+              <div class="limb-row">
+                <label class="toggle-label"><input id="loss-left-leg" data-side="left" data-limb="leg" type="checkbox"> Left leg</label>
+                <label class="visually-hidden" for="loss-left-leg-level">Left leg level or description (optional)</label>
+                <input id="loss-left-leg-level" type="text" maxlength="80" placeholder="Level or description (optional)" autocomplete="off">
+              </div>
+          </fieldset>
+          <h3 id="pain-phase">Pain before use</h3>
+          <p id="pain-key-hint" class="hint">Choose 0–10. Keys 1–9 record scores 1–9; the 0 key means 10. For a pain score of zero, choose No pain (0). Shortcuts pause while typing or adjusting form fields.</p>
+          <div id="pain-scores" class="pain-scores" role="group" aria-labelledby="pain-phase" aria-describedby="pain-key-hint"></div>
+          <div class="button-row session-actions">
+            <button id="start-session" type="button" disabled>Start session</button>
+            <button id="end-session" type="button" disabled>End session</button>
+            <button id="continue-session" type="button" hidden>Continue session</button>
+            <button id="save-session" type="button" disabled>Save session JSON</button>
+            <button id="new-session" type="button" hidden>New session</button>
+          </div>
+          <p id="session-status" class="status" role="status" aria-live="polite">Choose a starting pain score, then press Start session.</p>
+          <ol id="pain-history" class="pain-history" aria-label="Most recent five pain entries"></ol>
+          <p class="hint">End session asks for a final score, then requests a JSON download. Save session JSON can also download progress during use. Closing or reloading the page can lose records that have not been downloaded. Stopping the camera does not end the session.</p>
         </section>
       </aside>
     </main>

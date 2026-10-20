@@ -8,9 +8,11 @@ One camera, four receiving quadrants meeting at a shared center, and one setup d
 | --- | --- | --- |
 | `captureRGB.js` | Live stream, permission request, device enumeration, stop/disconnect handling | Canvas, participant records, DOM controls |
 | `mirrorView.js` | Canvas transformations, frame sizing, animation cleanup | Camera permission, file storage |
-| `mirrorRegions.js` | Region/center validation, source selection, upright reflection and proportional fill | DOM, camera permission, file download |
+| `mirrorRegions.js` | Region/center validation, source selection, full-frame mask geometry and horizontal reflection | DOM, camera permission, file download |
 | `fullscreenView.js` | Fullscreen and expanded layout, panel visibility, exit handling and focus | Camera lifetime, transforms, JSON storage |
 | `controls.js` | Accessible page controls and status text | Camera acquisition, JSON validation |
+| `studySession.js` | Optional session state, measurements, immutable snapshots and session JSON download | DOM, live camera, chart rendering |
+| `sessionControls.js` | Participant form, scoring phases, keyboard guard, progress/final download actions | Camera acquisition, pixel rendering |
 | `setupFile.js` | Versioned setup format, validation, export filename | Live streams, pain data |
 | `app.js` | User actions and coordination | Pixel processing or format validation |
 
@@ -21,7 +23,7 @@ Keep these direct dependencies. Do not introduce a plugin system, universal came
 1. **RGB baseline — user confirmed camera orientation and setup loading in build 4.** Record browser/OS versions when doing broader acceptance. Windows and hospital validation remain explicitly unverified.
 2. **Fullscreen — implemented in build 5; user acceptance pending.** Use the current screen. Show/hide settings, keep Stop and Exit accessible, fit the full frame, and handle browser rejection with an in-page expanded layout. Stop when entry, exit, and adjustments work on the user's browser. Do not change capture or setup JSON for this milestone.
 3. **Shared alignment and quadrant mirroring — corrected in build 8; user acceptance pending.** One horizontal mirror choice per quadrant; two global sliders move the shared center. Each pane clips a complete normal or reflected frame; shared dividers change visibility without rescaling or translating the images. This matches the native regional renderer. Schema 3 divider values remain compatible. Independent settings scrolling keeps video visible at desktop and narrow widths. Schema 3 stores the center; schema 2 migrations discard retired vertical flips/offsets with a visible notice. Stop for the user's camera/alignment test. Split-screen comparison remains a separate milestone.
-4. **Optional session tracking.** Add `studySession` and a dedicated session panel when pain entries are implemented. Camera use remains available without entering identity or administrator details. Keep setups separate from timestamped sessions. Match the existing study JSON fields where their meaning is shared; write and test explicit mappings for desktop records. Never silently drop unsupported alignment or clinical fields during import. Stop when continuing a participant's history creates a new session without overwriting older entries.
+4. **Optional session tracking — implemented in build 9; user acceptance pending.** Participant name, zero to four limb-loss locations/descriptions, baseline/during/final scores and dated JSON downloads. Setup JSON remains separate. A fresh session has a new ID; completed and progress downloads share that ID. See SESSION-FORMAT.md for the flat ECharts-ready rows. Import/resume, stable participant IDs, clinician fields and native desktop adapters are separate future work. Stop for the user's session recording and file review.
 5. **Shareable browser release.** Choose HTTPS hosting, test a public link in current desktop browsers, and supply a download-free quick start. Include keyboard navigation and touch-sized controls. Add tablet/phone validation as separate recorded results. Do not claim hospital compatibility based on a home-computer test.
 6. **Administrative charts.** Create a separate folder/file import tool for ECharts once the session format is working. Participant camera use should not depend on chart libraries.
 

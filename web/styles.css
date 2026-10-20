@@ -105,3 +105,12 @@ body.view-expanded { overflow: hidden; }
   .preview-panel { grid-template-rows: minmax(0, 1fr); padding: 4px; }
   .workspace.is-expanded { padding: 6px; }
 }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.limb-row { margin-bottom: 14px; }
+.limb-row .toggle-label { margin-bottom: 0; }
+.pain-scores { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.pain-scores button { padding: 8px 5px; }
+.pain-scores [aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: white; }
+.session-actions { margin-top: 14px; }
+.pain-history { padding-left: 20px; font-size: .8rem; }

@@ -14,7 +14,7 @@
     <a href="index.html">← Back to the mirror</a>
     <p class="eyebrow">Augmented Reality Mirror RGB Web</p>
     <h1>Getting started</h1>
-    <p>This browser version offers a camera mirror, fullscreen and independent quadrant adjustments. You can save and reload your view and camera preference. Pain entries are a later milestone.</p>
+    <p>This browser version offers a camera mirror, fullscreen and independent quadrant adjustments. You can save and reload your view and camera preference. Optional sessions record participant details and pain scores before, during and after use.</p>
     <section><h2>Start with a comfortable view</h2>
       <ol>
         <li>Place your computer or camera on a stable surface, with enough light to see yourself. Adjust the physical camera to include the area you want to view.</li>
@@ -60,6 +60,20 @@
       <p>A setup cannot move the physical camera or restore your posture. Check your position each time. Camera names can change or be shared by two devices, so always check the preview.</p>
       <p>Only setups saved by this browser version are supported here. Desktop ARM study-session files will be rejected with an explanation.</p>
     </section>
+    <section><h2>Record an optional pain session</h2>
+      <p>You can use the camera without a session. To record one, scroll the controls to <strong>Optional session</strong>. A family member, clinician or the person using ARM can operate these controls.</p>
+      <ol>
+        <li>Enter a participant name or label if wanted. It begins the session filename; without a name, the file begins with the session date and time.</li>
+        <li>Select all limb-loss locations that apply, using the person's own right and left. For bilateral limb loss, select both sides. Add a level or description if useful. These selections do not change the mirror quadrants.</li>
+        <li>Choose the <strong>pain before use</strong> score, then press <strong>Start session</strong>. Participant details are fixed until the session is complete.</li>
+        <li>During use, select a score whenever you want to record one. A single selection records the score immediately with its time and the current mirror settings.</li>
+        <li>Press <strong>End session</strong>, then choose the final score. That selection ends the record and requests a JSON download. <strong>Continue session</strong> returns to during-use scoring if you are not finished.</li>
+      </ol>
+      <p><strong>Keyboard:</strong> keys <strong>1–9</strong> record scores 1–9; the <strong>0 key records 10</strong>. For an actual pain score of zero, choose <strong>No pain (0)</strong> in the panel. Number shortcuts pause while typing in text fields or using sliders/select controls. Holding a key does not repeat measurements.</p>
+      <p>The toolbar shows the session state while controls are hidden. Its <strong>End session</strong> button also asks for the final score; you can give that score with a number key or use Show controls to access the score buttons. Stopping the camera does not end the session, and ending the session does not stop the camera.</p>
+      <p><strong>Save session JSON</strong> can download progress at any time or request the completed file again. Check Downloads or the browser save dialog. <strong>New session</strong> starts a fresh record with a new ID; check the retained participant details and choose a new starting score. Camera setup files and pain-session records are different files.</p>
+      <p>Records remain only in the current tab until downloaded. Closing, reloading or leaving the page can lose unsaved entries. There is no automatic upload or background saving. Session files contain the entered participant information, so keep them in a location you choose.</p>
+    </section>
     <section><h2>If the camera does not open</h2>
       <ul>
         <li><strong>Permission denied:</strong> check the site's camera permission in your browser and the browser's permission in your computer's privacy settings. Then press Start camera again.</li>
@@ -71,7 +85,7 @@
       </ul>
     </section>
     <section><h2>Where information goes</h2>
-      <p>The camera image is processed on this device. This version has no video recording, accounts, analytics, or upload service. Saving creates a local JSON download containing the setup name, camera preference, mirror choice, quadrant choices, shared alignment, and save date. Loading reads the file on your device.</p>
+      <p>The camera image is processed on this device. This version has no video recording, accounts, analytics, or upload service. Saving a setup creates a local JSON download containing the setup name, camera preference, mirror choice, quadrant choices, shared alignment, and save date. Saving a session creates a separate JSON file containing participant details, limb-loss selections, timestamps, pain entries and mirror settings. Loading reads the file on your device.</p>
       <p>A hosting provider may log ordinary website requests, such as your IP address. The app does not send it camera images or setup files. A file saved to a cloud-synced folder may be synced by that folder's service.</p>
     </section>
     <section><h2>About this version</h2><p>ARM is an experimental visual-feedback tool. These instructions explain its controls; they are not a treatment plan or a promise of pain relief.</p></section>

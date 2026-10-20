@@ -11,7 +11,7 @@ try {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(process.env.ARM_TEST_URL || "http://localhost:8001");
-  assert.equal(await page.locator("#build-version").textContent(), "Browser build 8");
+  assert.equal(await page.locator("#build-version").textContent(), "Browser build 9");
   const pixels = await page.evaluate(async () => {
     const { drawRegions, defaultRegions, REGION_IDS } = await import("./src/mirrorRegions.js");
     const source = document.createElement("canvas"), target = document.createElement("canvas");

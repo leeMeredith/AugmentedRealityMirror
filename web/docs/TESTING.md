@@ -19,6 +19,7 @@ npm install --no-save --package-lock=false playwright
 npx playwright install chromium
 node tests/fullscreen.browser.mjs
 node tests/regions.browser.mjs
+node tests/session.browser.mjs
 ```
 
 Set `ARM_TEST_URL` to test a different local address. Existing test environments can supply `ARM_PLAYWRIGHT_MODULE` (a module path) and `ARM_CHROME_EXECUTABLE` instead of installing another copy. `ARM_SCREENSHOT_DIR` optionally saves review images outside source. These checks exercise native fullscreen, Escape, browser-driven exit, rejected/unavailable fullscreen, control visibility, Stop, focus restoration, and narrow-screen layout.
@@ -83,3 +84,17 @@ Build 8 corrects a limitation of the earlier tests: checking coverage and uprigh
 Build 8 verification on 2026-10-11: all 16 unit checks passed. Headless Chrome 155.0.8059.39 passed all 3,136 exact-coordinate pixel cases and the shared-control, JSON migration, layout/scrolling, keyboard and capture-stop integration checks. All 9 fullscreen checks passed. The desktop screenshot was inspected. Tests used synthetic video only; live-camera acceptance remains pending.
 
 Hosted Build 8 verification on 2026-10-11: the HTTPS GitHub Pages application at `https://leemeredith.github.io/AugmentedRealityMirror/web/` passed all 3,136 exact-coordinate pixel cases and shared controls, JSON download/import, legacy conversion, independent scrolling, keyboard and capture-stop checks in headless Chrome 155.0.8059.39. All 9 fullscreen checks also passed. Capture used browser-generated synthetic video, not a physical camera. The project homepage and app JavaScript returned HTTP 200, and the deployed JavaScript identified itself as Browser build 8. Physical-camera and managed-hospital checks remain separate acceptance steps.
+
+## Optional sessions (build 9)
+
+1. Confirm the camera still works without participant information or a session. Select a baseline and start a named session with multiple limb-loss locations. Participant details should lock for that record.
+2. Press 1–9 and 0 while watching the view: each press records once, with key 0 meaning 10. No pain (0) records zero. Holding a key, typing a name, using a slider or entering text must not add pain measurements.
+3. Save progress, then continue scoring. The progress file should be active with no end timestamp. End session, then select the final score: one after entry and one download request. Repeat download must preserve the session ID and entries.
+4. Test a blank name, bilateral locations, Continue session after requesting an end, and New session. New records get new IDs; unnamed filenames begin with the UTC date/time. Stopping the camera must not silently end the session.
+5. Test hidden controls/fullscreen scoring and final-score entry using the toolbar. On a narrow screen, the panel still scrolls while the view remains visible.
+6. Check JSON with invented data only: before/during/after phases, integer score 0–10, full UTC timestamps, numeric elapsedSeconds, start/end/per-entry mirror snapshots and separate session format. Setup import should reject a session file without changing the view.
+7. Request navigation/reload during an active record: the browser should offer its leave warning. A browser crash or ignored warning can still lose undownloaded records. Confirm downloads before closing; no automatic storage is promised.
+
+Build 9 staging verification on 2026-10-20: all 22 Node unit checks passed. Chrome 155.0.8059.85 with synthetic video and invented participants passed the full session flow, key mapping/guards, progress and final downloads, multiple limb locations, anonymous filenames, zero pain, new IDs, end cancellation, camera/session independence and setup/session separation. All 3,136 rendering pixel cases and all 9 fullscreen checks passed. The narrow session screenshot was inspected. Real-camera session acceptance remains pending.
+
+Release check: publish only application sources/docs/tests, never generated participant records. If the hosted page has a script error or loses/mislabels scores, revert the Build 9 commit to restore the previous static application, retaining already downloaded session JSON separately. Verify the Pages deployment and a synthetic baseline/during/final download after publishing.

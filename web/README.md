@@ -2,7 +2,7 @@
 
 A small RGB camera mirror for home use and later testing on managed computers. This lives alongside the openFrameworks RGB application in the same repository. No changes to the desktop application's source are needed to run it.
 
-Implemented: explicit camera start/stop, camera selection, horizontal mirror toggle, independent quadrant mirroring/alignment, local setup JSON download/import, and fullscreen with show/hide controls. No account, participant name, or administrator is required. Video recording is outside the browser scope.
+Implemented: explicit camera start/stop, camera selection, horizontal mirror toggle, independent quadrant mirroring/alignment, optional participant/pain sessions, local setup JSON download/import, and fullscreen with show/hide controls. No account, participant name, or administrator is required. Video recording is outside the browser scope.
 
 Build 8 uses **shared reveal dividers** over full-frame camera images. Horizontal moves the vertical boundary; vertical moves the horizontal boundary. All four panes remain joined. Each quadrant keeps one independent **Left/right mirror** toggle; top/bottom flipping has been removed. Both sliders range from 10% to 90% of the full image so no pane collapses. **Reset alignment** returns both to 50% without changing mirror choices.
 
@@ -14,7 +14,15 @@ The controls scroll independently while the camera remains visible, in normal an
 
 [**Open ARM camera mirror**](https://leemeredith.github.io/AugmentedRealityMirror/web/) · [Online user guide](https://leemeredith.github.io/AugmentedRealityMirror/web/guide.html)
 
-Open the link, press **Start camera**, and allow camera access. No installation or GitHub account is required. The live app is Build 8. Camera frames are processed on the visitor's device.
+Open the link, press **Start camera**, and allow camera access. No installation or GitHub account is required. The live app is Build 9. Camera frames are processed on the visitor's device.
+
+## Optional participant and pain sessions
+
+Build 9 adds an optional session panel. Enter a name/label if wanted, select anatomical limb-loss locations (multiple locations and bilateral loss are supported), choose a baseline score, and press Start session. During use, one score selection appends one timestamped measurement. End session asks for a final score and requests a JSON download. Key 0 means score 10; use the No pain (0) button for a zero score. Number keys do not record while typing or adjusting form fields.
+
+Session files begin with the optional name plus the UTC start date/time, or just the date/time when unnamed. Save session JSON can also download unfinished progress or repeat a completed download. New session retains form details for review but creates a new record. Records live only in the current tab until downloaded; check Downloads before closing or starting another session. Camera Start/Stop is independent of session Start/End.
+
+The [session format](docs/SESSION-FORMAT.md) documents the flat timestamp/elapsed-time/score rows for a future separate ECharts administration tool. ECharts is not a dependency of the camera app. Session import/resume and desktop-session conversion remain later work.
 
 ## Run locally for development
 
@@ -55,11 +63,15 @@ web/
     fullscreenView.js        Fullscreen/fallback layout, panel visibility, exit/focus
     controls.js              DOM updates and control references
     setupFile.js             Setup schema, validation, filenames, JSON download
+    studySession.js          Session state, measurements, snapshots and dated JSON files
+    sessionControls.js       Participant form, scoring phases and keyboard actions
   tests/
     captureRGB.test.js        Permission/cancellation/disconnection behavior
     mirrorView.test.js        Mirror transforms and draw-loop cleanup
     mirrorRegions.test.js     Gap-free mask geometry
     setupFile.test.js         Round trips, invalid files, filename safety
+    studySession.test.js      Session lifecycle, immutable records, timestamps, filenames
+    session.browser.mjs       Participant/scoring/download flow with synthetic data
     regions.browser.mjs      Synthetic pixel and quadrant-control integration checks
     fullscreen.browser.mjs   Native/fallback fullscreen integration checks
   docs/
