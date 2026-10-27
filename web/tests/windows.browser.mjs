@@ -19,11 +19,9 @@ try {
  context.on("page",p=>p.on("pageerror",e=>errors.push(e.message)));
  page.on("pageerror",e=>errors.push(e.message));
  await page.goto(base);
- assert.equal(await page.locator("#build-version").textContent(),"Browser build 10");
- await page.locator("#view-tab").focus();await page.keyboard.press("ArrowRight");
- assert.equal(await page.locator("#session-tab").getAttribute("aria-selected"),"true");
- await page.keyboard.press("ArrowLeft");
- assert.equal(await page.locator("#view-tab").getAttribute("aria-selected"),"true");
+ assert.equal(await page.locator("#build-version").textContent(),"Browser build 11");
+ assert.equal(await page.locator("#camera-controls-box").isVisible(),true);
+ assert.equal(await page.locator("#study-session").isVisible(),true);
  await page.locator("#participant-name").fill("Example Person");
  await page.locator("#start-camera").click();
  await page.waitForFunction(()=>document.querySelector("#camera-state").textContent==="Camera on");
@@ -31,7 +29,7 @@ try {
   window.originalTrack=document.querySelector("#camera-video").srcObject.getVideoTracks()[0];
   window.originalCanvas=document.querySelector("#mirror-canvas");
  });
- await page.locator("#session-tab").click();
+
  await page.locator("[data-score='6']").click();await page.locator("#start-session").click();
  const open=async()=>{
   const pending=page.waitForEvent("popup");await page.locator("#open-camera-window").click();
@@ -43,7 +41,7 @@ try {
  assert.equal(await page.evaluate(()=>captureCalls),1);
  assert.equal(await child.evaluate(()=>captureCalls),0);
  assert.equal(await page.evaluate(()=>originalTrack.readyState),"live");
- assert.equal(await page.locator("#session-tab").getAttribute("aria-selected"),"true");
+ assert.equal(await page.locator("#study-session").isVisible(),true);
  // Render continues with the controller tab in the background.
  await child.bringToFront();
  await child.evaluate(()=>{window.firstFrame=document.querySelector("#mirror-canvas").toDataURL();});
@@ -69,7 +67,7 @@ try {
  assert.equal(session.record.participantName,"Example Person");
  assert.match(session.name,/^Example_Person_/);
  assert.deepEqual(session.record.painEntries.map(e=>e.painScore),[6,4,10,3]);
- await page.locator("#view-tab").click();
+
  const setup=await download(()=>page.locator("#save-setup").click());
  assert.equal(setup.record.schemaVersion,4);
  assert.equal(setup.record.participantName,session.record.participantName);
@@ -84,7 +82,7 @@ try {
  await load(other);
  assert.equal(await page.locator("#participant-name").inputValue(),"Example Person");
  assert.match(await page.locator("#setup-status").textContent(),/Current session name kept/);
- await page.locator("#session-tab").click();await page.locator("#new-session").click();
+ await page.locator("#new-session").click();
  await load(other);
  assert.equal(await page.locator("#participant-name").inputValue(),"Other Example");
  // Returning and actually closing both restore the original canvas and preserve capture.
@@ -95,8 +93,9 @@ try {
  child=await open();await child.close();
  await page.locator("#mirror-canvas").waitFor({state:"visible"});
  assert.equal(await page.evaluate(()=>originalTrack.readyState),"live");
- // Opening from fullscreen with its panel hidden must restore the control panel.
+ // Show the control boxes before opening their camera-window action from fullscreen.
  await page.locator("#fullscreen-view").click();await page.waitForFunction(()=>!!document.fullscreenElement);
+ await page.locator("#toggle-controls").click();
  child=await open();
  await page.waitForFunction(()=>!document.fullscreenElement);
  assert.equal(await page.locator("#controls").isVisible(),true);
@@ -110,7 +109,7 @@ try {
  await child.locator("#camera-window-end").click();
  const anonymous=await download(()=>child.keyboard.press("2"));
  assert.equal(anonymous.record.participantName,"");assert.match(anonymous.name,/^\d{4}-/);
- await page.locator("#view-tab").click();
+
  const emptySetup=await download(()=>page.locator("#save-setup").click());
  assert.equal(emptySetup.record.participantName,"");assert.match(emptySetup.name,/^\d{4}-.*_setup\.json$/);
  const closing=child.waitForEvent("close");await page.close();await closing;

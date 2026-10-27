@@ -1,5 +1,5 @@
 // A small, versioned setup document. It is not a study session or pain record.
-import { REGION_IDS, defaultCenter, validateCenter, defaultRegions, validateRegions } from "./mirrorRegions.js";
+import { REGION_IDS, defaultCenter, validateCenter, defaultRegions, validateRegions } from "./mirrorRegions.js?v=11";
 export const MAX_SETUP_BYTES = 64 * 1024;
 const format = "arm-rgb-setup";
 

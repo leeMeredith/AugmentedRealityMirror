@@ -7,22 +7,20 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>ARM · Camera mirror</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="styles.css">
-  <script type="module" src="src/app.js"></script>
+  <link rel="stylesheet" href="styles.css?v=11">
+  <script type="module" src="src/app.js?v=11"></script>
 </head>
 <body class="mirror-app">
   <a class="skip-link" href="#controls">Skip to controls</a>
   <div class="page">
     <header class="masthead">
       <div><p class="eyebrow">Augmented Reality Mirror RGB Web</p><h1>A place to start.</h1></div>
-      <a class="guide-link" href="guide.html">Getting started <span aria-hidden="true">↗</span></a>
+      <a class="guide-link" href="guide.html?v=11">Getting started <span aria-hidden="true">↗</span></a>
     </header>
     <p class="intro">Use your camera as a mirror. Start with a comfortable position and a clear view.</p>
     <main id="mirror-workspace" class="workspace">
       <div class="view-toolbar" role="group" aria-label="View controls">
         <div class="button-row">
-          <button id="open-camera-window" type="button">Open camera window</button>
-          <button id="return-camera-window" type="button" hidden>Return camera here</button>
           <button id="fullscreen-view" type="button">Fullscreen</button>
           <button id="toggle-controls" type="button" aria-controls="controls" aria-expanded="true">Hide controls</button>
           <button id="stop-view" type="button" disabled>Stop camera</button>
@@ -49,12 +47,16 @@
         <div class="controls-header">
           <label for="participant-name">Participant name (optional)</label>
           <input id="participant-name" type="text" maxlength="80" autocomplete="off" placeholder="Name used in both JSON files">
-          <div id="control-tabs" class="control-tabs" role="tablist" aria-label="Controls">
-            <button id="view-tab" type="button" role="tab" aria-controls="view-controls" aria-selected="true">View settings</button>
-            <button id="session-tab" type="button" role="tab" aria-controls="study-session" aria-selected="false" tabindex="-1">Session</button>
-          </div>
         </div>
-        <div id="view-controls" class="control-page" role="tabpanel" aria-labelledby="view-tab">
+        <section id="camera-controls-box" class="control-box" aria-labelledby="camera-panel-title">
+          <header class="control-box-heading">
+            <h2 id="camera-panel-title">Camera &amp; view</h2>
+            <div class="button-row camera-window-actions">
+              <button id="open-camera-window" type="button">Open camera window</button>
+              <button id="return-camera-window" type="button" hidden>Return camera here</button>
+            </div>
+          </header>
+          <div id="view-controls" class="control-page" role="region" aria-label="Camera and view settings" tabindex="0">
         <section class="control-section" aria-labelledby="camera-title">
           <p class="step">01 / Camera</p><h2 id="camera-title">Settle into your view</h2>
           <label for="camera-select">Camera</label>
@@ -101,12 +103,23 @@
           <p id="setup-status" class="status" role="status" aria-live="polite">Saves your mirror direction, quadrant mirror choices, shared alignment and preferred camera to a JSON file.</p>
         </section>
         </div>
-        <section id="study-session" class="control-section control-page" role="tabpanel" aria-labelledby="session-tab" hidden>
-          <p class="step">04 / Optional session</p><h2 id="session-title">Participant and pain scores</h2>
-          <p class="hint">Camera use does not require a session. Session records stay in this tab until you download them; no information is uploaded.</p>
+        </section>
+        <section id="study-session" class="control-box" aria-labelledby="session-title">
+          <header class="control-box-heading session-heading">
+            <h2 id="session-title">Session &amp; pain</h2>
+            <button id="end-session" type="button" disabled>End session</button>
+          </header>
+          <div id="session-content" class="control-page control-section" role="region" aria-label="Participant details and pain scores" tabindex="0">
+
+          <h3 id="pain-phase">Pain before use</h3>
+          <div id="pain-scores" class="pain-scores" role="group" aria-labelledby="pain-phase" aria-describedby="pain-key-hint"></div>
+          <p id="pain-key-hint" class="hint">Choose 0–10. Keys 1–9 record scores 1–9; the 0 key means 10. For a pain score of zero, choose No pain (0). Shortcuts pause while typing or adjusting form fields.</p>
+          <p id="limb-summary" class="hint" hidden></p>
+          <details id="participant-fold">
+            <summary>Limb-loss details (optional)</summary>
           <fieldset id="participant-details" class="region-settings">
             <legend>Participant details</legend>
-            <p class="hint">The shared participant name above is used for this session and the camera setup file. Leave it blank for date/time filenames. Details stay fixed for the session; choose New session to edit them afterward.</p>
+            <p class="hint">The name above is shared by both files. Details stay fixed for a session; choose New session to edit them afterward.</p>
             <p id="limb-loss-hint" class="hint">Select all limb-loss locations that apply, using the person's own right and left. Select both sides for bilateral limb loss. Descriptions are optional. These choices do not change the mirror quadrants.</p>
               <div class="limb-row">
                 <label class="toggle-label"><input id="loss-right-arm" data-side="right" data-limb="arm" type="checkbox"> Right arm</label>
@@ -129,20 +142,17 @@
                 <input id="loss-left-leg-level" type="text" maxlength="80" placeholder="Level or description (optional)" autocomplete="off">
               </div>
           </fieldset>
-          <p id="limb-summary" class="hint" hidden></p>
-          <h3 id="pain-phase">Pain before use</h3>
-          <p id="pain-key-hint" class="hint">Choose 0–10. Keys 1–9 record scores 1–9; the 0 key means 10. For a pain score of zero, choose No pain (0). Shortcuts pause while typing or adjusting form fields.</p>
-          <div id="pain-scores" class="pain-scores" role="group" aria-labelledby="pain-phase" aria-describedby="pain-key-hint"></div>
-          <div class="button-row session-actions">
+          </details>
+          <p id="session-status" class="status" role="status" aria-live="polite">Choose a starting pain score, then press Start session.</p>
+          <ol id="pain-history" class="pain-history" aria-label="Most recent five pain entries"></ol>
+          <p class="hint">End session asks for a final score, then requests a JSON download. Save session JSON can also download progress during use. Closing or reloading the page can lose records that have not been downloaded. Stopping the camera does not end the session.</p>
+          </div>
+          <div class="button-row session-actions control-box-actions">
             <button id="start-session" type="button" disabled>Start session</button>
-            <button id="end-session" type="button" disabled>End session</button>
             <button id="continue-session" type="button" hidden>Continue session</button>
             <button id="save-session" type="button" disabled>Save session JSON</button>
             <button id="new-session" type="button" hidden>New session</button>
           </div>
-          <p id="session-status" class="status" role="status" aria-live="polite">Choose a starting pain score, then press Start session.</p>
-          <ol id="pain-history" class="pain-history" aria-label="Most recent five pain entries"></ol>
-          <p class="hint">End session asks for a final score, then requests a JSON download. Save session JSON can also download progress during use. Closing or reloading the page can lose records that have not been downloaded. Stopping the camera does not end the session.</p>
         </section>
       </aside>
     </main>

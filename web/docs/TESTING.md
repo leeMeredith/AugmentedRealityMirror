@@ -21,6 +21,7 @@ node tests/fullscreen.browser.mjs
 node tests/regions.browser.mjs
 node tests/session.browser.mjs
 node tests/windows.browser.mjs
+node tests/panels.browser.mjs
 ```
 
 Set `ARM_TEST_URL` to test a different local address. Existing test environments can supply `ARM_PLAYWRIGHT_MODULE` (a module path) and `ARM_CHROME_EXECUTABLE` instead of installing another copy. `ARM_SCREENSHOT_DIR` optionally saves review images outside source. These checks exercise native fullscreen, Escape, browser-driven exit, rejected/unavailable fullscreen, control visibility, Stop, focus restoration, and narrow-screen layout.
@@ -111,3 +112,14 @@ Release check: publish only application sources/docs/tests, never generated part
 Use only invented participant data in automated checks. Real-camera and multiple-monitor acceptance remain user checks.
 
 Build 10 staging verification on 2026-10-20: all 24 Node unit checks passed. Chrome 155.0.8059.85 with synthetic video/invented participants passed the new two-window suite, including one-stream/canvas identity, visible rendering with the controller in the background, camera-window scoring and final download, fullscreen/Escape, active-session close/reopen, return, parent-close cleanup, blocked pop-ups and standalone recovery. Shared-name downloads, schema 4 setup imports, legacy label handling and current-session name protection passed. The existing session suite, 3,136 exact-coordinate rendering cases and all 9 fullscreen checks passed with the new tabs. Camera-window and narrow controller screenshots were inspected. Real-camera and physical window/monitor arrangement remain user acceptance checks.
+
+## Two visible control boxes (build 11)
+
+1. Confirm the name stays above both Camera & view and Session & pain, with a gap between boxes. Both should remain visible without switching tabs. On desktop, Session gets more height. On small screens both sit below the fixed video.
+2. Scroll the camera box to its setup files. The Session content, both headings, shared name and live image must stay in place. Scroll Session independently; End remains in its heading and Start/Save/New remain in the fixed bottom row as appropriate.
+3. Confirm scoring buttons appear first. Optional limb details can be expanded below them before starting; records and key mappings must still match Build 10. Download a named setup/session pair and check the matching names.
+4. Check fullscreen, detached/returned camera, blocked pop-ups and narrow/short windows. Verify each box has a usable content scroller and actions remain inside the Session box. Camera/window placement and records must survive layout changes.
+5. Compare browsers using `index.html?v=11` after saving active records. The footer must say Browser build 11. HTML/style/module addresses use release queries so an updated page does not load an old unversioned dependency.
+
+
+Build 11 staging verification on 2026-10-27: all 24 Node unit checks passed. Chrome 156.0.8078.48 with synthetic video and invented participants passed the new independent-panel checks at desktop, fullscreen, 390×600 and 780×400 sizes. Camera/Session content scrolls independently, headings and video stay fixed, Session has more desktop height, and actions stay inside its box. The versioned CSS/module requests were checked. Existing session/download, detached-window, all 9 fullscreen checks and all 3,136 pixel cases passed. Desktop, active-session and narrow screenshots were inspected. Real-camera/Safari acceptance remains for the user.

@@ -14,13 +14,13 @@ The controls scroll independently while the camera remains visible, in normal an
 
 [**Open ARM camera mirror**](https://leemeredith.github.io/AugmentedRealityMirror/web/) · [Online user guide](https://leemeredith.github.io/AugmentedRealityMirror/web/guide.html)
 
-Open the link, press **Start camera**, and allow camera access. No installation or GitHub account is required. The live app is Build 10. Camera frames are processed on the visitor's device.
+Open the link, press **Start camera**, and allow camera access. No installation or GitHub account is required. The live app is Build 11. Camera frames are processed on the visitor's device.
 
 ## Separate camera window and shared participant name
 
-Build 10 adds View settings / Session tabs and an Open camera window button. The same canvas moves to a same-origin camera page, sharing the original stream rather than opening a second camera. Its animation scheduler follows the destination window so the live view can update with the controller in the background. Return/close restores the canvas to the controller without restarting capture. The camera window supports fullscreen, Stop, End session, status and number-key scoring; the main window owns records and requests downloads. Keep the main window open.
+Build 11 replaces tabs with two visible, independently scrolling boxes: Camera & view and Session & pain, separated by space. The shared name stays above both. Headings and session actions stay fixed while the contents scroll. On desktop the boxes stack beside the video and Session gets more height; on small screens they sit side by side below the video. Pain scores come first, with optional limb details underneath. Open camera window is in the Camera heading. The same canvas moves to a same-origin camera page, sharing the original stream rather than opening a second camera. Its animation scheduler follows the destination window so the live view can update with the controller in the background. Return/close restores the canvas to the controller without restarting capture. The camera window supports fullscreen, Stop, End session, status and number-key scoring; the main window owns records and requests downloads. Keep the main window open.
 
-Both panels share one participant-name field, fixed during an active or completed session. Setup and session JSON contain `participantName`; both filenames begin with that name when supplied, otherwise with a UTC timestamp. Loading a camera setup fills the name only before a session starts. A conflicting name is kept out of active/completed records with an explanation. New session unlocks the field. The old setup `name` remains an optional view label and never becomes a participant identity automatically.
+Both boxes share one participant-name field, fixed during an active or completed session. Setup and session JSON contain `participantName`; both filenames begin with that name when supplied, otherwise with a UTC timestamp. Loading a camera setup fills the name only before a session starts. A conflicting name is kept out of active/completed records with an explanation. New session unlocks the field. The old setup `name` remains an optional view label and never becomes a participant identity automatically.
 
 If pop-ups are blocked, the embedded view remains usable. A browser may choose a tab instead of a window. A second monitor is optional.
 
@@ -31,6 +31,10 @@ Build 9 adds an optional session panel. Enter a name/label if wanted, select ana
 Session files begin with the optional name plus the UTC start date/time, or just the date/time when unnamed. Save session JSON can also download unfinished progress or repeat a completed download. New session retains form details for review but creates a new record. Records live only in the current tab until downloaded; check Downloads before closing or starting another session. Camera Start/Stop is independent of session Start/End.
 
 The [session format](docs/SESSION-FORMAT.md) documents the flat timestamp/elapsed-time/score rows for a future separate ECharts administration tool. ECharts is not a dependency of the camera app. Session import/resume and desktop-session conversion remain later work.
+
+## Browser updates
+
+Build 11 versions its stylesheet, entry scripts and relative module imports with `?v=11` so refreshed pages request a consistent set of release assets. Use `https://leemeredith.github.io/AugmentedRealityMirror/web/index.html?v=11` for a fresh page address when comparing Safari with another browser. Save active session records before reloading. Check Browser build 11 in the footer. Future releases must update the HTML and all relative module query versions together. This does not add a service worker or persistent cache.
 
 ## Run locally for development
 
@@ -72,7 +76,6 @@ web/
     fullscreenView.js        Fullscreen/fallback layout, panel visibility, exit/focus
     cameraWindow.js          Canvas/window lifecycle and shared camera/session actions
     cameraWindowPage.js      Camera-window fullscreen and connection recovery
-    controlTabs.js           View/Session panel selection and keyboard tab navigation
     controls.js              DOM updates and control references
     setupFile.js             Setup schema, validation, filenames, JSON download
     studySession.js          Session state, measurements, snapshots and dated JSON files

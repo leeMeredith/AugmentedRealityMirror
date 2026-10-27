@@ -115,26 +115,49 @@ body.view-expanded { overflow: hidden; }
 .session-actions { margin-top: 14px; }
 .pain-history { padding-left: 20px; font-size: .8rem; }
 
-/* The shared name and tabs remain visible; only the selected panel scrolls. */
-.controls { display: flex; flex-direction: column; overflow: hidden; }
-.controls-header { flex: none; padding: 10px 16px; border-bottom: 1px solid var(--line); }
+/* Two visible control boxes share one name, with separate content scrollers. */
+.controls { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 2fr) minmax(0, 3fr); gap: 12px; overflow: hidden; background: none; border: 0; border-radius: 0; }
+.controls-header { padding: 10px 14px; background: white; border: 1px solid var(--line); border-radius: 14px; }
 .controls-header label { margin-bottom: 3px; font-size: .8rem; }
 .controls-header input { min-height: 36px; padding: 5px 10px; }
-.control-tabs { display: flex; gap: 6px; margin-top: 8px; }
-.control-tabs button { flex: 1; padding: 6px; min-height: 36px; }
-.control-tabs [aria-selected="true"] { background: var(--teal); color: white; border-color: var(--teal); }
-.control-page { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.control-box { min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: white; }
+.control-box-heading { flex: none; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.control-box-heading h2 { margin: 0; font-size: 1rem; line-height: 1.3; }
+.camera-window-actions { margin-top: 7px; gap: 6px; }
+.camera-window-actions button { font-size: .78rem; padding: 6px 8px; min-height: 36px; }
+.session-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.session-heading button { font-size: .78rem; padding: 5px 8px; min-height: 36px; }
+.control-page { flex: 1; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.control-page.control-section, .control-page .control-section { padding: 14px; }
+.control-box-actions { flex: none; margin: 0; padding: 8px 12px; border-top: 1px solid var(--line); background: white; }
+.control-box-actions button { flex: 1; font-size: .8rem; padding: 6px; }
+#pain-phase { font-size: 1.05rem; margin: 10px 0 6px; }
+#participant-fold summary { cursor: pointer; font-size: .85rem; font-weight: 600; padding: 7px 0; }
+#participant-fold .region-settings { margin-top: 8px; }
 .workspace.camera-detached { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
 .workspace.camera-detached .controls { grid-column: 1 / -1; grid-row: 2; }
 .camera-window-app { height: 100vh; height: 100dvh; overflow: hidden; padding: 10px; }
 #camera-window-root { height: 100%; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 10px; background: var(--paper); }
 #camera-window-root:fullscreen { padding: 10px; }
 #camera-window-root .preview-panel { min-height: 0; }
-@media (max-width: 560px) {
- .controls-header { padding: 6px 10px; }
- .controls-header input { min-height: 32px; }
- .control-tabs { margin-top: 4px; }
- .control-tabs button { min-height: 32px; }
+@media (max-width: 900px) {
+  .workspace { grid-template-rows: auto minmax(0, 1fr) minmax(0, 2fr); }
+  .controls { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); grid-template-rows: auto minmax(0, 1fr); gap: 8px; }
+  .controls-header { grid-column: 1 / -1; padding: 6px 10px; }
+  .controls-header input { min-height: 32px; }
+  .control-box-heading { padding: 7px 8px; }
+  .control-box-heading h2 { font-size: .85rem; }
+  .control-page.control-section, .control-page .control-section { padding: 10px; }
+  .control-box-actions { padding: 5px; gap: 5px; flex-wrap: wrap; }
+  .control-box-actions button { min-width: 70px; }
+  .session-heading { flex-wrap: nowrap; gap: 5px; }
+  .session-heading h2 { min-width: 0; }
+  .session-heading button { padding: 4px; font-size: .72rem; min-height: 32px; }
+  .pain-scores { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .camera-detached #fullscreen-view, .camera-detached #toggle-controls { display: none; }
+@media (max-width: 560px) {
+  /* End remains in the Session heading; keep the toolbar copy for hidden controls. */
+  .workspace:not(.controls-hidden) #end-session-view { display: none; }
+}

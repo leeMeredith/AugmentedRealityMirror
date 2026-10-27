@@ -10,23 +10,24 @@ try {
  const page=await browser.newPage({viewport:{width:1440,height:1000}});
  const errors=[];page.on("pageerror",error=>errors.push(error.message));
  await page.goto(process.env.ARM_TEST_URL||"http://localhost:8001");
- assert.equal(await page.locator("#build-version").textContent(),"Browser build 10");
+ assert.equal(await page.locator("#build-version").textContent(),"Browser build 11");
  assert.equal(await page.locator("#start-session").isDisabled(),true);
- await page.locator("#session-tab").click();
+
  await page.locator("#participant-name").fill("Example 123");
  await page.keyboard.press("0");
  assert.equal(await page.locator("#start-session").isDisabled(),true);
  await page.locator("#participant-name").fill("Example Participant");
+ await page.locator("#participant-fold").evaluate(el=>{el.open=true;});
  await page.locator("#loss-right-arm").check();
  await page.locator("#loss-right-arm-level").fill("below elbow");
  await page.locator("#loss-left-leg").check();
  await page.locator("#loss-left-leg-level").fill("above knee");
  await page.locator("[data-score='6']").click();
- await page.locator("#view-tab").click();
+
  await page.locator("#start-camera").click();
  await page.waitForFunction(()=>document.querySelector("#camera-state").textContent==="Camera on");
  await page.locator("#center-x").fill("32");
- await page.locator("#session-tab").click();
+
  await page.locator("#start-session").click();
  assert.equal(await page.locator("#participant-name").isDisabled(),true);
  assert.equal(await page.locator("#pain-history li").count(),1);
@@ -37,7 +38,7 @@ try {
  // Repeats/modifiers and number keys used in camera/alignment fields must not add scores.
  await page.evaluate(()=>document.dispatchEvent(new KeyboardEvent("keydown",{key:"7",repeat:true,bubbles:true})));
  await page.evaluate(()=>document.dispatchEvent(new KeyboardEvent("keydown",{key:"7",ctrlKey:true,bubbles:true})));
- await page.locator("#view-tab").click();
+
  await page.locator("#center-y").focus();await page.keyboard.press("8");
  assert.equal(await page.locator("#pain-history li").count(),3);
  await page.locator("#setup-name").fill("Example 123");await page.keyboard.press("0");
@@ -46,7 +47,7 @@ try {
   const waiting=page.waitForEvent("download");await action();const item=await waiting;
   return {name:item.suggestedFilename(),record:JSON.parse(await readFile(await item.path(),"utf8"))};
  };
- await page.locator("#session-tab").click();
+
  const progress=await download(()=>page.locator("#save-session").click());
  assert.match(progress.name,/^Example_Participant_.*Z\.json$/);
  assert.equal(progress.record.status,"active");assert.equal(progress.record.endedAt,null);

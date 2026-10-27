@@ -1,4 +1,4 @@
-import { StudySession, downloadSession, sessionFilename } from "./studySession.js";
+import { StudySession, downloadSession, sessionFilename } from "./studySession.js?v=11";
 
 // Owns only the optional session form and scoring actions, including keyboard shortcuts.
 export class SessionControls {
@@ -55,7 +55,7 @@ export class SessionControls {
       this.#refresh();
       // Leave name/text inputs before making number keys available.
       this.#start.blur();
-      this.#root.scrollTop = 0;
+      this.#root.querySelector("#session-content").scrollTop = 0;
     }));
     const end = () => {
       if (!this.#session.active || this.#ending) return;
@@ -143,15 +143,19 @@ export class SessionControls {
     const completed = record?.status === "completed";
     this.#details.disabled = active || completed;
     this.#details.hidden = Boolean(record);
+    this.#root.querySelector("#participant-fold").hidden = Boolean(record);
     const limbSummary = this.#root.querySelector("#limb-summary");
     limbSummary.hidden = !record;
     if (record) limbSummary.textContent = "Limb loss: " + (record.limbLoss.map(({side, limb, level}) =>
       `${side} ${limb}${level ? ` (${level})` : ""}`).join(", ") || "not specified") + ". Details are fixed for this session.";
     this.#name.disabled = active || completed;
     this.#start.disabled = active || completed || this.#beforeScore === null;
+    this.#start.hidden = Boolean(record);
     this.#end.disabled = !active || this.#ending;
+    this.#end.hidden = !active;
     this.#endView.disabled = !active || this.#ending;
     this.#save.disabled = !record;
+    this.#save.hidden = !record;
     this.#next.hidden = !completed;
     this.#root.querySelector("#continue-session").hidden = !this.#ending;
     this.#phase.textContent = completed ? "Session complete" : this.#ending ? "Pain at end of use" : active ? "Pain during use" : "Pain before use";

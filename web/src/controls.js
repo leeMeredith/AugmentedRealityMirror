@@ -1,5 +1,5 @@
 // DOM details only. The application decides when to start a camera or change settings.
-import { REGION_IDS, REGION_LABELS } from "./mirrorRegions.js";
+import { REGION_IDS, REGION_LABELS } from "./mirrorRegions.js?v=11";
 export class Controls {
   video = document.querySelector("#camera-video");
   canvas = document.querySelector("#mirror-canvas");

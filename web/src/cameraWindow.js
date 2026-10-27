@@ -5,7 +5,6 @@ export class CameraWindow {
   #view;
   #controls;
   #sessions;
-  #tabs;
   #fullscreen;
   #stage;
   #open;
@@ -15,9 +14,9 @@ export class CameraWindow {
   #detachKeyboard = null;
   #exitReady = Promise.resolve();
 
-  constructor({view, controls, sessions, tabs, fullscreen}) {
+  constructor({view, controls, sessions, fullscreen}) {
     this.#view = view; this.#controls = controls; this.#sessions = sessions;
-    this.#tabs = tabs; this.#fullscreen = fullscreen;
+    this.#fullscreen = fullscreen;
     this.#stage = controls.canvas.parentElement;
     this.#open = document.querySelector("#open-camera-window");
     this.#return = document.querySelector("#return-camera-window");
@@ -30,7 +29,7 @@ export class CameraWindow {
 
   open() {
     if (this.#child && !this.#child.closed) { this.#child.focus(); return; }
-    const child = window.open("camera.html", this.#windowName, "popup,width=1000,height=760");
+    const child = window.open("camera.html?v=11", this.#windowName, "popup,width=1000,height=760");
     if (!child) {
       this.#notice.hidden = false;
       this.#notice.textContent = "The browser blocked the camera window. Allow pop-ups for this site and retry, or keep using the view here.";
@@ -49,10 +48,9 @@ export class CameraWindow {
     this.#open.textContent = "Show camera window";
     this.#return.hidden = false;
     this.#notice.hidden = false;
-    this.#notice.textContent = "Camera view is in its own window. Choose View settings or Session below.";
+    this.#notice.textContent = "Camera view is in its own window. Both control boxes below remain available.";
     document.querySelector("#fullscreen-view").disabled = true;
     document.querySelector("#toggle-controls").disabled = true;
-    this.#tabs.select("session-tab");
     this.#fullscreen.showControls();
     this.#exitReady.then(() => { if (this.#child === child) this.#fullscreen.showControls(); });
     this.#detachKeyboard = this.#sessions.attachKeyboard(doc);

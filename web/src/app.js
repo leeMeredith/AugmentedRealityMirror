@@ -1,21 +1,19 @@
-import { CameraWindow } from "./cameraWindow.js";
-import { ControlTabs } from "./controlTabs.js";
-import { CaptureRGB } from "./captureRGB.js";
-import { MirrorView } from "./mirrorView.js";
-import { Controls } from "./controls.js";
-import { SessionControls } from "./sessionControls.js";
-import { FullscreenView } from "./fullscreenView.js";
-import { defaultCenter } from "./mirrorRegions.js";
-import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename } from "./setupFile.js";
+import { CameraWindow } from "./cameraWindow.js?v=11";
+import { CaptureRGB } from "./captureRGB.js?v=11";
+import { MirrorView } from "./mirrorView.js?v=11";
+import { Controls } from "./controls.js?v=11";
+import { SessionControls } from "./sessionControls.js?v=11";
+import { FullscreenView } from "./fullscreenView.js?v=11";
+import { defaultCenter } from "./mirrorRegions.js?v=11";
+import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename } from "./setupFile.js?v=11";
 
 const controls = new Controls();
 const camera = new CaptureRGB(controls.video);
 const view = new MirrorView(controls.canvas, controls.video);
-const tabs = new ControlTabs(document.querySelector("#control-tabs"));
 const participantName = document.querySelector("#participant-name");
 const fullscreen = new FullscreenView(document.querySelector("#mirror-workspace"));
 // Set by the running JavaScript, so a stale HTML label alone cannot claim this build loaded.
-controls.build.textContent = "Browser build 10";
+controls.build.textContent = "Browser build 11";
 let selectedRegion = "topLeft";
 const refreshRegion = () => controls.regionState(selectedRegion, view.regions[selectedRegion]);
 controls.quadrants.forEach(button => button.addEventListener("click", () => {
@@ -158,4 +156,4 @@ const sessionControls = new SessionControls(document.querySelector("#study-sessi
   camera: { preferredLabel: camera.device.label || preferredCameraLabel },
 }));
 
-const cameraWindow = new CameraWindow({view, controls, sessions: sessionControls, tabs, fullscreen});
+const cameraWindow = new CameraWindow({view, controls, sessions: sessionControls, fullscreen});
