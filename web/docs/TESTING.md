@@ -48,7 +48,7 @@ Record the operating system, browser/version, camera, date, and result. Test des
 ## Fullscreen (build 5)
 
 1. Start the camera and enter Fullscreen on the current screen. Confirm the settings panel hides, the full image fits, and movement stays live with the same direction.
-2. Show controls, reverse the view, then hide controls. Confirm the toolbar always provides Show controls, Exit, and Stop camera. On a narrow window, the controls must sit below the video and scroll independently without moving or covering it.
+2. Show controls, reverse the view, then hide controls. Confirm the toolbar always provides Show controls, Exit, and Stop camera. The controls must remain on the right and scroll independently without moving or covering the video; Hide controls expands the image.
 3. Exit using the button and repeat using Escape. Confirm normal layout and previous panel visibility return, with the camera still running. Repeat with controls hidden before entering fullscreen.
 4. Hide controls and stop the camera from the top toolbar. Confirm the image clears and capture ends. Show controls to start again.
 5. Load and save settings while fullscreen. Confirm settings are preserved even if the browser exits fullscreen for a file dialog. Loading a setup must never automatically enter fullscreen.
@@ -103,11 +103,11 @@ Release check: publish only application sources/docs/tests, never generated part
 
 ## Separate camera window / shared name (build 10)
 
-1. Enter an invented participant name above the tabs. Save a camera setup and complete a session. Both JSON records must include the same participantName, with that prefix in both filenames. With no name, both files must have empty participantName and date/time filenames.
+1. Enter an invented participant name in Create session. Save a camera setup and complete a session. Both JSON records must include the same participantName, with that prefix in both filenames. With no name, both files must have empty participantName and date/time filenames.
 2. Load a schema 4 setup before starting: the name should fill in. Try a different name while a session is active/completed: the session name must stay and the setup status explain it. New session unlocks the field. Earlier setup labels must not become participant names automatically.
 3. Open camera window. Verify the original stream remains live and capture is not requested twice. With the main window in the background, confirm the camera view still updates and pain keys record once. Test popup fullscreen/Escape and final score/download from the popup.
 4. Return the view, close the camera window during an active session, and reopen it. Confirm the same capture and record remain. Closing the controller should close the child. A camera page opened directly must explain how to open it from the controller and never acquire a stream.
-5. Test blocked pop-ups, small screens, View/Session tab keyboard navigation and opening the camera window from fullscreen. The fallback embedded view should remain available and the session controls must not disappear.
+5. Test blocked pop-ups, small screens, session-dialog keyboard navigation and opening the camera window from fullscreen. The fallback embedded view should remain available and the session controls must not disappear.
 
 Use only invented participant data in automated checks. Real-camera and multiple-monitor acceptance remain user checks.
 
@@ -123,3 +123,15 @@ Build 10 staging verification on 2026-10-20: all 24 Node unit checks passed. Chr
 
 
 Build 11 staging verification on 2026-10-27: all 24 Node unit checks passed. Chrome 156.0.8078.48 with synthetic video and invented participants passed the new independent-panel checks at desktop, fullscreen, 390×600 and 780×400 sizes. Camera/Session content scrolls independently, headings and video stay fixed, Session has more desktop height, and actions stay inside its box. The versioned CSS/module requests were checked. Existing session/download, detached-window, all 9 fullscreen checks and all 3,136 pixel cases passed. Desktop, active-session and narrow screenshots were inspected. Real-camera/Safari acceptance remains for the user.
+
+
+## Focused session dialog and compact camera toolbar (build 12)
+
+1. Camera & view is the only scrolling sidebar, on the right. Create session in the toolbar opens a modal with participant name, all four limb-loss sides and descriptions expanded, and baseline pain. On small screens the modal fills the screen. Its header and actions stay fixed as the contents scroll.
+2. Close, Escape or backdrop click must preserve form inputs and return focus to Create session / Current session. Tab must stay within the modal or the browser's own interface. Opening the session over camera fullscreen must work; Escape closes the session before exiting expanded view.
+3. Start session closes the modal. Current session reopens it with locked identity/limb summary. New session unlocks and retains those fields for review. Both JSON files and their filenames must still share the participant name.
+4. Record pain opens a compact score tray beside the camera, with 0–10 buttons. Each choice records once and closes the tray. Key 0 still means 10; No pain (0) records zero. End session in the main toolbar opens the final-score step. Closing that dialog must not discard the session or its end request.
+5. The separate camera window uses the same capture/session. Its compact toolbar includes Hide/Show controls, Record pain, Stop, End session, Fullscreen and Return. Hide leaves Show controls reachable; numeric scoring continues. End accepts a final score using that window's tray or keyboard. No inactive-session instruction or repeating main-window scoring message appears over the camera.
+6. Save active records before comparing browsers with `index.html?v=12`. The footer must show Browser build 12; all stylesheet and module queries must be v=12. Check a real camera in Safari separately.
+
+Build 12 staging verification on 2026-10-31: all 24 Node checks passed. Headless Chrome 156.0.8078.74 with synthetic video/invented participants passed session-dialog focus, dismissal, retained forms, independent camera scrolling, expanded limb choices, quick scoring, compact toolbars and fullscreen-modal checks at 1440×1000, 390×600 and 780×400. Session/download and two-window suites passed, along with all 9 fullscreen checks and all 3,136 exact-coordinate pixel cases. Desktop and narrow screenshots were inspected. No physical camera or Safari was exercised. The static release can be reverted to the preceding commit if the hosted session or camera flow fails; keep downloaded participant records separately.

@@ -7,29 +7,32 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>ARM RGB Web · Camera window</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="styles.css?v=11">
-  <script type="module" src="src/cameraWindowPage.js?v=11"></script>
+  <link rel="stylesheet" href="styles.css?v=12">
+  <script type="module" src="src/cameraWindowPage.js?v=12"></script>
 </head>
 <body class="camera-window-app">
   <main id="camera-window-root">
     <header>
       <p class="eyebrow">Augmented Reality Mirror RGB Web</p>
-      <div class="button-row">
+      <div id="camera-window-toolbar" class="button-row">
         <button id="camera-window-fullscreen" type="button">Fullscreen</button>
+        <button id="camera-window-toggle" type="button" aria-expanded="true" aria-controls="camera-window-toolbar">Hide controls</button>
+        <button id="camera-window-score" type="button" aria-expanded="false" aria-controls="camera-quick-panel" disabled>Record pain</button>
         <button id="camera-window-stop" type="button" disabled>Stop camera</button>
         <button id="camera-window-end" type="button" disabled>End session</button>
         <button id="camera-window-return" type="button" disabled>Return to main window</button>
       </div>
-      <p id="camera-window-summary" class="view-status" role="status"></p>
+      <div id="camera-quick-panel" class="quick-pain-panel" hidden><p id="camera-quick-label">Record pain · 0–10</p><div id="camera-quick-scores" class="pain-scores" role="group" aria-labelledby="camera-quick-label"></div></div>
+      <p id="camera-window-summary" class="view-status" role="status" hidden></p>
       <p id="camera-window-status" class="view-status" role="status">Connecting to the main ARM window…</p>
     </header>
     <section class="preview-panel" aria-label="Camera view">
       <div class="preview-heading"><h2>Your view</h2><span id="camera-window-state" class="badge">Camera off</span></div>
       <div id="camera-window-stage" class="preview-stage">
-        <div id="camera-window-placeholder" class="placeholder"><h3>Your camera is off</h3><p>Start the camera from View settings in the main window.</p></div>
+        <div id="camera-window-placeholder" class="placeholder"><h3>Your camera is off</h3><p>Start the camera from Camera &amp; view in the main window.</p></div>
       </div>
     </section>
-    <p id="camera-window-help" hidden><a href="index.html?v=11">Open the main ARM application</a>, then choose Open camera window. This page does not start another camera or session.</p>
+    <p id="camera-window-help" hidden><a href="index.html?v=12">Open the main ARM application</a>, then choose Open camera window. This page does not start another camera or session.</p>
   </main>
 </body>
 </html>

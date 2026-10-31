@@ -19,10 +19,12 @@ try {
  context.on("page",p=>p.on("pageerror",e=>errors.push(e.message)));
  page.on("pageerror",e=>errors.push(e.message));
  await page.goto(base);
- assert.equal(await page.locator("#build-version").textContent(),"Browser build 11");
+ assert.equal(await page.locator("#build-version").textContent(),"Browser build 12");
  assert.equal(await page.locator("#camera-controls-box").isVisible(),true);
- assert.equal(await page.locator("#study-session").isVisible(),true);
+ assert.equal(await page.locator("#study-session").isVisible(),false);
+ await page.locator("#open-session").click();
  await page.locator("#participant-name").fill("Example Person");
+ await page.locator("#close-session").click();
  await page.locator("#start-camera").click();
  await page.waitForFunction(()=>document.querySelector("#camera-state").textContent==="Camera on");
  await page.evaluate(()=>{
@@ -30,6 +32,7 @@ try {
   window.originalCanvas=document.querySelector("#mirror-canvas");
  });
 
+ await page.locator("#open-session").click();
  await page.locator("[data-score='6']").click();await page.locator("#start-session").click();
  const open=async()=>{
   const pending=page.waitForEvent("popup");await page.locator("#open-camera-window").click();
@@ -41,12 +44,21 @@ try {
  assert.equal(await page.evaluate(()=>captureCalls),1);
  assert.equal(await child.evaluate(()=>captureCalls),0);
  assert.equal(await page.evaluate(()=>originalTrack.readyState),"live");
- assert.equal(await page.locator("#study-session").isVisible(),true);
+ assert.equal(await page.locator("#study-session").isVisible(),false);
  // Render continues with the controller tab in the background.
  await child.bringToFront();
  await child.evaluate(()=>{window.firstFrame=document.querySelector("#mirror-canvas").toDataURL();});
  await child.waitForFunction(()=>document.querySelector("#mirror-canvas").toDataURL()!==window.firstFrame);
- await child.keyboard.press("4");await child.keyboard.press("0");
+ assert.equal(await child.locator("#camera-window-status").isHidden(),true);
+ assert.equal(await child.locator("#camera-window-summary").textContent().then(t=>t.includes("Optional pain")),false);
+ assert.ok((await child.locator("#camera-window-fullscreen").boundingBox()).height<=36);
+ await child.locator("#camera-window-toggle").click();
+ assert.equal(await child.locator("#camera-window-stop").isHidden(),true);
+ await child.locator("#camera-window-toggle").click();
+ await child.locator("#camera-window-score").click();
+ await child.getByRole("button",{name:"Pain score 4",exact:true}).click();
+ assert.equal(await child.locator("#camera-quick-panel").isHidden(),true);
+ await child.keyboard.press("0");
  await page.waitForFunction(()=>document.querySelector("#session-summary").textContent.includes("10/10"));
  await child.locator("#camera-window-fullscreen").click();
  await child.waitForFunction(()=>!!document.fullscreenElement);
@@ -82,7 +94,9 @@ try {
  await load(other);
  assert.equal(await page.locator("#participant-name").inputValue(),"Example Person");
  assert.match(await page.locator("#setup-status").textContent(),/Current session name kept/);
+ await page.locator("#open-session").click();
  await page.locator("#new-session").click();
+ await page.locator("#close-session").click();
  await load(other);
  assert.equal(await page.locator("#participant-name").inputValue(),"Other Example");
  // Returning and actually closing both restore the original canvas and preserve capture.
@@ -100,6 +114,7 @@ try {
  await page.waitForFunction(()=>!document.fullscreenElement);
  assert.equal(await page.locator("#controls").isVisible(),true);
  await page.setViewportSize({width:390,height:650});
+ await page.locator("#open-session").click();
  await page.locator("#participant-name").fill("");
  await page.locator("[data-score='0']").click();await page.locator("#start-session").click();
  if(process.env.ARM_SCREENSHOT_DIR) await page.screenshot({path:`${process.env.ARM_SCREENSHOT_DIR}/session-window.png`});

@@ -7,11 +7,11 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Getting started · ARM</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="styles.css?v=11">
+  <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
   <main class="page guide">
-    <a href="index.html?v=11">← Back to the mirror</a>
+    <a href="index.html?v=12">← Back to the mirror</a>
     <p class="eyebrow">Augmented Reality Mirror RGB Web</p>
     <h1>Getting started</h1>
     <p>This browser version offers a camera mirror, fullscreen and independent quadrant adjustments. You can save and reload your view and camera preference. Optional sessions record participant details and pain scores before, during and after use.</p>
@@ -31,13 +31,13 @@
       <p>Fullscreen always starts with a button press; loading a setup will not enter it automatically.</p>
     </section>
     <section><h2>Find the camera and session controls</h2>
-      <p>The participant name stays above two visible boxes. <strong>Camera &amp; view</strong> contains camera selection, mirroring, divider adjustments and setup files. <strong>Session &amp; pain</strong> contains pain scores, optional limb-loss details and session downloads. There are no tabs to switch.</p>
-      <p>Each box scrolls independently. Their headings stay in place, and the live camera image stays visible while you adjust controls. End session stays in the Session heading; Start session, Save session JSON and New session appear in its fixed bottom row when appropriate. Score buttons come first; extra details are below them.</p>
-      <p>On a wide screen the boxes are stacked beside the video, with more height for Session. On smaller screens they sit next to each other below the video, so both remain available. You can also use a separate camera window.</p>
+      <p><strong>Camera &amp; view</strong> stays on the right of the live image. Its settings scroll while the camera stays in place. <strong>Hide controls</strong> gives the image more space.</p>
+      <p>Choose <strong>Create session</strong> in the top toolbar to open a focused session window. The participant name, limb-loss sides and descriptions, and starting pain score are shown there. On smaller screens this window fills the screen. Close or Escape returns to the camera and preserves your entries.</p>
+      <p>After Start session, the window closes and the top button becomes <strong>Current session</strong>. Use it to review the fixed participant details, see recent scores, save JSON or end the session. <strong>Record pain</strong> opens a small scoring panel beside the camera; number-key scoring also works without opening the session window.</p>
     </section>
     <section><h2>Use a separate camera window</h2>
-      <p>Choose <strong>Open camera window</strong> in the Camera &amp; view heading to put the live mirrored view in its own window. The main window keeps both <strong>Camera &amp; view</strong> and <strong>Session &amp; pain</strong> visible, with the shared participant name above them. Each box has its own scroll area.</p>
-      <p>Arrange the windows side by side on one screen or move the camera window to another monitor. Both windows share one camera and session. Number-key pain scoring works in either window; the camera window also provides Stop camera, End session and Fullscreen. Downloads are requested by the main window, so check its Downloads/save prompt after a final score.</p>
+      <p>Choose <strong>Open camera window</strong> in the Camera &amp; view heading to put the live mirrored view in its own window. The main window keeps camera settings on the right and the Create session / Current session button at the top.</p>
+      <p>Arrange the windows side by side on one screen or move the camera window to another monitor. Both windows share one camera and session. Number-key pain scoring works in either window; the camera window also provides Record pain, Stop camera, End session and Fullscreen in a compact toolbar. Hide controls leaves a Show controls button so you can restore the toolbar. Downloads are requested by the main window, so check its Downloads/save prompt after a final score.</p>
       <p><strong>Return to main window</strong> in the camera window, or <strong>Return camera here</strong> in the main window, brings the view back. Closing the camera window does the same and leaves the session available. <strong>Keep the main window open</strong>: it owns the camera and session records. Closing it closes the camera window too and can lose undownloaded records.</p>
       <p>If the browser blocks the new window, allow pop-ups for this site or keep using the embedded view. Your browser may open it as a tab; you can move it to a separate window using your browser's controls. Open this view with the app's button rather than bookmarking the camera-only page, which has no independent camera or session.</p>
     </section>
@@ -65,23 +65,23 @@
       <p>Sources always come from the original camera image. Check posture and physical camera position each time; saved settings cannot move the camera for you.</p>
     </section>
     <section><h2>Save your setup for another day</h2>
-      <p>The shared <strong>Participant name</strong> above the two boxes is optional and is saved in both camera-setup and session JSON files. If entered, it begins both filenames. Without a participant name, filenames begin with the UTC date and time. The optional <strong>Setup label</strong> describes the view and is saved separately; it is not the participant name. Choose <strong>Save setup</strong>, then keep the JSON file in a folder you can find again. Your browser may save it to Downloads or ask where to put it.</p>
+      <p>The shared <strong>Participant name</strong> in Create session / Current session is optional and is saved in both camera-setup and session JSON files. If entered, it begins both filenames. Without a participant name, filenames begin with the UTC date and time. The optional <strong>Setup label</strong> describes the view and is saved separately; it is not the participant name. Choose <strong>Save setup</strong>, then keep the JSON file in a folder you can find again. Your browser may save it to Downloads or ask where to put it.</p>
       <p>Next time, choose <strong>Load setup</strong> and select that file. This restores your mirror direction, all four left/right choices, the shared mirror center, participant name and preferred camera name. It does not start or switch the camera automatically. Confirm the camera choice and press Start camera or Use selected camera.</p>
       <p>Older setups keep their camera direction and any left/right choices. Earlier top/bottom flips and individual offsets are removed, and shared alignment starts centered. An import message explains this. Older setup labels are kept as labels, not treated as participant names. New camera setups use version 4 and need build 10 or later. Loading a different name during an active or completed session keeps that session's name and explains why. Choose New session before loading another participant's setup.</p>
       <p>A setup cannot move the physical camera or restore your posture. Check your position each time. Camera names can change or be shared by two devices, so always check the preview.</p>
       <p>Only setups saved by this browser version are supported here. Desktop ARM study-session files will be rejected with an explanation.</p>
     </section>
     <section><h2>Record an optional pain session</h2>
-      <p>You can use the camera without a session. To record one, use the <strong>Session &amp; pain</strong> box. A family member, clinician or the person using ARM can operate these controls.</p>
+      <p>You can use the camera without a session. To record one, choose <strong>Create session</strong> in the top toolbar. A family member, clinician or the person using ARM can operate these controls.</p>
       <ol>
-        <li>Enter a participant name or label in the shared field above the two boxes if wanted. Both JSON files include that name and begin their filenames with it; without a name they begin with the date and time.</li>
-        <li>Expand <strong>Limb-loss details (optional)</strong> and select all locations that apply, using the person's own right and left. For bilateral limb loss, select both sides. Add a level or description if useful. These selections do not change the mirror quadrants.</li>
+        <li>Enter a participant name or label in the session window if wanted. Both JSON files include that name and begin their filenames with it; without a name they begin with the date and time.</li>
+        <li>Under <strong>Limb-loss locations and sides (optional)</strong>, select all locations that apply, using the person's own right and left. For bilateral limb loss, select both sides. Add a level or description if useful. These selections do not change the mirror quadrants.</li>
         <li>Choose the <strong>pain before use</strong> score, then press <strong>Start session</strong>. Participant details are fixed for that record and summarized beneath the score buttons. Choose New session afterward to edit details again.</li>
         <li>During use, select a score whenever you want to record one. A single selection records the score immediately with its time and the current mirror settings.</li>
         <li>Press <strong>End session</strong>, then choose the final score. That selection ends the record and requests a JSON download. <strong>Continue session</strong> returns to during-use scoring if you are not finished.</li>
       </ol>
       <p><strong>Keyboard:</strong> keys <strong>1–9</strong> record scores 1–9; the <strong>0 key records 10</strong>. For an actual pain score of zero, choose <strong>No pain (0)</strong> in the panel. Number shortcuts pause while typing in text fields or using sliders/select controls. Holding a key does not repeat measurements.</p>
-      <p>The toolbar shows the session state while controls are hidden. Its <strong>End session</strong> button also asks for the final score; you can give that score with a number key or use Show controls to access the score buttons. Stopping the camera does not end the session, and ending the session does not stop the camera.</p>
+      <p>The toolbar shows the session state while controls are hidden. Its <strong>Record pain</strong> button opens a small scoring panel. <strong>End session</strong> opens the session window to ask for the final score. In the separate camera window, End session accepts the final score through Record pain or the number keys. Stopping the camera does not end the session, and ending the session does not stop the camera.</p>
       <p><strong>Save session JSON</strong> can download progress at any time or request the completed file again. Check Downloads or the browser save dialog. <strong>New session</strong> starts a fresh record with a new ID; check the retained participant details and choose a new starting score. Camera setup files and pain-session records are different files.</p>
       <p>Records remain only in the current tab until downloaded. Closing, reloading or leaving the page can lose unsaved entries. There is no automatic upload or background saving. Session files contain the entered participant information, so keep them in a location you choose.</p>
     </section>

@@ -115,49 +115,61 @@ body.view-expanded { overflow: hidden; }
 .session-actions { margin-top: 14px; }
 .pain-history { padding-left: 20px; font-size: .8rem; }
 
-/* Two visible control boxes share one name, with separate content scrollers. */
-.controls { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 2fr) minmax(0, 3fr); gap: 12px; overflow: hidden; background: none; border: 0; border-radius: 0; }
-.controls-header { padding: 10px 14px; background: white; border: 1px solid var(--line); border-radius: 14px; }
-.controls-header label { margin-bottom: 3px; font-size: .8rem; }
-.controls-header input { min-height: 36px; padding: 5px 10px; }
-.control-box { min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: white; }
-.control-box-heading { flex: none; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+/* Camera settings stay beside the view; sessions use the browser's modal top layer. */
+.controls { display: flex; flex-direction: column; overflow: hidden; background: none; border: 0; border-radius: 0; }
+.control-box { min-width: 0; min-height: 0; display: flex; flex: 1; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: white; }
+.control-box-heading { flex: none; padding: 10px 12px; border-bottom: 1px solid var(--line); }
 .control-box-heading h2 { margin: 0; font-size: 1rem; line-height: 1.3; }
 .camera-window-actions { margin-top: 7px; gap: 6px; }
 .camera-window-actions button { font-size: .78rem; padding: 6px 8px; min-height: 36px; }
-.session-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.session-heading button { font-size: .78rem; padding: 5px 8px; min-height: 36px; }
 .control-page { flex: 1; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 .control-page.control-section, .control-page .control-section { padding: 14px; }
-.control-box-actions { flex: none; margin: 0; padding: 8px 12px; border-top: 1px solid var(--line); background: white; }
-.control-box-actions button { flex: 1; font-size: .8rem; padding: 6px; }
-#pain-phase { font-size: 1.05rem; margin: 10px 0 6px; }
-#participant-fold summary { cursor: pointer; font-size: .85rem; font-weight: 600; padding: 7px 0; }
-#participant-fold .region-settings { margin-top: 8px; }
+.session-dialog { color: var(--ink); background: white; border: 1px solid var(--line); border-radius: 16px; padding: 0; width: min(640px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); height: min(820px, calc(100dvh - 32px)); margin: auto; overflow: hidden; }
+.session-dialog[open] { display: flex; flex-direction: column; }
+.session-dialog::backdrop { background: rgb(12 34 31 / .6); }
+.session-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.session-heading button { min-height: 36px; padding: 5px 10px; font-size: .8rem; }
+.controls-header { padding: 0 0 12px; }
+.controls-header input { min-height: 40px; }
+#participant-fold .region-settings { margin-top: 0; }
+.control-box-actions { flex: none; margin: 0; padding: 10px 14px; border-top: 1px solid var(--line); background: white; }
+.control-box-actions button { flex: 1; font-size: .85rem; padding: 8px; }
+#pain-phase { font-size: 1.05rem; margin: 14px 0 8px; }
+.session-dialog .pain-scores { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.session-dialog .pain-scores button:first-child { grid-column: span 2; }
+.view-toolbar { position: relative; }
+.quick-pain-panel { position: absolute; z-index: 20; top: 100%; right: 0; width: min(340px, 100%); padding: 12px; background: white; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 8px 24px #183d3a30; }
+.quick-pain-panel p { margin: 0 0 8px; font-size: .85rem; font-weight: 600; }
 .workspace.camera-detached { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
-.workspace.camera-detached .controls { grid-column: 1 / -1; grid-row: 2; }
-.camera-window-app { height: 100vh; height: 100dvh; overflow: hidden; padding: 10px; }
-#camera-window-root { height: 100%; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 10px; background: var(--paper); }
-#camera-window-root:fullscreen { padding: 10px; }
-#camera-window-root .preview-panel { min-height: 0; }
-@media (max-width: 900px) {
-  .workspace { grid-template-rows: auto minmax(0, 1fr) minmax(0, 2fr); }
-  .controls { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); grid-template-rows: auto minmax(0, 1fr); gap: 8px; }
-  .controls-header { grid-column: 1 / -1; padding: 6px 10px; }
-  .controls-header input { min-height: 32px; }
-  .control-box-heading { padding: 7px 8px; }
-  .control-box-heading h2 { font-size: .85rem; }
-  .control-page.control-section, .control-page .control-section { padding: 10px; }
-  .control-box-actions { padding: 5px; gap: 5px; flex-wrap: wrap; }
-  .control-box-actions button { min-width: 70px; }
-  .session-heading { flex-wrap: nowrap; gap: 5px; }
-  .session-heading h2 { min-width: 0; }
-  .session-heading button { padding: 4px; font-size: .72rem; min-height: 32px; }
-  .pain-scores { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
+.workspace.camera-detached .controls { grid-column: 1 / -1; grid-row: 2; max-width: 640px; width: 100%; justify-self: end; }
 .camera-detached #fullscreen-view, .camera-detached #toggle-controls { display: none; }
-@media (max-width: 560px) {
-  /* End remains in the Session heading; keep the toolbar copy for hidden controls. */
-  .workspace:not(.controls-hidden) #end-session-view { display: none; }
+/* Compact camera toolbars keep more space for the live image. */
+.view-toolbar > .button-row, #camera-window-toolbar { gap: 5px; }
+.view-toolbar > .button-row button, #camera-window-toolbar button { min-height: 34px; padding: 5px 9px; font-size: .76rem; border-radius: 6px; }
+.camera-window-app { height: 100vh; height: 100dvh; overflow: hidden; padding: 8px; }
+#camera-window-root { height: 100%; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 6px; background: var(--paper); }
+#camera-window-root > header { position: relative; }
+#camera-window-root:fullscreen { padding: 8px; }
+#camera-window-root .preview-panel { min-height: 0; }
+#camera-window-root .eyebrow { font-size: .65rem; margin-bottom: 4px; }
+#camera-window-root.camera-toolbar-hidden .eyebrow, #camera-window-root.camera-toolbar-hidden #camera-window-toolbar > button:not(#camera-window-toggle), #camera-window-root.camera-toolbar-hidden header > .view-status { display: none; }
+@media (max-width: 900px) {
+  /* Keep settings on the right even on smaller screens; Hide controls expands the view. */
+  .workspace { grid-template-columns: minmax(0, 1fr) clamp(160px, 40vw, 300px); grid-template-rows: auto minmax(0, 1fr); }
+  .preview-panel, .controls { grid-row: 2; }
+  .controls { grid-column: 2; }
+  .control-box-heading { padding: 8px; }
+  .control-page .control-section { padding: 10px; }
+  .controls-hidden .preview-panel { grid-column: 1 / -1; }
+  .camera-detached .controls { grid-column: 1 / -1; }
 }
+@media (max-width: 560px) {
+  .session-dialog { width: 100%; height: 100dvh; max-height: 100dvh; border-radius: 0; border: 0; }
+  .session-dialog .pain-scores { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .session-heading { padding: 10px; }
+  .view-toolbar > .button-row button, #camera-window-toolbar button { min-height: 36px; }
+}
+/* Pair right/left limb choices so setup and its baseline score fit comfortably. */
+#participant-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+#participant-details > p { grid-column: 1 / -1; }
+@media (max-width: 440px) { #participant-details { grid-template-columns: minmax(0, 1fr); } }

@@ -11,7 +11,7 @@ try {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(process.env.ARM_TEST_URL || "http://localhost:8001");
-  assert.equal(await page.locator("#build-version").textContent(), "Browser build 11");
+  assert.equal(await page.locator("#build-version").textContent(), "Browser build 12");
   const pixels = await page.evaluate(async () => {
     const { drawRegions, defaultRegions, REGION_IDS } = await import("./src/mirrorRegions.js");
     const source = document.createElement("canvas"), target = document.createElement("canvas");
@@ -61,7 +61,9 @@ try {
   assert.equal(await page.locator("#region-mirror-x").isChecked(),false);
   await page.locator("#region-mirror-x").check();
   await page.locator("#setup-name").fill("Example chair");
+  await page.locator("#open-session").click();
   await page.locator("#participant-name").fill("Example Participant");
+  await page.locator("#close-session").click();
   const downloadPromise=page.waitForEvent("download");
   await page.locator("#save-setup").click();
   const download=await downloadPromise;

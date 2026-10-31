@@ -1,4 +1,4 @@
-import { defaultCenter, defaultRegions, drawRegions, hasRegionAdjustments } from "./mirrorRegions.js?v=11";
+import { defaultCenter, defaultRegions, drawRegions, hasRegionAdjustments } from "./mirrorRegions.js?v=12";
 // Owns the canvas and draw loop; regional composition lives in mirrorRegions.
 export class MirrorView {
   #canvas;

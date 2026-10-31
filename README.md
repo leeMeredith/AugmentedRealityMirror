@@ -28,10 +28,10 @@ There are two applications in the current checkout:
 
 | Location | Application |
 | --- | --- |
-| [`web/`](web/) | Browser version: camera start/stop, full-image mirror masks, shared dividers, fullscreen, two visible scrolling control boxes, a separate camera window, and JSON setup import/export. Optional participant, limb-loss and timestamped pain-session JSON. No video recording. |
+| [`web/`](web/) | Browser version: camera start/stop, full-image mirror masks, shared dividers, fullscreen, a camera settings sidebar and focused session dialog, a separate camera window, and JSON setup import/export. Optional participant, limb-loss and timestamped pain-session JSON. No video recording. |
 | [`src/`](src/) and `AugmentedRealityMirrorRGB.xcodeproj` | Native openFrameworks RGB rebuild: regional mirroring, split-screen comparison, JSON study-session controls and recording code. |
 
-The browser version is **Build 11**. Each selected region reveals a normal or horizontally reflected full camera image. Moving the dividers changes which image is visible without enlarging or shifting the underlying images. Saved setups preserve the camera direction, quadrant choices, shared divider positions and participant name. Setup and session downloads share that name. Use Open camera window to separate the view from the two control boxes; both windows use one camera and session.
+The browser version is **Build 12**. Each selected region reveals a normal or horizontally reflected full camera image. Moving the dividers changes which image is visible without enlarging or shifting the underlying images. Saved setups preserve the camera direction, quadrant choices, shared divider positions and participant name. Setup and session downloads share that name. Camera settings stay on the right. Create session opens participant, limb-loss and pain controls in a focused window. Compact camera controls support quick pain scoring. Open camera window separates the view while sharing one camera and session.
 
 ### Open the browser version
 

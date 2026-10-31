@@ -1,4 +1,4 @@
-import { StudySession, downloadSession, sessionFilename } from "./studySession.js?v=11";
+import { StudySession, downloadSession, sessionFilename } from "./studySession.js?v=12";
 
 // Owns only the optional session form and scoring actions, including keyboard shortcuts.
 export class SessionControls {
@@ -56,6 +56,7 @@ export class SessionControls {
       // Leave name/text inputs before making number keys available.
       this.#start.blur();
       this.#root.querySelector("#session-content").scrollTop = 0;
+      this.#root.dispatchEvent(new Event("session:started"));
     }));
     const end = () => {
       if (!this.#session.active || this.#ending) return;
@@ -78,6 +79,7 @@ export class SessionControls {
       this.#message("Ready for a new session. Check the participant details and choose a starting score.");
       this.#refresh();
     });
+    this.attachQuickScores(document.querySelector("#quick-pain-scores"));
     this.attachKeyboard(document);
     window.addEventListener("beforeunload", event => {
       if (!this.#session.active) return;
@@ -88,6 +90,18 @@ export class SessionControls {
   }
 
   get canChangeParticipantName() { return this.#session.record === null; }
+
+  // Reuse the same scoring action in either camera window; no second session state.
+  attachQuickScores(container) {
+    for (let score = 0; score <= 10; score++) {
+      const button = container.ownerDocument.createElement("button");
+      button.type = "button";
+      button.textContent = score === 0 ? "No pain (0)" : String(score);
+      button.setAttribute("aria-label", `Pain score ${score}`);
+      button.addEventListener("click", () => { if (this.#session.active) this.#score(score); });
+      container.append(button);
+    }
+  }
 
   attachKeyboard(target) {
     target.addEventListener("keydown", this.#key);
@@ -160,10 +174,20 @@ export class SessionControls {
     this.#root.querySelector("#continue-session").hidden = !this.#ending;
     this.#phase.textContent = completed ? "Session complete" : this.#ending ? "Pain at end of use" : active ? "Pain during use" : "Pain before use";
     const latest = record?.painEntries.at(-1);
+    document.querySelector("#open-session").textContent = record ? "Current session" : "Create session";
+    document.querySelector("#session-title").textContent = record ? "Current session" : "Create session";
+    const recordPain = document.querySelector("#record-pain-view");
+    recordPain.disabled = !active;
+    recordPain.textContent = this.#ending ? "Final pain score" : "Record pain";
+    if (!active) {
+      document.querySelector("#quick-pain-panel").hidden = true;
+      recordPain.setAttribute("aria-expanded", "false");
+    }
+    this.#summary.hidden = !record;
     this.#summary.textContent = completed ? `Session ended · final pain ${latest.painScore}/10`
       : this.#ending ? "Session: select the final pain score (1–9; key 0 = 10)."
       : active ? `Session active · last pain ${latest.painScore}/10 · keys 1–9; key 0 = 10`
-      : "Optional pain session: choose a starting score in the controls.";
+      : "";
     this.#scores.querySelectorAll("button").forEach(button => {
       button.disabled = completed;
       // During-use scores are actions, not a persistent selection.

@@ -8,19 +8,21 @@ Build 8 uses **shared reveal dividers** over full-frame camera images. Horizonta
 
 Each quadrant masks either the full base camera image or its full horizontal reflection. Moving a divider changes only what is revealed: the underlying images stay at a constant scale and position. The reflection axis stays at the middle of the full frame; the divider is not a moving reflection axis. There is no pane-specific zoom, translation or vertical flip. This matches the existing openFrameworks regional rendering. The full composed view may still have outer borders to preserve its proportions; there are no empty gaps between panes.
 
-The controls scroll independently while the camera remains visible, in normal and fullscreen views. On narrow screens the camera sits above the scrolling controls rather than behind them. **Fullscreen** initially hides settings; **Show controls**, **Stop camera**, and Exit stay available. Escape exits, and an in-page expanded view is used if native fullscreen is unavailable.
+The controls scroll independently while the camera remains visible, in normal and fullscreen views. Camera settings stay on the right, including on narrow screens; Hide controls expands the camera view. **Fullscreen** initially hides settings; **Show controls**, **Stop camera**, and Exit stay available. Escape exits, and an in-page expanded view is used if native fullscreen is unavailable.
 
 ## Open the hosted app
 
 [**Open ARM camera mirror**](https://leemeredith.github.io/AugmentedRealityMirror/web/) · [Online user guide](https://leemeredith.github.io/AugmentedRealityMirror/web/guide.html)
 
-Open the link, press **Start camera**, and allow camera access. No installation or GitHub account is required. The live app is Build 11. Camera frames are processed on the visitor's device.
+Open the link, press **Start camera**, and allow camera access. No installation or GitHub account is required. The live app is Build 12. Camera frames are processed on the visitor's device.
 
 ## Separate camera window and shared participant name
 
-Build 11 replaces tabs with two visible, independently scrolling boxes: Camera & view and Session & pain, separated by space. The shared name stays above both. Headings and session actions stay fixed while the contents scroll. On desktop the boxes stack beside the video and Session gets more height; on small screens they sit side by side below the video. Pain scores come first, with optional limb details underneath. Open camera window is in the Camera heading. The same canvas moves to a same-origin camera page, sharing the original stream rather than opening a second camera. Its animation scheduler follows the destination window so the live view can update with the controller in the background. Return/close restores the canvas to the controller without restarting capture. The camera window supports fullscreen, Stop, End session, status and number-key scoring; the main window owns records and requests downloads. Keep the main window open.
+Build 12 keeps Camera & view in a scrolling sidebar on the right. Create session opens a native modal dialog containing participant name, expanded anatomical limb-loss choices, baseline pain score and session actions. On small screens the dialog fills the screen. Its header and action row remain fixed while its content scrolls. Close, Escape or clicking the backdrop preserves form/session state and returns focus to the top session button. Starting a session closes the dialog; Current session reopens it for review, scoring, downloads or ending. End session in the main toolbar opens the final-score step. Record pain provides a compact score tray outside the dialog, and number shortcuts work from the camera view. Escape closes a dialog or score tray before exiting expanded view.
 
-Both boxes share one participant-name field, fixed during an active or completed session. Setup and session JSON contain `participantName`; both filenames begin with that name when supplied, otherwise with a UTC timestamp. Loading a camera setup fills the name only before a session starts. A conflicting name is kept out of active/completed records with an explanation. New session unlocks the field. The old setup `name` remains an optional view label and never becomes a participant identity automatically.
+Open camera window moves the existing canvas to a same-origin camera page, sharing the original stream. Its animation scheduler follows the destination window so the view keeps updating with the controller in the background. Return/close restores the canvas without restarting capture. Its compact toolbar offers fullscreen, show/hide controls, Record pain, Stop, End session and Return to main window. The inactive-session prompt and repeating scoring instruction are removed. The main window still owns records and requests downloads; keep it open.
+
+One participant-name field in the session dialog supplies both setup and session JSON. It stays fixed during an active or completed session. Both filenames begin with that name when supplied, otherwise with a UTC timestamp. Loading a camera setup fills the name only before a session starts. A conflicting name is kept out of active/completed records with an explanation. New session unlocks the field. The old setup `name` remains an optional view label and never becomes a participant identity automatically.
 
 If pop-ups are blocked, the embedded view remains usable. A browser may choose a tab instead of a window. A second monitor is optional.
 
@@ -34,7 +36,7 @@ The [session format](docs/SESSION-FORMAT.md) documents the flat timestamp/elapse
 
 ## Browser updates
 
-Build 11 versions its stylesheet, entry scripts and relative module imports with `?v=11` so refreshed pages request a consistent set of release assets. Use `https://leemeredith.github.io/AugmentedRealityMirror/web/index.html?v=11` for a fresh page address when comparing Safari with another browser. Save active session records before reloading. Check Browser build 11 in the footer. Future releases must update the HTML and all relative module query versions together. This does not add a service worker or persistent cache.
+Build 12 versions its stylesheet, entry scripts and relative module imports with `?v=12` so refreshed pages request a consistent set of release assets. Use `https://leemeredith.github.io/AugmentedRealityMirror/web/index.html?v=12` for a fresh page address when comparing Safari with another browser. Save active session records before reloading. Check Browser build 12 in the footer. Future releases must update the HTML and all relative module query versions together. This does not add a service worker or persistent cache.
 
 ## Run locally for development
 
@@ -80,6 +82,7 @@ web/
     setupFile.js             Setup schema, validation, filenames, JSON download
     studySession.js          Session state, measurements, snapshots and dated JSON files
     sessionControls.js       Participant form, scoring phases and keyboard actions
+    sessionOverlay.js        Modal focus/dismissal and compact scoring tray
   tests/
     captureRGB.test.js        Permission/cancellation/disconnection behavior
     mirrorView.test.js        Mirror transforms and draw-loop cleanup

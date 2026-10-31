@@ -35,7 +35,7 @@ export class FullscreenView {
       }
     });
     document.addEventListener("keydown", event => {
-      if (event.key === "Escape" && this.#expanded) {
+      if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]") && this.#expanded) {
         event.preventDefault();
         this.exit();
       }

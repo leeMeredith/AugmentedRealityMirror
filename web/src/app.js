@@ -1,11 +1,12 @@
-import { CameraWindow } from "./cameraWindow.js?v=11";
-import { CaptureRGB } from "./captureRGB.js?v=11";
-import { MirrorView } from "./mirrorView.js?v=11";
-import { Controls } from "./controls.js?v=11";
-import { SessionControls } from "./sessionControls.js?v=11";
-import { FullscreenView } from "./fullscreenView.js?v=11";
-import { defaultCenter } from "./mirrorRegions.js?v=11";
-import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename } from "./setupFile.js?v=11";
+import { SessionOverlay } from "./sessionOverlay.js?v=12";
+import { CameraWindow } from "./cameraWindow.js?v=12";
+import { CaptureRGB } from "./captureRGB.js?v=12";
+import { MirrorView } from "./mirrorView.js?v=12";
+import { Controls } from "./controls.js?v=12";
+import { SessionControls } from "./sessionControls.js?v=12";
+import { FullscreenView } from "./fullscreenView.js?v=12";
+import { defaultCenter } from "./mirrorRegions.js?v=12";
+import { MAX_SETUP_BYTES, createSetup, parseSetup, downloadSetup, setupFilename } from "./setupFile.js?v=12";
 
 const controls = new Controls();
 const camera = new CaptureRGB(controls.video);
@@ -13,7 +14,7 @@ const view = new MirrorView(controls.canvas, controls.video);
 const participantName = document.querySelector("#participant-name");
 const fullscreen = new FullscreenView(document.querySelector("#mirror-workspace"));
 // Set by the running JavaScript, so a stale HTML label alone cannot claim this build loaded.
-controls.build.textContent = "Browser build 11";
+controls.build.textContent = "Browser build 12";
 let selectedRegion = "topLeft";
 const refreshRegion = () => controls.regionState(selectedRegion, view.regions[selectedRegion]);
 controls.quadrants.forEach(button => button.addEventListener("click", () => {
@@ -155,5 +156,7 @@ const sessionControls = new SessionControls(document.querySelector("#study-sessi
   ...createSetup({ mirrored: view.mirrored, regions: view.regions, center: view.center }).view,
   camera: { preferredLabel: camera.device.label || preferredCameraLabel },
 }));
+
+const sessionOverlay = new SessionOverlay(document.querySelector("#study-session"));
 
 const cameraWindow = new CameraWindow({view, controls, sessions: sessionControls, fullscreen});

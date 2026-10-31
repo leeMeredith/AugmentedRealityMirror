@@ -29,7 +29,7 @@ export class CameraWindow {
 
   open() {
     if (this.#child && !this.#child.closed) { this.#child.focus(); return; }
-    const child = window.open("camera.html?v=11", this.#windowName, "popup,width=1000,height=760");
+    const child = window.open("camera.html?v=12", this.#windowName, "popup,width=1000,height=760");
     if (!child) {
       this.#notice.hidden = false;
       this.#notice.textContent = "The browser blocked the camera window. Allow pop-ups for this site and retry, or keep using the view here.";
@@ -48,21 +48,31 @@ export class CameraWindow {
     this.#open.textContent = "Show camera window";
     this.#return.hidden = false;
     this.#notice.hidden = false;
-    this.#notice.textContent = "Camera view is in its own window. Both control boxes below remain available.";
+    this.#notice.textContent = "Camera view is in its own window. Camera settings and Current session remain available here.";
     document.querySelector("#fullscreen-view").disabled = true;
     document.querySelector("#toggle-controls").disabled = true;
     this.#fullscreen.showControls();
     this.#exitReady.then(() => { if (this.#child === child) this.#fullscreen.showControls(); });
     this.#detachKeyboard = this.#sessions.attachKeyboard(doc);
+    this.#sessions.attachQuickScores(doc.querySelector("#camera-quick-scores"));
     doc.querySelector("#camera-window-stop").addEventListener("click", () => this.#controls.stopView.click());
-    doc.querySelector("#camera-window-end").addEventListener("click", () => document.querySelector("#end-session-view").click());
+    doc.querySelector("#camera-window-end").addEventListener("click", () => document.querySelector("#end-session").click());
     const returnButton = doc.querySelector("#camera-window-return");
     returnButton.disabled = false;
     returnButton.addEventListener("click", () => this.restore());
     child.addEventListener("pagehide", () => { if (this.#child === child) this.restore(false); });
     const sync = () => {
       if (child.closed || this.#child !== child) return;
-      doc.querySelector("#camera-window-summary").textContent = document.querySelector("#session-summary").textContent;
+      const summary = document.querySelector("#session-summary");
+      doc.querySelector("#camera-window-summary").textContent = summary.textContent;
+      doc.querySelector("#camera-window-summary").hidden = summary.hidden;
+      const score = document.querySelector("#record-pain-view");
+      doc.querySelector("#camera-window-score").disabled = score.disabled;
+      doc.querySelector("#camera-window-score").textContent = score.textContent;
+      if (score.disabled) {
+        doc.querySelector("#camera-quick-panel").hidden = true;
+        doc.querySelector("#camera-window-score").setAttribute("aria-expanded", "false");
+      }
       doc.querySelector("#camera-window-end").disabled = document.querySelector("#end-session-view").disabled;
       doc.querySelector("#camera-window-stop").disabled = this.#controls.stopView.disabled;
       const badge = this.#controls.preview.querySelector("#camera-state");
@@ -72,7 +82,8 @@ export class CameraWindow {
     };
     this.#observer = new MutationObserver(sync);
     this.#observer.observe(document.querySelector("#mirror-workspace"), {attributes:true, childList:true, subtree:true});
-    doc.querySelector("#camera-window-status").textContent = "Use number keys to score here or in the main window. The main window keeps session records; leave it open.";
+    doc.querySelector("#camera-window-status").textContent = "";
+    doc.querySelector("#camera-window-status").hidden = true;
     sync();
     child.focus();
     return true;
